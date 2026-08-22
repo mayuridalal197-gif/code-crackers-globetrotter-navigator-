@@ -2,9 +2,7 @@
    GLOBETROTTER - MY TRIPS
    ========================================= */
 
-
-document.addEventListener("DOMContentLoaded", function () {
-
+document.addEventListener("DOMContentLoaded", async function () {
 
     /* ================= LOGIN CHECK ================= */
 
@@ -13,13 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.getItem("globeTrotterLoggedIn")
         );
 
-
     if (!user) {
-
         window.location.href = "login.html";
-
         return;
-
     }
 
 
@@ -31,21 +25,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const tripAvatar =
         document.getElementById("tripAvatar");
 
-
     if (tripUserName) {
-
-        tripUserName.textContent = user.name;
-
+        tripUserName.textContent =
+            user.name || "Traveler";
     }
-
 
     if (tripAvatar) {
-
         tripAvatar.textContent =
-            user.name.charAt(0).toUpperCase();
-
+            (user.name || "T").charAt(0).toUpperCase();
     }
-
 
 
     /* ================= MOBILE MENU ================= */
@@ -56,29 +44,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const tripMobileNav =
         document.getElementById("tripMobileNav");
 
+    if (tripMenu && tripMobileNav) {
 
-    tripMenu.addEventListener(
-        "click",
-        function () {
+        tripMenu.addEventListener(
+            "click",
+            function () {
 
-            tripMobileNav.classList.toggle("active");
+                tripMobileNav.classList.toggle("active");
 
-
-            if (
-                tripMobileNav.classList.contains("active")
-            ) {
-
-                tripMenu.textContent = "✕";
-
-            } else {
-
-                tripMenu.textContent = "☰";
+                tripMenu.textContent =
+                    tripMobileNav.classList.contains("active")
+                        ? "✕"
+                        : "☰";
 
             }
+        );
 
-        }
-    );
-
+    }
 
 
     /* ================= ELEMENTS ================= */
@@ -102,38 +84,104 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("confirmDelete");
 
 
+    let trips = [];
+
     let selectedTripId = null;
 
     let currentFilter = "all";
 
 
+    /* ================= GET TRIPS FROM BACKEND ================= */
 
-    /* ================= GET TRIPS ================= */
+    async function loadTrips() {
 
-    function getTrips() {
+        try {
 
-        return (
-            JSON.parse(
-                localStorage.getItem("globeTrotterTrips")
-            ) || []
-        );
+            tripsGrid.innerHTML = `
+                <p class="loading-message">
+                    Loading your trips...
+                </p>
+            `;
+
+            const response =
+                await apiRequest("/trips", {
+                    method: "GET"
+                });
+
+
+            if (!response.success) {
+
+                throw new Error(
+                    response.message ||
+                    "Unable to load trips."
+                );
+
+            }
+
+
+            trips =
+                response.data?.trips || [];
+
+
+            updateCounts();
+
+            displayTrips();
+
+
+        } catch (error) {
+
+            console.error(
+                "Load trips error:",
+                error
+            );
+
+
+            tripsGrid.innerHTML = "";
+
+            emptyTrips.classList.add("show");
+
+            const message =
+                emptyTrips.querySelector("p");
+
+            if (message) {
+
+                message.textContent =
+                    error.message ||
+                    "Unable to load your trips.";
+
+            }
+
+        }
 
     }
-
 
 
     /* ================= UPDATE COUNTS ================= */
 
     function updateCounts() {
 
-        const trips = getTrips();
+        const today =
+            new Date();
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
 
 
         const upcomingTrips =
             trips.filter(
                 function (trip) {
 
-                    return trip.status === "Upcoming";
+                    const startDate =
+                        new Date(
+                            trip.start_date +
+                            "T00:00:00"
+                        );
+
+                    return startDate >= today;
 
                 }
             );
@@ -143,7 +191,13 @@ document.addEventListener("DOMContentLoaded", function () {
             trips.filter(
                 function (trip) {
 
-                    return trip.status === "Completed";
+                    const endDate =
+                        new Date(
+                            trip.end_date +
+                            "T00:00:00"
+                        );
+
+                    return endDate < today;
 
                 }
             );
@@ -169,40 +223,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
     /* ================= DISPLAY TRIPS ================= */
 
     function displayTrips() {
 
-        const allTrips = getTrips();
-
-
-        const userTrips =
-            allTrips.filter(
-                function (trip) {
-
-                    return (
-                        trip.userId ===
-                        (user.email || user.name)
-                    );
-
-                }
-            );
-
-
-        let filteredTrips = userTrips;
+        let filteredTrips = trips;
 
 
         if (currentFilter === "upcoming") {
 
             filteredTrips =
-                userTrips.filter(
+                trips.filter(
                     function (trip) {
 
-                        return (
-                            trip.status === "Upcoming" ||
-                            trip.status === "Planned"
+                        const startDate =
+                            new Date(
+                                trip.start_date +
+                                "T00:00:00"
+                            );
+
+                        const today =
+                            new Date();
+
+                        today.setHours(
+                            0,
+                            0,
+                            0,
+                            0
                         );
+
+                        return startDate >= today;
 
                     }
                 );
@@ -213,12 +263,26 @@ document.addEventListener("DOMContentLoaded", function () {
         if (currentFilter === "completed") {
 
             filteredTrips =
-                userTrips.filter(
+                trips.filter(
                     function (trip) {
 
-                        return (
-                            trip.status === "Completed"
+                        const endDate =
+                            new Date(
+                                trip.end_date +
+                                "T00:00:00"
+                            );
+
+                        const today =
+                            new Date();
+
+                        today.setHours(
+                            0,
+                            0,
+                            0,
+                            0
                         );
+
+                        return endDate < today;
 
                     }
                 );
@@ -255,7 +319,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
     /* ================= CREATE CARD ================= */
 
     function createTripCard(trip) {
@@ -263,13 +326,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const article =
             document.createElement("article");
 
-
         article.className =
             "trip-card";
 
 
-        const style =
-            trip.travelStyle || "Travel";
+        const status =
+            getTripStatus(trip);
 
 
         article.innerHTML = `
@@ -277,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="trip-card-image">
 
                 <span class="trip-card-status">
-                    ${escapeHTML(trip.status || "Upcoming")}
+                    ${escapeHTML(status)}
                 </span>
 
             </div>
@@ -289,11 +351,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="trip-card-title-row">
 
                     <h2 class="trip-card-title">
-                        ${escapeHTML(trip.tripName)}
+                        ${escapeHTML(trip.title)}
                     </h2>
 
                     <span class="trip-card-style">
-                        ${escapeHTML(style)}
+                        Travel
                     </span>
 
                 </div>
@@ -311,9 +373,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         <span>📅</span>
 
                         <span>
-                            ${formatDate(trip.startDate)}
+                            ${formatDate(trip.start_date)}
                             -
-                            ${formatDate(trip.endDate)}
+                            ${formatDate(trip.end_date)}
                         </span>
 
                     </div>
@@ -324,8 +386,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <span>👥</span>
 
                         <span>
-                            <strong>${trip.travelers}</strong>
-                            Traveler(s)
+                            Traveler information unavailable
                         </span>
 
                     </div>
@@ -336,10 +397,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <span>💰</span>
 
                         <span>
-                            ${formatBudget(
-                                trip.budget,
-                                trip.currency
-                            )}
+                            Budget information unavailable
                         </span>
 
                     </div>
@@ -409,6 +467,53 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    /* ================= TRIP STATUS ================= */
+
+    function getTripStatus(trip) {
+
+        const today =
+            new Date();
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        const startDate =
+            new Date(
+                trip.start_date +
+                "T00:00:00"
+            );
+
+
+        const endDate =
+            new Date(
+                trip.end_date +
+                "T00:00:00"
+            );
+
+
+        if (endDate < today) {
+
+            return "Completed";
+
+        }
+
+
+        if (startDate > today) {
+
+            return "Upcoming";
+
+        }
+
+
+        return "Ongoing";
+
+    }
+
 
     /* ================= FILTERS ================= */
 
@@ -422,7 +527,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     filterButtons.forEach(
                         function (item) {
 
-                            item.classList.remove("active");
+                            item.classList.remove(
+                                "active"
+                            );
 
                         }
                     );
@@ -444,7 +551,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-
     /* ================= CANCEL DELETE ================= */
 
     cancelDelete.addEventListener(
@@ -453,61 +559,102 @@ document.addEventListener("DOMContentLoaded", function () {
 
             selectedTripId = null;
 
-            deleteModal.classList.remove("show");
+            deleteModal.classList.remove(
+                "show"
+            );
 
         }
     );
-
 
 
     /* ================= CONFIRM DELETE ================= */
 
     confirmDelete.addEventListener(
         "click",
-        function () {
+        async function () {
 
             if (selectedTripId === null) {
-
                 return;
+            }
+
+
+            const tripId =
+                selectedTripId;
+
+
+            confirmDelete.disabled = true;
+
+            confirmDelete.textContent =
+                "Deleting...";
+
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        `/trips/${tripId}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                if (!response.success) {
+
+                    throw new Error(
+                        response.message ||
+                        "Unable to delete trip."
+                    );
+
+                }
+
+
+                trips =
+                    trips.filter(
+                        function (trip) {
+
+                            return Number(trip.id) !==
+                                tripId;
+
+                        }
+                    );
+
+
+                selectedTripId = null;
+
+                deleteModal.classList.remove(
+                    "show"
+                );
+
+
+                updateCounts();
+
+                displayTrips();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Delete trip error:",
+                    error
+                );
+
+
+                alert(
+                    error.message ||
+                    "Unable to delete trip."
+                );
 
             }
 
 
-            const trips =
-                getTrips();
+            confirmDelete.disabled = false;
 
-
-            const updatedTrips =
-                trips.filter(
-                    function (trip) {
-
-                        return (
-                            Number(trip.id) !==
-                            selectedTripId
-                        );
-
-                    }
-                );
-
-
-            localStorage.setItem(
-                "globeTrotterTrips",
-                JSON.stringify(updatedTrips)
-            );
-
-
-            selectedTripId = null;
-
-            deleteModal.classList.remove("show");
-
-
-            updateCounts();
-
-            displayTrips();
+            confirmDelete.textContent =
+                "Delete Trip";
 
         }
     );
-
 
 
     /* ================= CLOSE MODAL OUTSIDE ================= */
@@ -516,19 +663,18 @@ document.addEventListener("DOMContentLoaded", function () {
         "click",
         function (event) {
 
-            if (
-                event.target === deleteModal
-            ) {
+            if (event.target === deleteModal) {
 
                 selectedTripId = null;
 
-                deleteModal.classList.remove("show");
+                deleteModal.classList.remove(
+                    "show"
+                );
 
             }
 
         }
     );
-
 
 
     /* ================= DATE FORMAT ================= */
@@ -543,72 +689,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         const date =
-            new Date(dateValue + "T00:00:00");
+            new Date(
+                dateValue +
+                "T00:00:00"
+            );
 
 
         return date.toLocaleDateString(
             "en-IN",
             {
-
                 day: "numeric",
-
                 month: "short",
-
                 year: "numeric"
-
             }
         );
 
     }
-
-
-
-    /* ================= BUDGET FORMAT ================= */
-
-    function formatBudget(
-        budget,
-        currency
-    ) {
-
-        const amount =
-            Number(budget || 0);
-
-
-        if (!amount) {
-
-            return "Budget not set";
-
-        }
-
-
-        try {
-
-            return new Intl.NumberFormat(
-                "en-IN",
-                {
-
-                    style: "currency",
-
-                    currency:
-                        currency || "INR",
-
-                    maximumFractionDigits: 0
-
-                }
-            ).format(amount);
-
-        } catch (error) {
-
-            return (
-                (currency || "INR") +
-                " " +
-                amount
-            );
-
-        }
-
-    }
-
 
 
     /* ================= SECURITY ================= */
@@ -635,11 +731,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
     /* ================= INITIAL LOAD ================= */
 
-    updateCounts();
-
-    displayTrips();
+    await loadTrips();
 
 });
