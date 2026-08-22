@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GlobeTrotter - Calendar</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/global.css">
+
+    <!-- Calendar CSS -->
+    <style>
+        .calendar-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .calendar-header h1 {
+            margin: 0;
+        }
+
+        .calendar-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .calendar-controls button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .calendar-controls button:hover {
+            background: #1d4ed8;
+        }
+
+        #monthYear {
+            min-width: 170px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .calendar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .weekdays,
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .weekday {
+            text-align: center;
+            font-weight: 600;
+            padding: 15px 5px;
+            color: #555;
+        }
+
+        .day {
+            min-height: 100px;
+            border: 1px solid #eee;
+            padding: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .day:hover {
+            background: #f5f8ff;
+        }
+
+        .day-number {
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .other-month {
+            color: #aaa;
+            background: #fafafa;
+        }
+
+        .today .day-number {
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .trip-event {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-left: 4px solid #2563eb;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-top: 5px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .selected-day {
+            background: #eff6ff;
+        }
+
+        .trip-details {
+            margin-top: 25px;
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .trip-details h2 {
+            margin-top: 0;
+        }
+
+        .no-trip {
+            color: #777;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-page {
+                padding: 20px 10px;
+            }
+
+            .calendar-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .calendar-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .calendar {
+                padding: 10px;
+            }
+
+            .weekday {
+                font-size: 12px;
+                padding: 10px 2px;
+            }
+
+            .day {
+                min-height: 70px;
+                padding: 5px;
+            }
+
+            .day-number {
+                font-size: 13px;
+            }
+
+            .trip-event {
+                font-size: 9px;
+                padding: 3px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .day {
+                min-height: 55px;
+            }
+
+            .trip-event {
+                display: none;
+            }
+
+            .today .day-number {
+                width: 25px;
+                height: 25px;
+            }
+
+            #monthYear {
+                font-size: 16px;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            🌍 GlobeTrotter
+        </div>
+
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="my-trips.html">My Trips</a>
+            <a href="calendar.html" class="active">Calendar</a>
+            <a href="community.html">Community</a>
+            <a href="profile.html">Profile</a>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle">
+            ☰
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="calendar-page">
+
+        <div class="calendar-header">
+            <div>
+                <h1>📅 My Travel Calendar</h1>
+                <p>View your trips and important travel dates.</p>
+            </div>
+
+            <div class="calendar-controls">
+                <button id="prevMonth">‹</button>
+
+                <span id="monthYear"></span>
+
+                <button id="nextMonth">›</button>
+
+                <button id="todayBtn">Today</button>
+            </div>
+        </div>
+
+        <!-- Calendar -->
+        <section class="calendar">
+
+            <div class="weekdays">
+                <div class="weekday">Sun</div>
+                <div class="weekday">Mon</div>
+                <div class="weekday">Tue</div>
+                <div class="weekday">Wed</div>
+                <div class="weekday">Thu</div>
+                <div class="weekday">Fri</div>
+                <div class="weekday">Sat</div>
+            </div>
+
+            <div class="calendar-days" id="calendarDays">
+                <!-- JavaScript will generate dates here -->
+            </div>
+
+        </section>
+
+        <!-- Selected Date Details -->
+        <section class="trip-details" id="tripDetails">
+
+            <h2>📍 Select a date</h2>
+
+            <p class="no-trip">
+                Click any date to see your trip details.
+            </p>
+
+        </section>
+
+    </main>
+
+    <!-- JavaScript -->
+    <script src="js/calendar.js"></script>
+
+</body>
+</html>
