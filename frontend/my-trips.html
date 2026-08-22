@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Trips | GlobeTrotter</title>
+
+    <link rel="stylesheet" href="cssfiles/global.css">
+    <link rel="stylesheet" href="cssfiles/trip.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="trip-navbar">
+
+        <div class="trip-navbar-inner">
+
+            <a href="dashboard.html"
+               class="dashboard-logo">
+
+                <span class="logo-icon">✈</span>
+
+                <span>GlobeTrotter</span>
+
+            </a>
+
+
+            <nav class="trip-nav">
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="create-trip.html">
+                    Create Trip
+                </a>
+
+                <a href="my-trips.html"
+                   class="active">
+                    My Trips
+                </a>
+
+                <a href="community.html">
+                    Community
+                </a>
+
+            </nav>
+
+
+            <div class="trip-user">
+
+                <div class="trip-avatar"
+                     id="tripAvatar">
+                    T
+                </div>
+
+                <span id="tripUserName">
+                    Traveler
+                </span>
+
+            </div>
+
+
+            <button class="trip-menu"
+                    id="tripMenu"
+                    type="button"
+                    aria-label="Open menu">
+
+                ☰
+
+            </button>
+
+        </div>
+
+
+        <!-- MOBILE NAV -->
+        <nav class="trip-mobile-nav"
+             id="tripMobileNav">
+
+            <a href="dashboard.html">
+                🏠 Dashboard
+            </a>
+
+            <a href="create-trip.html">
+                ➕ Create Trip
+            </a>
+
+            <a href="my-trips.html"
+               class="active">
+                🧳 My Trips
+            </a>
+
+            <a href="community.html">
+                👥 Community
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- MAIN -->
+    <main class="my-trips-main">
+
+        <div class="create-trip-container">
+
+
+            <!-- PAGE HEADER -->
+            <section class="trip-page-header my-trips-header">
+
+                <div>
+
+                    <span class="page-label">
+                        MY JOURNEYS
+                    </span>
+
+                    <h1>
+                        My Trips
+                    </h1>
+
+                    <p>
+                        View, manage and continue planning
+                        all your adventures in one place.
+                    </p>
+
+                </div>
+
+
+                <a href="create-trip.html"
+                   class="btn btn-primary">
+
+                    + Create New Trip
+
+                </a>
+
+            </section>
+
+
+            <!-- FILTERS -->
+            <section class="trip-filters">
+
+                <button class="filter-btn active"
+                        type="button"
+                        data-filter="all">
+
+                    All Trips
+
+                    <span id="allTripsCount">0</span>
+
+                </button>
+
+
+                <button class="filter-btn"
+                        type="button"
+                        data-filter="upcoming">
+
+                    Upcoming
+
+                    <span id="upcomingCount">0</span>
+
+                </button>
+
+
+                <button class="filter-btn"
+                        type="button"
+                        data-filter="completed">
+
+                    Completed
+
+                    <span id="completedCount">0</span>
+
+                </button>
+
+            </section>
+
+
+            <!-- TRIPS CONTAINER -->
+            <section class="my-trips-section">
+
+                <div class="trips-grid"
+                     id="tripsGrid">
+
+                    <!-- JavaScript will add trip cards here -->
+
+                </div>
+
+
+                <!-- EMPTY STATE -->
+                <div class="empty-trips"
+                     id="emptyTrips">
+
+                    <div class="empty-icon">
+                        ✈️
+                    </div>
+
+                    <h2>
+                        No trips yet!
+                    </h2>
+
+                    <p>
+                        Your next adventure is waiting.
+                        Create your first trip and start planning.
+                    </p>
+
+                    <a href="create-trip.html"
+                       class="btn btn-primary">
+
+                        + Create Your First Trip
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- DELETE MODAL -->
+    <div class="modal-overlay"
+         id="deleteModal">
+
+        <div class="delete-modal">
+
+            <div class="modal-icon">
+                🗑️
+            </div>
+
+            <h2>
+                Delete Trip?
+            </h2>
+
+            <p>
+                Are you sure you want to delete this trip?
+                This action cannot be undone.
+            </p>
+
+            <div class="modal-actions">
+
+                <button class="btn btn-cancel"
+                        id="cancelDelete"
+                        type="button">
+
+                    Cancel
+
+                </button>
+
+                <button class="btn btn-danger"
+                        id="confirmDelete"
+                        type="button">
+
+                    Delete Trip
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer class="footer trip-footer">
+
+        <div class="container">
+
+            <div class="footer-bottom">
+
+                <p>
+                    © 2026 GlobeTrotter.
+                    All rights reserved.
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script src="jsfiles/my-trips.js"></script>
+
+</body>
+
+</html>
