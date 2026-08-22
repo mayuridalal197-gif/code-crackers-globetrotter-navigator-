@@ -1,294 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>GlobeTrotter - My Trips</title>
 
-    <title>My Trips | GlobeTrotter</title>
+    <link rel="stylesheet" href="css/global.css">
 
-    <link rel="stylesheet" href="cssfiles/global.css">
-    <link rel="stylesheet" href="cssfiles/trip.css">
+    <style>
+        .trips-page {
+            max-width: 1150px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .trips-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .trips-header h1 {
+            margin: 0;
+        }
+
+        .create-btn {
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .create-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .filter-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .filter-box input,
+        .filter-box select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+        }
+
+        .trips-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .trip-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        .trip-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .trip-cover {
+            height: 170px;
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #60a5fa
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .trip-content {
+            padding: 20px;
+        }
+
+        .trip-content h2 {
+            margin: 0 0 8px;
+        }
+
+        .trip-location {
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .trip-info {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .trip-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .view-btn,
+        .delete-btn {
+            border: none;
+            padding: 10px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .view-btn {
+            background: #2563eb;
+            color: white;
+            flex: 1;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h2 {
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .empty-create-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .trip-count {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+
+            .trips-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .trips-page {
+                padding: 20px 12px;
+            }
+
+            .trips-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .create-btn {
+                width: 100%;
+                text-align: center;
+                box-sizing: border-box;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .trips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
-    <header class="trip-navbar">
+    <!-- Navbar -->
 
-        <div class="trip-navbar-inner">
+    <nav class="navbar">
 
-            <a href="dashboard.html"
-               class="dashboard-logo">
-
-                <span class="logo-icon">✈</span>
-
-                <span>GlobeTrotter</span>
-
-            </a>
-
-
-            <nav class="trip-nav">
-
-                <a href="dashboard.html">
-                    Dashboard
-                </a>
-
-                <a href="create-trip.html">
-                    Create Trip
-                </a>
-
-                <a href="my-trips.html"
-                   class="active">
-                    My Trips
-                </a>
-
-                <a href="community.html">
-                    Community
-                </a>
-
-            </nav>
-
-
-            <div class="trip-user">
-
-                <div class="trip-avatar"
-                     id="tripAvatar">
-                    T
-                </div>
-
-                <span id="tripUserName">
-                    Traveler
-                </span>
-
-            </div>
-
-
-            <button class="trip-menu"
-                    id="tripMenu"
-                    type="button"
-                    aria-label="Open menu">
-
-                ☰
-
-            </button>
-
+        <div class="logo">
+            🌍 GlobeTrotter
         </div>
 
-
-        <!-- MOBILE NAV -->
-        <nav class="trip-mobile-nav"
-             id="tripMobileNav">
+        <div class="nav-links">
 
             <a href="dashboard.html">
-                🏠 Dashboard
+                Dashboard
             </a>
 
-            <a href="create-trip.html">
-                ➕ Create Trip
+            <a href="my-trips.html" class="active">
+                My Trips
             </a>
 
-            <a href="my-trips.html"
-               class="active">
-                🧳 My Trips
+            <a href="calendar.html">
+                Calendar
+            </a>
+
+            <a href="search.html">
+                Search
             </a>
 
             <a href="community.html">
-                👥 Community
+                Community
             </a>
 
-        </nav>
-
-    </header>
-
-
-    <!-- MAIN -->
-    <main class="my-trips-main">
-
-        <div class="create-trip-container">
-
-
-            <!-- PAGE HEADER -->
-            <section class="trip-page-header my-trips-header">
-
-                <div>
-
-                    <span class="page-label">
-                        MY JOURNEYS
-                    </span>
-
-                    <h1>
-                        My Trips
-                    </h1>
-
-                    <p>
-                        View, manage and continue planning
-                        all your adventures in one place.
-                    </p>
-
-                </div>
-
-
-                <a href="create-trip.html"
-                   class="btn btn-primary">
-
-                    + Create New Trip
-
-                </a>
-
-            </section>
-
-
-            <!-- FILTERS -->
-            <section class="trip-filters">
-
-                <button class="filter-btn active"
-                        type="button"
-                        data-filter="all">
-
-                    All Trips
-
-                    <span id="allTripsCount">0</span>
-
-                </button>
-
-
-                <button class="filter-btn"
-                        type="button"
-                        data-filter="upcoming">
-
-                    Upcoming
-
-                    <span id="upcomingCount">0</span>
-
-                </button>
-
-
-                <button class="filter-btn"
-                        type="button"
-                        data-filter="completed">
-
-                    Completed
-
-                    <span id="completedCount">0</span>
-
-                </button>
-
-            </section>
-
-
-            <!-- TRIPS CONTAINER -->
-            <section class="my-trips-section">
-
-                <div class="trips-grid"
-                     id="tripsGrid">
-
-                    <!-- JavaScript will add trip cards here -->
-
-                </div>
-
-
-                <!-- EMPTY STATE -->
-                <div class="empty-trips"
-                     id="emptyTrips">
-
-                    <div class="empty-icon">
-                        ✈️
-                    </div>
-
-                    <h2>
-                        No trips yet!
-                    </h2>
-
-                    <p>
-                        Your next adventure is waiting.
-                        Create your first trip and start planning.
-                    </p>
-
-                    <a href="create-trip.html"
-                       class="btn btn-primary">
-
-                        + Create Your First Trip
-
-                    </a>
-
-                </div>
-
-            </section>
+            <a href="profile.html">
+                Profile
+            </a>
 
         </div>
 
-    </main>
+        <button
+            class="menu-toggle"
+            id="menuToggle"
+        >
+            ☰
+        </button>
+
+    </nav>
 
 
-    <!-- DELETE MODAL -->
-    <div class="modal-overlay"
-         id="deleteModal">
+    <!-- Main -->
 
-        <div class="delete-modal">
+    <main class="trips-page">
 
-            <div class="modal-icon">
-                🗑️
-            </div>
+        <div class="trips-header">
 
-            <h2>
-                Delete Trip?
-            </h2>
+            <div>
 
-            <p>
-                Are you sure you want to delete this trip?
-                This action cannot be undone.
-            </p>
-
-            <div class="modal-actions">
-
-                <button class="btn btn-cancel"
-                        id="cancelDelete"
-                        type="button">
-
-                    Cancel
-
-                </button>
-
-                <button class="btn btn-danger"
-                        id="confirmDelete"
-                        type="button">
-
-                    Delete Trip
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- FOOTER -->
-    <footer class="footer trip-footer">
-
-        <div class="container">
-
-            <div class="footer-bottom">
+                <h1>
+                    ✈️ My Trips
+                </h1>
 
                 <p>
-                    © 2026 GlobeTrotter.
-                    All rights reserved.
+                    Manage all your planned journeys.
                 </p>
 
             </div>
 
+            <a
+                href="create-trip.html"
+                class="create-btn"
+            >
+                + Create New Trip
+            </a>
+
         </div>
 
-    </footer>
+
+        <!-- Filters -->
+
+        <section class="filter-box">
+
+            <div class="filter-row">
+
+                <input
+                    type="text"
+                    id="tripSearch"
+                    placeholder="🔎 Search your trips..."
+                >
 
 
-    <script src="jsfiles/api.js"></script>
-    <script src="jsfiles/my-trips.js"></script>
+                <select id="tripFilter">
+
+                    <option value="all">
+                        All Trips
+                    </option>
+
+                    <option value="upcoming">
+                        Upcoming
+                    </option>
+
+                    <option value="past">
+                        Past
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <div class="trip-count">
+            <span id="tripCount">
+                0 trips
+            </span>
+        </div>
+
+
+        <!-- Trips -->
+
+        <section
+            class="trips-grid"
+            id="tripsGrid"
+        >
+
+        </section>
+
+    </main>
+
+
+    <script src="js/my-trips.js"></script>
 
 </body>
-
 </html>
