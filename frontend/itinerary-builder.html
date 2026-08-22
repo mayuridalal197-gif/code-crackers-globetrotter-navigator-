@@ -1,449 +1,577 @@
-/* =========================================
-   GLOBETROTTER ITINERARY BUILDER
-   ========================================= */
+<!DOCTYPE html>
+<html lang="en">
 
-document.addEventListener("DOMContentLoaded", function () {
+<head>
+    <meta charset="UTF-8">
 
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    /* =====================================
-       GET HTML ELEMENTS
-       ===================================== */
+    <title>Build Itinerary | GlobeTrotter</title>
 
-    const activityForm =
-        document.getElementById("activityForm");
+    <!-- CSS -->
+    <link rel="stylesheet" href="cssfiles/global.css">
+    <link rel="stylesheet" href="cssfiles/itinerary.css">
 
-    const activityDay =
-        document.getElementById("activityDay");
+</head>
 
-    const activityTime =
-        document.getElementById("activityTime");
+<body>
 
-    const activityName =
-        document.getElementById("activityName");
 
-    const activityLocation =
-        document.getElementById("activityLocation");
+    <!-- ================= NAVBAR ================= -->
 
-    const saveItineraryBtn =
-        document.getElementById("saveItineraryBtn");
+    <header class="trip-navbar">
 
-    const description =
-        document.getElementById("description");
+        <div class="trip-navbar-inner">
 
-    const characterCount =
-        document.getElementById("characterCount");
+            <a href="dashboard.html" class="dashboard-logo">
+                <span class="logo-icon">✈</span>
+                <span>GlobeTrotter</span>
+            </a>
 
-    const tripMenu =
-        document.getElementById("tripMenu");
 
-    const tripMobileNav =
-        document.getElementById("tripMobileNav");
+            <nav class="trip-nav">
 
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
 
-    /* =====================================
-       MOBILE MENU
-       ===================================== */
+                <a href="create-trip.html">
+                    Create Trip
+                </a>
 
-    if (tripMenu && tripMobileNav) {
+                <a href="my-trips.html">
+                    My Trips
+                </a>
 
-        tripMenu.addEventListener(
-            "click",
-            function () {
+                <a href="community.html">
+                    Community
+                </a>
 
-                tripMobileNav.classList.toggle(
-                    "active"
-                );
+            </nav>
 
-            }
-        );
 
-    }
+            <div class="trip-user">
 
+                <div class="trip-avatar">
+                    T
+                </div>
 
-    /* =====================================
-       ADD ACTIVITY
-       ===================================== */
+                <span>
+                    Traveler
+                </span>
 
-    activityForm.addEventListener(
-        "submit",
-        function (event) {
+            </div>
 
-            event.preventDefault();
 
+            <!-- Mobile Menu -->
 
-            const selectedDay =
-                activityDay.value;
+            <button
+                class="trip-menu"
+                id="tripMenu"
+                type="button">
 
-            const time =
-                activityTime.value;
+                ☰
 
-            const name =
-                activityName.value.trim();
+            </button>
 
-            const location =
-                activityLocation.value.trim();
+        </div>
 
 
-            /* VALIDATION */
+        <nav
+            class="trip-mobile-nav"
+            id="tripMobileNav">
 
-            if (!time || !name || !location) {
+            <a href="dashboard.html">
+                🏠 Dashboard
+            </a>
 
-                alert(
-                    "Please fill all activity details!"
-                );
+            <a href="create-trip.html">
+                ➕ Create Trip
+            </a>
 
-                return;
+            <a href="my-trips.html">
+                🧳 My Trips
+            </a>
 
-            }
+            <a href="community.html">
+                👥 Community
+            </a>
 
+        </nav>
 
-            /* FIND SELECTED DAY LIST */
+    </header>
 
-            const activitiesList =
-                document.querySelector(
-                    `.activities-list[data-day="${selectedDay}"]`
-                );
 
 
-            if (!activitiesList) {
+    <!-- ================= MAIN ================= -->
 
-                alert(
-                    "Selected day was not found!"
-                );
+    <main class="itinerary-main">
 
-                return;
 
-            }
+        <div class="itinerary-container">
 
 
-            /* REMOVE EMPTY MESSAGE */
+            <!-- PAGE HEADER -->
 
-            const emptyMessage =
-                activitiesList.querySelector(
-                    ".empty-message"
-                );
+            <section class="itinerary-header">
 
-            if (emptyMessage) {
+                <div>
 
-                emptyMessage.remove();
+                    <span class="page-label">
+                        TRIP PLANNER
+                    </span>
 
-            }
+                    <h1>
+                        Build Your Itinerary
+                    </h1>
 
+                    <p>
+                        Plan your journey day by day and
+                        organize all your activities in one place.
+                    </p>
 
-            /* CREATE ACTIVITY ITEM */
+                </div>
 
-            const activityItem =
-                document.createElement("div");
 
-            activityItem.className =
-                "activity-item";
+                <a
+                    href="my-trips.html"
+                    class="back-link">
 
+                    ← Back to My Trips
 
-            /* TIME */
+                </a>
 
-            const timeBox =
-                document.createElement("div");
+            </section>
 
-            timeBox.className =
-                "activity-time";
 
-            timeBox.textContent =
-                formatTime(time);
 
+            <!-- TRIP SUMMARY -->
 
-            /* ACTIVITY DETAILS */
+            <section class="trip-summary-card">
 
-            const details =
-                document.createElement("div");
+                <div class="summary-item">
 
-            details.className =
-                "activity-details";
+                    <span class="summary-label">
+                        TRIP
+                    </span>
 
+                    <h2 id="tripTitle">
+                        My Amazing Trip
+                    </h2>
 
-            const activityTitle =
-                document.createElement("h4");
+                </div>
 
-            activityTitle.textContent =
-                name;
 
+                <div class="summary-item">
 
-            const activityPlace =
-                document.createElement("p");
+                    <span class="summary-label">
+                        DESTINATION
+                    </span>
 
-            activityPlace.textContent =
-                "📍 " + location;
+                    <p id="tripDestination">
+                        Paris, France
+                    </p>
 
+                </div>
 
-            details.appendChild(
-                activityTitle
-            );
 
-            details.appendChild(
-                activityPlace
-            );
+                <div class="summary-item">
 
+                    <span class="summary-label">
+                        TRAVELERS
+                    </span>
 
-            /* DELETE BUTTON */
+                    <p id="tripTravelers">
+                        1 Traveler
+                    </p>
 
-            const deleteButton =
-                document.createElement("button");
+                </div>
 
-            deleteButton.type =
-                "button";
+            </section>
 
-            deleteButton.className =
-                "delete-activity-btn";
 
-            deleteButton.textContent =
-                "Delete";
 
+            <!-- ================= ADD ACTIVITY ================= -->
 
-            /* DELETE ACTIVITY */
+            <section class="activity-form-card">
 
-            deleteButton.addEventListener(
-                "click",
-                function () {
+                <h2>
+                    Add New Activity
+                </h2>
 
-                    activityItem.remove();
+                <p>
+                    Add activities to your selected travel day.
+                </p>
 
 
-                    /* IF NO ACTIVITY LEFT */
+                <form id="activityForm">
 
-                    if (
-                        activitiesList.children.length === 0
-                    ) {
 
-                        const newEmptyMessage =
-                            document.createElement("p");
+                    <div class="activity-form-grid">
 
-                        newEmptyMessage.className =
-                            "empty-message";
 
-                        newEmptyMessage.textContent =
-                            "No activities added yet.";
+                        <!-- DAY -->
 
-                        activitiesList.appendChild(
-                            newEmptyMessage
-                        );
+                        <div class="form-group">
 
-                    }
+                            <label for="activityDay">
+                                Select Day
+                            </label>
 
-                }
-            );
+                            <select id="activityDay">
 
+                                <option value="Day 1">
+                                    Day 1
+                                </option>
 
-            /* ADD ALL PARTS */
+                                <option value="Day 2">
+                                    Day 2
+                                </option>
 
-            activityItem.appendChild(
-                timeBox
-            );
+                                <option value="Day 3">
+                                    Day 3
+                                </option>
 
-            activityItem.appendChild(
-                details
-            );
+                                <option value="Day 4">
+                                    Day 4
+                                </option>
 
-            activityItem.appendChild(
-                deleteButton
-            );
+                                <option value="Day 5">
+                                    Day 5
+                                </option>
 
+                            </select>
 
-            /* ADD ACTIVITY TO DAY */
+                        </div>
 
-            activitiesList.appendChild(
-                activityItem
-            );
 
 
-            /* RESET FORM */
+                        <!-- TIME -->
 
-            activityTime.value = "";
+                        <div class="form-group">
 
-            activityName.value = "";
+                            <label for="activityTime">
+                                Time
+                            </label>
 
-            activityLocation.value = "";
+                            <input
+                                type="time"
+                                id="activityTime"
+                                required>
 
+                        </div>
 
-            /* SUCCESS MESSAGE */
 
-            alert(
-                "Activity added successfully!"
-            );
 
-        }
-    );
+                        <!-- ACTIVITY -->
 
+                        <div class="form-group">
 
-    /* =====================================
-       CHARACTER COUNT
-       ===================================== */
+                            <label for="activityName">
+                                Activity
+                            </label>
 
-    if (description && characterCount) {
+                            <input
+                                type="text"
+                                id="activityName"
+                                placeholder="e.g. Visit Eiffel Tower"
+                                required>
 
-        description.addEventListener(
-            "input",
-            function () {
+                        </div>
 
-                characterCount.textContent =
-                    description.value.length;
 
-            }
-        );
 
-    }
+                        <!-- LOCATION -->
 
+                        <div class="form-group">
 
-    /* =====================================
-       SAVE ITINERARY
-       ===================================== */
+                            <label for="activityLocation">
+                                Location
+                            </label>
 
-    if (saveItineraryBtn) {
+                            <input
+                                type="text"
+                                id="activityLocation"
+                                placeholder="e.g. Champ de Mars"
+                                required>
 
-        saveItineraryBtn.addEventListener(
-            "click",
-            function () {
+                        </div>
 
-                const allActivities =
-                    document.querySelectorAll(
-                        ".activity-item"
-                    );
 
+                    </div>
 
-                if (
-                    allActivities.length === 0
-                ) {
 
-                    alert(
-                        "Please add at least one activity before saving!"
-                    );
+                    <button
+                        type="submit"
+                        class="add-activity-btn">
 
-                    return;
+                        + Add Activity
 
-                }
+                    </button>
 
 
-                /*
-                   For now, data is stored in
-                   browser localStorage.
-                */
+                </form>
 
-                const itineraryData = [];
+            </section>
 
 
-                allActivities.forEach(
-                    function (activity) {
 
-                        const parentList =
-                            activity.parentElement;
+            <!-- ================= ITINERARY ================= -->
 
-                        const day =
-                            parentList.dataset.day;
+            <section class="itinerary-section">
 
-                        const time =
-                            activity.querySelector(
-                                ".activity-time"
-                            ).textContent;
+                <div class="itinerary-section-header">
 
-                        const name =
-                            activity.querySelector(
-                                ".activity-details h4"
-                            ).textContent;
+                    <div>
 
-                        const location =
-                            activity.querySelector(
-                                ".activity-details p"
-                            ).textContent
-                                .replace("📍 ", "");
+                        <span class="page-label">
+                            YOUR PLAN
+                        </span>
 
+                        <h2>
+                            Day Wise Itinerary
+                        </h2>
 
-                        itineraryData.push({
+                    </div>
 
-                            day: day,
+                </div>
 
-                            time: time,
 
-                            activity: name,
+                <!-- Day 1 -->
 
-                            location: location
+                <div
+                    class="day-card"
+                    id="day1">
 
-                        });
+                    <div class="day-card-header">
 
-                    }
-                );
+                        <div>
 
+                            <span class="day-number">
+                                DAY 1
+                            </span>
 
-                /* SAVE TO LOCAL STORAGE */
+                            <h3>
+                                Start Your Adventure
+                            </h3>
 
-                localStorage.setItem(
-                    "globeTrotterItinerary",
-                    JSON.stringify(itineraryData)
-                );
+                        </div>
 
+                    </div>
 
-                alert(
-                    "Itinerary saved successfully!"
-                );
 
+                    <div
+                        class="activities-list"
+                        data-day="Day 1">
 
-                console.log(
-                    itineraryData
-                );
+                        <p class="empty-message">
+                            No activities added yet.
+                        </p>
 
-            }
-        );
+                    </div>
 
-    }
+                </div>
 
 
-    /* =====================================
-       FORMAT TIME
-       ===================================== */
 
-    function formatTime(time) {
+                <!-- Day 2 -->
 
-        if (!time) {
+                <div
+                    class="day-card"
+                    id="day2">
 
-            return "";
+                    <div class="day-card-header">
 
-        }
+                        <div>
 
+                            <span class="day-number">
+                                DAY 2
+                            </span>
 
-        const timeParts =
-            time.split(":");
+                            <h3>
+                                Explore the City
+                            </h3>
 
+                        </div>
 
-        let hours =
-            Number(timeParts[0]);
+                    </div>
 
-        const minutes =
-            timeParts[1];
 
+                    <div
+                        class="activities-list"
+                        data-day="Day 2">
 
-        const period =
-            hours >= 12
-                ? "PM"
-                : "AM";
+                        <p class="empty-message">
+                            No activities added yet.
+                        </p>
 
+                    </div>
 
-        hours =
-            hours % 12;
+                </div>
 
 
-        if (hours === 0) {
 
-            hours = 12;
+                <!-- Day 3 -->
 
-        }
+                <div
+                    class="day-card"
+                    id="day3">
 
+                    <div class="day-card-header">
 
-        return (
-            hours +
-            ":" +
-            minutes +
-            " " +
-            period
-        );
+                        <div>
 
-    }
+                            <span class="day-number">
+                                DAY 3
+                            </span>
 
+                            <h3>
+                                Discover More
+                            </h3>
 
-});
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="activities-list"
+                        data-day="Day 3">
+
+                        <p class="empty-message">
+                            No activities added yet.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Day 4 -->
+
+                <div
+                    class="day-card"
+                    id="day4">
+
+                    <div class="day-card-header">
+
+                        <div>
+
+                            <span class="day-number">
+                                DAY 4
+                            </span>
+
+                            <h3>
+                                Local Experiences
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="activities-list"
+                        data-day="Day 4">
+
+                        <p class="empty-message">
+                            No activities added yet.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Day 5 -->
+
+                <div
+                    class="day-card"
+                    id="day5">
+
+                    <div class="day-card-header">
+
+                        <div>
+
+                            <span class="day-number">
+                                DAY 5
+                            </span>
+
+                            <h3>
+                                Final Day
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="activities-list"
+                        data-day="Day 5">
+
+                        <p class="empty-message">
+                            No activities added yet.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- SAVE BUTTON -->
+
+            <div class="save-itinerary-section">
+
+                <button
+                    type="button"
+                    id="saveItineraryBtn"
+                    class="save-itinerary-btn">
+
+                    Save Itinerary
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer trip-footer">
+
+        <div class="container">
+
+            <div class="footer-bottom">
+
+                <p>
+                    © 2026 GlobeTrotter.
+                    All rights reserved.
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="jsfiles/itinerary-builder.js"></script>
+
+</body>
+
+</html>
