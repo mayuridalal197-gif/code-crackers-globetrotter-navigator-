@@ -1,427 +1,364 @@
-/* =========================================
-   GLOBETROTTER CREATE TRIP
-   ========================================= */
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    /* =====================================
-       GET ELEMENTS
-       ===================================== */
-
-    const form =
-        document.getElementById("createTripForm");
-
-    const startDate =
-        document.getElementById("startDate");
-
-    const endDate =
-        document.getElementById("endDate");
-
-    const decreaseTravelers =
-        document.getElementById("decreaseTravelers");
-
-    const increaseTravelers =
-        document.getElementById("increaseTravelers");
-
-    const travelers =
-        document.getElementById("travelers");
-
-    const description =
-        document.getElementById("description");
-
-    const characterCount =
-        document.getElementById("characterCount");
-
-    const errorMessage =
-        document.getElementById("errorMessage");
-
-    const successMessage =
-        document.getElementById("successMessage");
+// ==========================================
+// GlobeTrotter - Create Trip JavaScript
+// ==========================================
 
 
-    /* =====================================
-       TODAY DATE
-       ===================================== */
+// ==========================================
+// DOM Elements
+// ==========================================
 
-    const today = new Date();
+const tripForm =
+    document.getElementById("tripForm");
 
-    const year =
-        today.getFullYear();
+const destinationInput =
+    document.getElementById("destination");
 
-    const month =
-        String(today.getMonth() + 1)
-            .padStart(2, "0");
+const selectedDestination =
+    document.getElementById("selectedDestination");
 
-    const day =
-        String(today.getDate())
-            .padStart(2, "0");
+const startDate =
+    document.getElementById("startDate");
 
-    const todayDate =
-        `${year}-${month}-${day}`;
+const endDate =
+    document.getElementById("endDate");
+
+const startDateError =
+    document.getElementById("startDateError");
+
+const endDateError =
+    document.getElementById("endDateError");
+
+const successMessage =
+    document.getElementById("successMessage");
 
 
-    /* =====================================
-       DISABLE PAST DATES
-       ===================================== */
+// ==========================================
+// Get Destination From URL
+// ==========================================
 
-    if (startDate) {
-        startDate.min = todayDate;
+const urlParams =
+    new URLSearchParams(window.location.search);
+
+const destinationFromURL =
+    urlParams.get("destination");
+
+
+if (destinationFromURL) {
+
+    destinationInput.value =
+        destinationFromURL;
+
+    selectedDestination.textContent =
+        destinationFromURL;
+
+}
+
+
+// ==========================================
+// Set Minimum Date
+// ==========================================
+
+const today =
+    new Date();
+
+const todayString =
+    today.toISOString().split("T")[0];
+
+
+// Prevent past dates
+
+startDate.min = todayString;
+
+endDate.min = todayString;
+
+
+// ==========================================
+// Start Date Change
+// ==========================================
+
+startDate.addEventListener(
+    "change",
+    function () {
+
+        startDateError.style.display =
+            "none";
+
+
+        if (!startDate.value) {
+            return;
+        }
+
+
+        // End date cannot be before start date
+
+        endDate.min =
+            startDate.value;
+
+
+        // If current end date is invalid
+
+        if (
+            endDate.value &&
+            endDate.value < startDate.value
+        ) {
+
+            endDate.value = "";
+
+            endDateError.style.display =
+                "block";
+
+        }
+
     }
+);
 
-    if (endDate) {
-        endDate.min = todayDate;
+
+// ==========================================
+// End Date Change
+// ==========================================
+
+endDate.addEventListener(
+    "change",
+    function () {
+
+        endDateError.style.display =
+            "none";
+
+
+        if (
+            startDate.value &&
+            endDate.value < startDate.value
+        ) {
+
+            endDateError.style.display =
+                "block";
+
+            endDate.value = "";
+
+        }
+
     }
+);
 
 
-    /* =====================================
-       START DATE CHANGE
-       ===================================== */
+// ==========================================
+// Form Submit
+// ==========================================
 
-    startDate.addEventListener(
-        "change",
-        function () {
+tripForm.addEventListener(
+    "submit",
+    function (event) {
 
-            endDate.min = startDate.value;
+        event.preventDefault();
 
-            if (
-                endDate.value &&
-                endDate.value < startDate.value
-            ) {
-                endDate.value = "";
-            }
+
+        // Get values
+
+        const tripName =
+            document.getElementById(
+                "tripName"
+            ).value.trim();
+
+
+        const destination =
+            destinationInput.value.trim();
+
+
+        const travellers =
+            document.getElementById(
+                "travellers"
+            ).value;
+
+
+        const budget =
+            document.getElementById(
+                "budget"
+            ).value;
+
+
+        const description =
+            document.getElementById(
+                "description"
+            ).value.trim();
+
+
+        // ==========================================
+        // Validation
+        // ==========================================
+
+        let isValid = true;
+
+
+        // Start date validation
+
+        if (
+            !startDate.value ||
+            startDate.value < todayString
+        ) {
+
+            startDateError.style.display =
+                "block";
+
+            isValid = false;
+
+        } else {
+
+            startDateError.style.display =
+                "none";
 
         }
-    );
 
 
-    /* =====================================
-       PLUS BUTTON
-       ===================================== */
+        // End date validation
 
-    increaseTravelers.addEventListener(
-        "click",
-        function () {
+        if (
+            !endDate.value ||
+            endDate.value < startDate.value
+        ) {
 
-            let currentValue =
-                Number(travelers.value);
+            endDateError.style.display =
+                "block";
 
-            travelers.value =
-                currentValue + 1;
+            isValid = false;
 
-        }
-    );
+        } else {
 
-
-    /* =====================================
-       MINUS BUTTON
-       ===================================== */
-
-    decreaseTravelers.addEventListener(
-        "click",
-        function () {
-
-            let currentValue =
-                Number(travelers.value);
-
-            if (currentValue > 1) {
-                travelers.value =
-                    currentValue - 1;
-            }
+            endDateError.style.display =
+                "none";
 
         }
-    );
 
 
-    /* =====================================
-       CHARACTER COUNT
-       ===================================== */
+        if (!isValid) {
 
-    if (description && characterCount) {
+            return;
 
-        description.addEventListener(
-            "input",
-            function () {
+        }
 
-                characterCount.textContent =
-                    description.value.length;
 
-            }
+        // ==========================================
+        // Create Trip Object
+        // ==========================================
+
+        const newTrip = {
+
+            id: Date.now(),
+
+            name: tripName,
+
+            destination: destination,
+
+            startDate: startDate.value,
+
+            endDate: endDate.value,
+
+            travellers: Number(travellers),
+
+            budget: budget,
+
+            description: description,
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        // ==========================================
+        // Get Existing Trips
+        // ==========================================
+
+        let savedTrips =
+            JSON.parse(
+                localStorage.getItem("globeTrotterTrips")
+            ) || [];
+
+
+        // Add new trip
+
+        savedTrips.push(newTrip);
+
+
+        // Save
+
+        localStorage.setItem(
+            "globeTrotterTrips",
+            JSON.stringify(savedTrips)
         );
 
-    }
 
-
-    /* =====================================
-       FORM SUBMIT
-       ===================================== */
-
-    form.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
-
-
-            /* =================================
-               CLEAR PREVIOUS MESSAGES
-               ================================= */
-
-            errorMessage.textContent = "";
-            successMessage.textContent = "";
-
-            errorMessage.style.display = "none";
-            successMessage.style.display = "none";
-
-
-            /* =================================
-               GET FORM VALUES
-               ================================= */
-
-            const tripName =
-                document.getElementById("tripName")
-                    .value.trim();
-
-            const destination =
-                document.getElementById("destination")
-                    .value.trim();
-
-            const start =
-                startDate.value;
-
-            const end =
-                endDate.value;
-
-            const tripDescription =
-                description.value.trim();
-
-
-            /* =================================
-               BASIC VALIDATION
-               ================================= */
-
-            if (!tripName) {
-
-                showError(
-                    "Please enter a trip name."
-                );
-
-                return;
-
-            }
-
-
-            if (!destination) {
-
-                showError(
-                    "Please enter a destination."
-                );
-
-                return;
-
-            }
-
-
-            if (!start) {
-
-                showError(
-                    "Please select a start date."
-                );
-
-                return;
-
-            }
-
-
-            if (!end) {
-
-                showError(
-                    "Please select an end date."
-                );
-
-                return;
-
-            }
-
-
-            if (start < todayDate) {
-
-                showError(
-                    "Start date cannot be in the past."
-                );
-
-                return;
-
-            }
-
-
-            if (end < start) {
-
-                showError(
-                    "End date cannot be before start date."
-                );
-
-                return;
-
-            }
-
-
-            /* =================================
-               REQUEST DATA
-               ================================= */
-
-            const tripData = {
-
-                /*
-                    Backend expects "title",
-                    while frontend uses "tripName".
-                */
-
-                title: tripName,
-
-                destination: destination,
-
-                startDate: start,
-
-                endDate: end,
-
-                description:
-                    tripDescription || null
-
-            };
-
-
-            /* =================================
-               DISABLE BUTTON
-               ================================= */
-
-            const submitButton =
-                form.querySelector(
-                    'button[type="submit"]'
-                );
-
-            const originalButtonText =
-                submitButton.textContent;
-
-            submitButton.disabled = true;
-
-            submitButton.textContent =
-                "Creating Trip...";
-
-
-            /* =================================
-               API REQUEST
-               ================================= */
-
-            try {
-
-                const response =
-                    await apiRequest(
-                        "/trips",
-                        {
-                            method: "POST",
-
-                            body:
-                                JSON.stringify(
-                                    tripData
-                                )
-                        }
-                    );
-
-
-                /* =============================
-                   SUCCESS
-                   ============================= */
-
-                if (response.success) {
-
-                    showSuccess(
-                        "Trip created successfully! Redirecting..."
-                    );
-
-
-                    /*
-                        Redirect to My Trips
-                        after successful creation.
-                    */
-
-                    setTimeout(
-                        function () {
-
-                            window.location.href =
-                                "my-trips.html";
-
-                        },
-                        1000
-                    );
-
-                }
-
-                else {
-
-                    showError(
-                        response.message ||
-                        "Unable to create trip."
-                    );
-
-                }
-
-
-            } catch (error) {
-
-                console.error(
-                    "Create trip error:",
-                    error
-                );
-
-
-                showError(
-                    error.message ||
-                    "Unable to create trip. Please try again."
-                );
-
-            }
-
-
-            /* =================================
-               ENABLE BUTTON
-               ================================= */
-
-            submitButton.disabled = false;
-
-            submitButton.textContent =
-                originalButtonText;
-
-        }
-    );
-
-
-    /* =====================================
-       SHOW ERROR
-       ===================================== */
-
-    function showError(message) {
-
-        errorMessage.textContent =
-            message;
-
-        errorMessage.style.display =
-            "block";
-
-    }
-
-
-    /* =====================================
-       SHOW SUCCESS
-       ===================================== */
-
-    function showSuccess(message) {
-
-        successMessage.textContent =
-            message;
+        // ==========================================
+        // Success
+        // ==========================================
 
         successMessage.style.display =
             "block";
 
-    }
 
-});
+        successMessage.scrollIntoView({
+            behavior: "smooth"
+        });
+
+
+        // ==========================================
+        // Redirect
+        // ==========================================
+
+        setTimeout(function () {
+
+            window.location.href =
+                "my-trips.html";
+
+        }, 1200);
+
+    }
+);
+
+
+// ==========================================
+// Update Destination Preview
+// ==========================================
+
+destinationInput.addEventListener(
+    "input",
+    function () {
+
+        if (destinationInput.value.trim() === "") {
+
+            selectedDestination.textContent =
+                "Not selected";
+
+        } else {
+
+            selectedDestination.textContent =
+                destinationInput.value.trim();
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// Mobile Menu
+// ==========================================
+
+const menuToggle =
+    document.getElementById("menuToggle");
+
+const navLinks =
+    document.querySelector(".nav-links");
+
+
+if (menuToggle) {
+
+    menuToggle.addEventListener(
+        "click",
+        function () {
+
+            navLinks.classList.toggle("show");
+
+        }
+    );
+
+}
