@@ -1,6 +1,6 @@
 /* =========================================
    GlobeTrotter Authentication
-   Temporary Frontend Authentication
+   Backend Integrated Authentication
    ========================================= */
 
 
@@ -17,13 +17,11 @@ function togglePassword(inputId, button) {
     if (input.type === "password") {
 
         input.type = "text";
-
         button.textContent = "🙈";
 
     } else {
 
         input.type = "password";
-
         button.textContent = "👁";
 
     }
@@ -41,7 +39,6 @@ function showMessage(elementId, message, type) {
     }
 
     element.textContent = message;
-
     element.className = "auth-message " + type;
 }
 
@@ -50,13 +47,11 @@ function showMessage(elementId, message, type) {
 
 const registerForm = document.getElementById("registerForm");
 
-
 if (registerForm) {
 
-    registerForm.addEventListener("submit", function (event) {
+    registerForm.addEventListener("submit", async function (event) {
 
         event.preventDefault();
-
 
         const fullName =
             document.getElementById("fullName").value.trim();
@@ -74,7 +69,7 @@ if (registerForm) {
             document.getElementById("terms").checked;
 
 
-        /* Validation */
+        /* ---------- Frontend Validation ---------- */
 
         if (fullName.length < 2) {
 
@@ -124,60 +119,58 @@ if (registerForm) {
         }
 
 
-        /* Check existing user */
+        /* ---------- Send Data To Backend ---------- */
 
-        const existingUser =
-            JSON.parse(localStorage.getItem("globeTrotterUser"));
-
-
-        if (existingUser &&
-            existingUser.email === email) {
+        try {
 
             showMessage(
                 "registerMessage",
-                "An account with this email already exists.",
+                "Creating your account...",
+                "success"
+            );
+
+
+            const response = await apiRequest(
+                "/auth/register",
+                {
+                    method: "POST",
+
+                    body: JSON.stringify({
+                        name: fullName,
+                        email: email,
+                        password: password
+                    })
+                }
+            );
+
+
+            /* ---------- Registration Success ---------- */
+
+            showMessage(
+                "registerMessage",
+                response.message || "Account created successfully!",
+                "success"
+            );
+
+
+            /* Redirect to login */
+
+            setTimeout(function () {
+
+                window.location.href = "login.html";
+
+            }, 1000);
+
+
+        } catch (error) {
+
+            showMessage(
+                "registerMessage",
+                error.message || "Registration failed.",
                 "error"
             );
 
-            return;
         }
-
-
-        /* Create user */
-
-        const user = {
-
-            name: fullName,
-
-            email: email,
-
-            password: password,
-
-            createdAt: new Date().toISOString()
-
-        };
-
-
-        localStorage.setItem(
-            "globeTrotterUser",
-            JSON.stringify(user)
-        );
-
-
-        showMessage(
-            "registerMessage",
-            "Account created successfully! Redirecting to login...",
-            "success"
-        );
-
-
-        /* Redirect */
-
-        setTimeout(function () {
-
-            window.location.href = "login.html";
-
-        }, 1500);
 
     });
 
@@ -188,10 +181,9 @@ if (registerForm) {
 
 const loginForm = document.getElementById("loginForm");
 
-
 if (loginForm) {
 
-    loginForm.addEventListener("submit", function (event) {
+    loginForm.addEventListener("submit", async function (event) {
 
         event.preventDefault();
 
@@ -203,17 +195,13 @@ if (loginForm) {
             document.getElementById("loginPassword").value;
 
 
-        /* Get registered user */
+        /* ---------- Basic Validation ---------- */
 
-        const user =
-            JSON.parse(localStorage.getItem("globeTrotterUser"));
-
-
-        if (!user) {
+        if (!email || !password) {
 
             showMessage(
                 "loginMessage",
-                "No account found. Please register first.",
+                "Please enter email and password.",
                 "error"
             );
 
@@ -221,56 +209,90 @@ if (loginForm) {
         }
 
 
-        /* Check credentials */
+        /* ---------- Send Login Request ---------- */
 
-        if (
-            email !== user.email ||
-            password !== user.password
-        ) {
+        try {
 
             showMessage(
                 "loginMessage",
-                "Invalid email or password.",
+                "Logging in...",
+                "success"
+            );
+
+
+            const response = await apiRequest(
+                "/auth/login",
+                {
+                    method: "POST",
+
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                }
+            );
+
+
+            /* ---------- Get Backend Response ---------- */
+
+            const token = response.data?.token;
+            const user = response.data?.user;
+
+
+            if (!token) {
+
+                throw new Error(
+                    "Login successful but authentication token was not received."
+                );
+
+            }
+
+
+            /* ---------- Store JWT ---------- */
+
+            localStorage.setItem(
+                "token",
+                token
+            );
+
+
+            /* ---------- Store User ---------- */
+
+            if (user) {
+
+                localStorage.setItem(
+                    "globeTrotterLoggedIn",
+                    JSON.stringify(user)
+                );
+
+            }
+
+
+            showMessage(
+                "loginMessage",
+                response.message || "Login successful!",
+                "success"
+            );
+
+
+            /* ---------- Redirect ---------- */
+
+            setTimeout(function () {
+
+                window.location.href = "dashboard.html";
+
+            }, 800);
+
+
+        } catch (error) {
+
+            showMessage(
+                "loginMessage",
+                error.message || "Login failed.",
                 "error"
             );
 
-            return;
         }
-
-
-        /* Login success */
-
-        const loggedInUser = {
-
-            name: user.name,
-
-            email: user.email,
-
-            loginTime: new Date().toISOString()
-
-        };
-
-
-        localStorage.setItem(
-            "globeTrotterLoggedIn",
-            JSON.stringify(loggedInUser)
-        );
-
-
-        showMessage(
-            "loginMessage",
-            "Login successful! Redirecting...",
-            "success"
-        );
-
-
-        /* Dashboard temporarily */
-
-        setTimeout(function () {
-
-            window.location.href = "dashboard.html";
-
-        }, 1000);
 
     });
 
