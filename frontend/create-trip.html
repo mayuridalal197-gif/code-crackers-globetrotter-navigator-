@@ -1,720 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <title>GlobeTrotter - Create Trip</title>
 
-    <title>Create Trip | GlobeTrotter</title>
+    <link rel="stylesheet" href="cssfiles/global.css">
 
+    <style>
+        .create-trip-page {
+            max-width: 850px;
+            margin: auto;
+            padding: 30px 20px;
+        }
 
-    <!-- CSS -->
+        .trip-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-    <link
-        rel="stylesheet"
-        href="cssfiles/global.css">
+        .trip-header h1 {
+            margin-bottom: 8px;
+        }
 
-    <link
-        rel="stylesheet"
-        href="cssfiles/trip.css">
+        .trip-header p {
+            color: #666;
+        }
 
+        .trip-form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #2563eb;
+        }
+
+        .form-group textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .destination-preview {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .destination-preview strong {
+            color: #1d4ed8;
+        }
+
+        .date-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .success-message {
+            display: none;
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .create-trip-page {
+                padding: 20px 12px;
+            }
+
+            .trip-form-card {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
 </head>
-
 
 <body>
 
+    <!-- Navbar -->
 
-    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
 
-    <header class="trip-navbar">
-
-        <div class="trip-navbar-inner">
-
-
-            <!-- LOGO -->
-
-            <a
-                href="dashboard.html"
-                class="dashboard-logo">
-
-                <span class="logo-icon">
-                    ✈
-                </span>
-
-                <span>
-                    GlobeTrotter
-                </span>
-
-            </a>
-
-
-            <!-- DESKTOP NAV -->
-
-            <nav class="trip-nav">
-
-                <a href="dashboard.html">
-                    Dashboard
-                </a>
-
-                <a
-                    href="create-trip.html"
-                    class="active">
-
-                    Create Trip
-
-                </a>
-
-                <a href="my-trips.html">
-                    My Trips
-                </a>
-
-                <a href="community.html">
-                    Community
-                </a>
-
-            </nav>
-
-
-            <!-- USER -->
-
-            <div class="trip-user">
-
-                <div
-                    class="trip-avatar"
-                    id="tripAvatar">
-
-                    T
-
-                </div>
-
-                <span id="tripUserName">
-                    Traveler
-                </span>
-
-            </div>
-
-
-            <!-- MOBILE MENU BUTTON -->
-
-            <button
-                class="trip-menu"
-                id="tripMenu"
-                type="button"
-                aria-label="Open Menu">
-
-                ☰
-
-            </button>
-
-
+        <div class="logo">
+            🌍 GlobeTrotter
         </div>
 
-
-        <!-- MOBILE NAV -->
-
-        <nav
-            class="trip-mobile-nav"
-            id="tripMobileNav">
+        <div class="nav-links">
 
             <a href="dashboard.html">
-                🏠 Dashboard
-            </a>
-
-            <a href="create-trip.html">
-                ➕ Create Trip
+                Dashboard
             </a>
 
             <a href="my-trips.html">
-                🧳 My Trips
+                My Trips
+            </a>
+
+            <a href="calendar.html">
+                Calendar
+            </a>
+
+            <a href="search.html">
+                Search
             </a>
 
             <a href="community.html">
-                👥 Community
+                Community
             </a>
 
-        </nav>
+            <a href="profile.html">
+                Profile
+            </a>
+
+        </div>
+
+        <button
+            class="menu-toggle"
+            id="menuToggle"
+        >
+            ☰
+        </button>
+
+    </nav>
 
 
-    </header>
+    <!-- Main -->
+
+    <main class="create-trip-page">
+
+        <div class="trip-header">
+
+            <h1>
+                ✈️ Create Your Trip
+            </h1>
+
+            <p>
+                Plan your next adventure with GlobeTrotter.
+            </p>
+
+        </div>
 
 
+        <section class="trip-form-card">
 
-    <!-- ================= MAIN ================= -->
-
-    <main class="create-trip-main">
-
-
-        <div class="create-trip-container">
-
-
-            <!-- ================= PAGE HEADER ================= -->
-
-            <section class="trip-page-header">
+            <div
+                class="success-message"
+                id="successMessage"
+            >
+                🎉 Trip created successfully!
+            </div>
 
 
-                <div>
+            <!-- Destination Preview -->
 
-                    <span class="page-label">
-                        TRIP PLANNER
-                    </span>
+            <div
+                class="destination-preview"
+                id="destinationPreview"
+            >
+                📍 Selected Destination:
+                <strong id="selectedDestination">
+                    Not selected
+                </strong>
+            </div>
 
-                    <h1>
-                        Create Your Trip
-                    </h1>
 
-                    <p>
-                        Tell us about your next adventure
-                        and start building your perfect journey.
-                    </p>
+            <!-- Form -->
+
+            <form id="tripForm">
+
+                <!-- Trip Name -->
+
+                <div class="form-group">
+
+                    <label for="tripName">
+                        Trip Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="tripName"
+                        placeholder="Example: Goa Vacation"
+                        required
+                    >
 
                 </div>
 
 
-                <a
-                    href="dashboard.html"
-                    class="back-link">
+                <!-- Destination -->
 
-                    ← Back to Dashboard
+                <div class="form-group">
 
-                </a>
+                    <label for="destination">
+                        Destination *
+                    </label>
 
+                    <input
+                        type="text"
+                        id="destination"
+                        placeholder="Enter destination"
+                        required
+                    >
 
-            </section>
-
-
-
-            <!-- ================= FORM CARD ================= -->
-
-            <section class="trip-form-card">
-
-
-                <form id="createTripForm">
+                </div>
 
 
-                    <!-- ================= SECTION 01 ================= -->
+                <!-- Dates -->
 
-                    <div class="form-section">
+                <div class="form-row">
 
+                    <div class="form-group">
 
-                        <div class="form-section-heading">
+                        <label for="startDate">
+                            Start Date *
+                        </label>
 
+                        <input
+                            type="date"
+                            id="startDate"
+                            required
+                        >
 
-                            <div class="form-number">
-                                01
-                            </div>
-
-
-                            <div>
-
-                                <h2>
-                                    Trip Details
-                                </h2>
-
-                                <p>
-                                    Give your trip a name
-                                    and choose your destination.
-                                </p>
-
-                            </div>
-
-
+                        <div
+                            class="date-error"
+                            id="startDateError"
+                        >
+                            Please select a valid future date.
                         </div>
-
-
-
-                        <div class="form-grid">
-
-
-                            <!-- TRIP NAME -->
-
-                            <div class="form-group full-width">
-
-                                <label for="tripName">
-
-                                    Trip Name
-                                    <span>*</span>
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="tripName"
-                                    name="tripName"
-                                    placeholder="e.g. My Europe Adventure"
-                                    required>
-
-                            </div>
-
-
-
-                            <!-- DESTINATION -->
-
-                            <div class="form-group">
-
-                                <label for="destination">
-
-                                    Destination
-                                    <span>*</span>
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="destination"
-                                    name="destination"
-                                    placeholder="e.g. Paris, France"
-                                    required>
-
-                            </div>
-
-
-
-                            <!-- TRAVEL STYLE -->
-
-                            <div class="form-group">
-
-                                <label for="travelStyle">
-                                    Travel Style
-                                </label>
-
-                                <select
-                                    id="travelStyle"
-                                    name="travelStyle">
-
-                                    <option value="">
-                                        Select travel style
-                                    </option>
-
-                                    <option value="adventure">
-                                        🏔️ Adventure
-                                    </option>
-
-                                    <option value="relaxation">
-                                        🏖️ Relaxation
-                                    </option>
-
-                                    <option value="culture">
-                                        🏛️ Culture & History
-                                    </option>
-
-                                    <option value="luxury">
-                                        💎 Luxury
-                                    </option>
-
-                                    <option value="budget">
-                                        🎒 Budget
-                                    </option>
-
-                                    <option value="family">
-                                        👨‍👩‍👧 Family
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-
-                        </div>
-
 
                     </div>
 
 
+                    <div class="form-group">
 
-                    <!-- ================= SECTION 02 ================= -->
+                        <label for="endDate">
+                            End Date *
+                        </label>
 
-                    <div class="form-section">
+                        <input
+                            type="date"
+                            id="endDate"
+                            required
+                        >
 
-
-                        <div class="form-section-heading">
-
-
-                            <div class="form-number">
-                                02
-                            </div>
-
-
-                            <div>
-
-                                <h2>
-                                    Travel Dates
-                                </h2>
-
-                                <p>
-                                    Select when your journey
-                                    will begin and end.
-                                </p>
-
-                            </div>
-
-
+                        <div
+                            class="date-error"
+                            id="endDateError"
+                        >
+                            End date must be after start date.
                         </div>
-
-
-
-                        <div class="form-grid">
-
-
-                            <!-- START DATE -->
-
-                            <div class="form-group">
-
-                                <label for="startDate">
-
-                                    Start Date
-                                    <span>*</span>
-
-                                </label>
-
-                                <input
-                                    type="date"
-                                    id="startDate"
-                                    name="startDate"
-                                    required>
-
-                            </div>
-
-
-
-                            <!-- END DATE -->
-
-                            <div class="form-group">
-
-                                <label for="endDate">
-
-                                    End Date
-                                    <span>*</span>
-
-                                </label>
-
-                                <input
-                                    type="date"
-                                    id="endDate"
-                                    name="endDate"
-                                    required>
-
-                            </div>
-
-
-                        </div>
-
-
-
-                        <!-- NUMBER OF TRAVELERS -->
-
-                        <div class="form-group">
-
-                            <label for="travelers">
-
-                                Number of Travelers
-                                <span>*</span>
-
-                            </label>
-
-
-                            <div class="traveler-counter">
-
-
-                                <!-- MINUS -->
-
-                                <button
-                                    type="button"
-                                    id="decreaseTravelers"
-                                    >
-
-                                    −
-
-                                </button>
-
-
-
-                                <!-- NUMBER -->
-
-                                <input
-                                    type="number"
-                                    id="travelers"
-                                    name="travelers"
-                                    value="1"
-                                    min="1"
-                                    readonly>
-
-
-
-                                <!-- PLUS -->
-
-                                <button
-                                    type="button"
-                                    id="increaseTravelers">
-
-                                    +
-
-                                </button>
-
-
-                            </div>
-
-
-                        </div>
-
 
                     </div>
 
+                </div>
 
 
-                    <!-- ================= SECTION 03 ================= -->
+                <!-- Travellers -->
 
-                    <div class="form-section">
+                <div class="form-group">
 
+                    <label for="travellers">
+                        Number of Travellers *
+                    </label>
 
-                        <div class="form-section-heading">
+                    <input
+                        type="number"
+                        id="travellers"
+                        min="1"
+                        max="50"
+                        value="1"
+                        required
+                    >
 
+                </div>
 
-                            <div class="form-number">
-                                03
-                            </div>
 
+                <!-- Budget -->
 
-                            <div>
+                <div class="form-group">
 
-                                <h2>
-                                    Budget
-                                </h2>
+                    <label for="budget">
+                        Budget
+                    </label>
 
-                                <p>
-                                    Set an estimated budget
-                                    for your trip.
-                                </p>
+                    <select id="budget">
 
-                            </div>
+                        <option value="low">
+                            Low - ₹10,000 to ₹20,000
+                        </option>
 
+                        <option value="medium" selected>
+                            Medium - ₹20,000 to ₹50,000
+                        </option>
 
-                        </div>
+                        <option value="high">
+                            High - ₹50,000+
+                        </option>
 
+                    </select>
 
+                </div>
 
-                        <div class="form-grid">
 
+                <!-- Description -->
 
-                            <!-- CURRENCY -->
+                <div class="form-group">
 
-                            <div class="form-group">
+                    <label for="description">
+                        Trip Description
+                    </label>
 
-                                <label for="currency">
-                                    Currency
-                                </label>
+                    <textarea
+                        id="description"
+                        placeholder="Tell us about your trip..."
+                    ></textarea>
 
-                                <select
-                                    id="currency"
-                                    name="currency">
+                </div>
 
-                                    <option value="INR">
-                                        ₹ Indian Rupee
-                                    </option>
 
-                                    <option value="USD">
-                                        $ US Dollar
-                                    </option>
+                <button
+                    type="submit"
+                    class="submit-btn"
+                >
+                    Create Trip ✈️
+                </button>
 
-                                    <option value="EUR">
-                                        € Euro
-                                    </option>
+            </form>
 
-                                    <option value="GBP">
-                                        £ British Pound
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-
-
-                            <!-- BUDGET -->
-
-                            <div class="form-group">
-
-                                <label for="budget">
-                                    Estimated Budget
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="budget"
-                                    name="budget"
-                                    min="0"
-                                    placeholder="e.g. 50000">
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- ================= SECTION 04 ================= -->
-
-                    <div class="form-section">
-
-
-                        <div class="form-section-heading">
-
-
-                            <div class="form-number">
-                                04
-                            </div>
-
-
-                            <div>
-
-                                <h2>
-                                    Trip Description
-                                </h2>
-
-                                <p>
-                                    Add some details about
-                                    what you want to experience.
-                                </p>
-
-                            </div>
-
-
-                        </div>
-
-
-
-                        <div class="form-group">
-
-
-                            <label for="description">
-                                Description
-                            </label>
-
-
-                            <textarea
-                                id="description"
-                                name="description"
-                                rows="5"
-                                maxlength="500"
-                                placeholder="Tell us what you want to do, places you want to visit, activities you are interested in..."></textarea>
-
-
-                            <div class="character-count">
-
-                                <span id="characterCount">
-                                    0
-                                </span>
-
-                                / 500
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- ================= ERROR MESSAGE ================= -->
-
-                    <div
-                        class="form-message error-message"
-                        id="errorMessage">
-
-                    </div>
-
-
-
-                    <!-- ================= SUCCESS MESSAGE ================= -->
-
-                    <div
-                        class="form-message success-message"
-                        id="successMessage">
-
-                    </div>
-
-
-
-                    <!-- ================= BUTTONS ================= -->
-
-                    <div class="form-actions">
-
-
-                        <a
-                            href="dashboard.html"
-                            class="btn btn-cancel">
-
-                            Cancel
-
-                        </a>
-
-
-                        <button
-                            type="submit"
-                            class="btn btn-primary">
-
-                            Create Trip →
-
-                        </button>
-
-
-                    </div>
-
-
-                </form>
-
-
-            </section>
-
-
-        </div>
-
+        </section>
 
     </main>
 
 
-
-    <!-- ================= FOOTER ================= -->
-
-    <footer class="footer trip-footer">
-
-
-        <div class="container">
-
-
-            <div class="footer-bottom">
-
-                <p>
-                    © 2026 GlobeTrotter.
-                    All rights reserved.
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-    </footer>
-
-
-
-    <!-- ================= JAVASCRIPT ================= -->
-
-    <!-- IMPORTANT: my-trips.js NAHI, create-trip.js -->
-
-    <script src="jsfiles/api.js"></script>
     <script src="jsfiles/create-trip.js"></script>
 
-
 </body>
-
 </html>
