@@ -1550,4 +1550,72 @@
 
     }
 
+    /* ================================
+   TRAVELER COUNTER
+   PLUS AND MINUS IN SAME ROW
+================================ */
+
+.traveler-counter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    width: fit-content;
+}
+
+
+.traveler-counter button {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #ddd;
+    background-color: #ffffff;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* MINUS BUTTON */
+
+#decreaseTravelers {
+    border-radius: 8px 0 0 8px;
+}
+
+
+/* NUMBER BOX */
+
+.traveler-counter input {
+    width: 60px;
+    height: 45px;
+
+    text-align: center;
+
+    border: 1px solid #ddd;
+    border-left: none;
+    border-right: none;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+
+/* PLUS BUTTON */
+
+#increaseTravelers {
+    border-radius: 0 8px 8px 0;
+}
+
+
+/* BUTTON HOVER */
+
+.traveler-counter button:hover {
+    background-color: #f1f1f1;
 }
