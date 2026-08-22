@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login | GlobeTrotter</title>
+
+    <link rel="stylesheet"
+          href="cssfiles/global.css">
+
+    <link rel="stylesheet"
+          href="cssfiles/auth.css">
+
+</head>
+
+
+<body>
+
+
+    <main class="auth-page">
+
+        <div class="auth-container">
+
+
+            <div class="auth-card">
+
+
+                <!-- LOGO -->
+
+                <div class="auth-logo">
+
+                    <a href="index.html"
+                       class="logo">
+
+                        <span class="logo-icon">
+                            ✈
+                        </span>
+
+                        <span>
+                            GlobeTrotter
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <!-- HEADER -->
+
+                <div class="auth-header">
+
+                    <h1>
+                        Welcome Back!
+                    </h1>
+
+                    <p>
+                        Login to continue your travel journey.
+                    </p>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div id="loginMessage"
+                     class="auth-message">
+                </div>
+
+
+                <!-- LOGIN FORM -->
+
+                <form id="loginForm"
+                      class="auth-form">
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="loginEmail">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            class="form-control"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <div class="password-wrapper">
+
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                class="form-control"
+                                placeholder="Enter your password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                onclick="togglePassword('loginPassword', this)">
+                                👁
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- OPTIONS -->
+
+                    <div class="form-options">
+
+                        <label class="remember">
+
+                            <input
+                                type="checkbox"
+                                id="rememberMe"
+                            >
+
+                            <span>
+                                Remember me
+                            </span>
+
+                        </label>
+
+
+                        <a href="#">
+                            Forgot Password?
+                        </a>
+
+                    </div>
+
+
+                    <!-- BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="auth-btn">
+
+                        Login
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- REGISTER -->
+
+                <div class="auth-footer">
+
+                    Don't have an account?
+
+                    <a href="register.html">
+                        Create Account
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+            <a href="index.html"
+               class="back-home">
+
+                ← Back to Home
+
+            </a>
+
+
+        </div>
+
+    </main>
+
+
+    <script src="jsfiles/auth.js"></script>
+
+</body>
+
+</html>

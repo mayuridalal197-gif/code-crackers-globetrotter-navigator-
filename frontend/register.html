@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register | GlobeTrotter</title>
+
+    <link rel="stylesheet"
+          href="cssfiles/global.css">
+
+    <link rel="stylesheet"
+          href="cssfiles/auth.css">
+
+</head>
+
+
+<body>
+
+
+    <main class="auth-page">
+
+        <div class="auth-container">
+
+
+            <div class="auth-card">
+
+
+                <!-- LOGO -->
+
+                <div class="auth-logo">
+
+                    <a href="index.html"
+                       class="logo">
+
+                        <span class="logo-icon">
+                            ✈
+                        </span>
+
+                        <span>
+                            GlobeTrotter
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <!-- HEADER -->
+
+                <div class="auth-header">
+
+                    <h1>
+                        Create Account
+                    </h1>
+
+                    <p>
+                        Start planning your next adventure.
+                    </p>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div id="registerMessage"
+                     class="auth-message">
+                </div>
+
+
+                <!-- REGISTER FORM -->
+
+                <form id="registerForm"
+                      class="auth-form">
+
+
+                    <!-- FULL NAME -->
+
+                    <div class="form-group">
+
+                        <label for="fullName">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fullName"
+                            class="form-control"
+                            placeholder="Enter your full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="registerEmail">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="registerEmail"
+                            class="form-control"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label for="registerPassword">
+                            Password
+                        </label>
+
+                        <div class="password-wrapper">
+
+                            <input
+                                type="password"
+                                id="registerPassword"
+                                class="form-control"
+                                placeholder="Create a password"
+                                minlength="6"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                onclick="togglePassword('registerPassword', this)">
+                                👁
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONFIRM PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label for="confirmPassword">
+                            Confirm Password
+                        </label>
+
+                        <div class="password-wrapper">
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                class="form-control"
+                                placeholder="Confirm your password"
+                                minlength="6"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                onclick="togglePassword('confirmPassword', this)">
+                                👁
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TERMS -->
+
+                    <div class="form-group">
+
+                        <label class="remember">
+
+                            <input
+                                type="checkbox"
+                                id="terms"
+                                required
+                            >
+
+                            <span>
+                                I agree to the Terms & Conditions
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="auth-btn">
+
+                        Create Account
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- LOGIN -->
+
+                <div class="auth-footer">
+
+                    Already have an account?
+
+                    <a href="login.html">
+                        Login
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+            <a href="index.html"
+               class="back-home">
+
+                ← Back to Home
+
+            </a>
+
+
+        </div>
+
+    </main>
+
+
+    <script src="jsfiles/auth.js"></script>
+
+</body>
+
+</html>
