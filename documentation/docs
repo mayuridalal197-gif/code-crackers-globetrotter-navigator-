@@ -1,1 +1,164 @@
+GLOBETROTTER
+Personalized Travel Planning Application
+PROJECT DOCUMENTATION
+Team Name: Code Crackers
+Team Members:
+1.	Dalal Mayuri
+2.	Gupta Anshu
+3.	Gohil Twinkle
+INDEX:
+Sr. No.	                                      Topic	.
+1	                                 Introducation
+	
+2	ProblemStatement	
+3 
+	Objectives	
+4
+	Features	
+5	Technology Used	
+		
+		
+		
+		
+6
+	System Flow	
+7
+	ExpectedOutcome	
+8
+
+9	Conclusion
+
+Future scope	
+
+1. INTRODUCTION
+  GlobeTrotter is a personalized travel planning application designed to help users plan and organize multi-city trips.
+The application allows users to create customized trips, add cities and activities, manage travel dates, estimate expenses, view their itinerary and share their travel plans.
+The main purpose of GlobeTrotter is to make travel planning simple, organized and interactive.
+2. PROBLEM STATEMENT
+Planning a multi-city trip requires managing different types of information such as destinations, travel dates, activities, schedules and expenses.
+Managing all this information can be difficult when it is spread across different places.
+GlobeTrotter provides a centralized platform where users can organize their complete travel plan, manage their itinerary and keep track of their estimated budget
+3. OBJECTIVES
+The main objectives of GlobeTrotter are:
+•	To create customized multi-city itineraries.
+•	To manage travel dates and destinations.
+•	To search and explore cities and activities.
+•	To estimate trip expenses.
+•	To provide a day-wise itinerary.
+•	To display trips using calendar and timeline views.
+•	To allow users to share their travel plans.
+To provide a simple and user-friendly travel planning platform.
+ 4. FEATURES
+4.1 Login / Signup
+Users can create an account or log in to manage their personal travel plans.
+4.2 Dashboard
+The dashboard provides an overview of recent trips, recommended destinations, budget highlights and a quick option to create a new trip.
+4.3 Create Trip
+Users can create a new trip by entering:
+•	Trip name
+•	Start date
+•	End date
+•	Trip description
+•	Optional cover photo
+4.4 My Trips
+Users can view and manage their existing trips.
+Trip cards can display the trip name, date range and destination count.
+4.5 Itinerary Builder
+Users can add cities, select travel dates, add activities.
+ Budget & Cost Breakdown
+The application provides an estimated cost breakdown for:
+•	Transport
+•	Stay
+•	Activities
+•	Meals
+4.8 Calendar / Timeline
+Users can view their complete travel plan in a calendar or timeline format.
+4.9 Community / Public Itinerary
+Users can share their itinerary publicly so that others can view or copy the travel plan.
+4.10 Profile / Settings
+Users can manage their profile information, preferences and saved destinations.
+4.11 Admin Dashboard
+The optional admin dashboard can display trip data, popular cities, popular activities, user engagement and user management.
+r cities to create a complete itinerary.
+4.6 City & Activity Search
+Users can search for cities and activities and add them to their travel plan.
+Activities can be filtered by type, cost and duration.
+4.7 Budget & Cost Breakdown
+The application provides an estimated cost breakdown for:
+•	Transport
+•	Stay
+•	Activities
+•	Meals
+4.8 Calendar / Timeline
+Users can view their complete travel plan in a calendar or timeline format.
+4.9 Community / Public Itinerary
+Users can share their itinerary publicly so that others can view or copy the travel plan.
+4.10 Profile / Settings
+Users can manage their profile information, preferences and saved destinations.
+4.11 Admin Dashboard
+The optional admin dashboard can display trip data, popular cities, popular activities, user engagement and user management.
+5. TECHNOLOGY USED
+The project is divided into three major parts:
+Frontend
+•	HTML
+•	CSS
+•	JavaScript
+Backend
+•	Node.js + Express.js
+•	API-based architecture
+Database
+•	Relational Database
+The project uses a structured frontend, backend and database architecture to manage travel-related information.
+The project requirements specifically mention the use of a relational database for storing user-specific itineraries, stops, activities and estimated expenses.
+6. SYSTEM FLOW
+The basic working flow of GlobeTrotter is:
+User
+  ↓
+Frontend
+  ↓
+JavaScript
+  ↓
+API Request
+  ↓
+Node.js Backend
+  ↓
+Routes
+  ↓
+Controllers
+  ↓
+Services
+  ↓
+Database
+  ↓
+API Response
+  ↓
+Frontend
+7. EXPECTED OUTCOME
+The expected outcome of GlobeTrotter is a user-friendly travel planning application that allows users to:
+•	Create personalized trips.
+•	Manage multiple destinations.
+•	Add travel activities.
+•	Organize day-wise itineraries.
+•	Estimate trip expenses.
+•	View trips through calendar/timeline.
+•	Share travel plans with others.
+The application aims to provide users with better organization and visibility of their complete journey.
+8. CONCLUSION
+GlobeTrotter is a travel planning application that combines trip management, destination discovery, activity planning, budgeting, itinerary visualization and trip sharing.
+The project uses a structured frontend, backend and database architecture to provide an organized travel planning experience.
+It helps users plan their multi-city journeys in a simple, interactive and efficient way.
+9. FUTURE SCOPE
+GlobeTrotter can be further improved in the future by adding more advanced travel planning features.
+Possible future improvements include:
+•	Intelligent and personalized travel recommendations.
+•	More detailed travel and destination information.
+•	Advanced budget and expense tracking.
+•	Improved collaboration for shared trip planning.
+•	More advanced calendar and itinerary management.
+•	Expanded analytics for administrators.
+•	Better support for different languages and user preferences.
+These improvements can make GlobeTrotter more intelligent, interactive, and useful for travelers.
+
+THANK YOU
+
 
