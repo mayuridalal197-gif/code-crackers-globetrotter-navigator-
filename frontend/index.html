@@ -1,108 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
 
-    <!-- Makes website responsive on mobile/tablet -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>GlobeTrotter - Plan Your Perfect Trip</title>
+    <meta name="description"
+          content="GlobeTrotter - Plan your perfect trip and create amazing travel itineraries.">
 
-    <!-- Common CSS used throughout the website -->
-    <!-- <link rel="stylesheet" href="./cssfiles/global.css"> -->
-     <link rel="stylesheet" href="cssfiles/global.css">
+    <title>GlobeTrotter | Explore. Plan. Travel.</title>
+
+    <link rel="stylesheet" href="cssfiles/global.css">
+
 </head>
+
 
 <body>
 
+
     <!-- ================= NAVBAR ================= -->
+
     <header class="navbar">
 
-        <!-- Website Logo -->
-        <div class="logo">
-            🌍 GlobeTrotter
-        </div>
+        <div class="container navbar-container">
 
-        <!-- Navigation Links -->
-        <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="search.html">Explore</a>
-            <a href="community.html">Community</a>
-            <a href="login.html" class="nav-login">Login</a>
-            <a href="register.html" class="btn-primary nav-register">
-                Get Started
+
+            <!-- LOGO -->
+
+            <a href="index.html" class="logo">
+
+                <span class="logo-icon">
+                    ✈
+                </span>
+
+                <span>
+                    GlobeTrotter
+                </span>
+
             </a>
-        </nav>
+
+
+            <!-- DESKTOP NAVIGATION -->
+
+            <nav class="nav-links" id="navLinks">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="#destinations">
+                    Destinations
+                </a>
+
+                <a href="#features">
+                    Features
+                </a>
+
+                <a href="#about">
+                    About
+                </a>
+
+                <a href="login.html">
+                    Login
+                </a>
+
+                <a href="register.html"
+                   class="btn btn-primary nav-button">
+                    Get Started
+                </a>
+
+            </nav>
+
+
+            <!-- MOBILE MENU BUTTON -->
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                type="button">
+                ☰
+            </button>
+                        
+
+
+        </div>
 
     </header>
 
 
-    <!-- ================= HERO SECTION ================= -->
+
+    <!-- ================= HERO ================= -->
+
     <main>
 
         <section class="hero">
 
-            <div class="hero-content">
+            <div class="hero-overlay"></div>
 
-                <span class="hero-badge">
-                    ✈️ Your Journey Starts Here
-                </span>
+            <div class="container hero-container">
 
-                <h1>
-                    Plan. Explore.
-                    <span>Travel.</span>
-                </h1>
+                <div class="hero-content">
 
-                <p>
-                    Create personalized trips, build smart itineraries,
-                    manage your budget and discover amazing destinations
-                    with GlobeTrotter.
-                </p>
-
-                <div class="hero-buttons">
-
-                    <a href="register.html" class="btn-primary">
-                        Start Planning →
-                    </a>
-
-                    <a href="search.html" class="btn-secondary">
-                        Explore Destinations
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- Hero visual -->
-            <div class="hero-card">
-
-                <div class="globe-icon">
-                    🌎
-                </div>
-
-                <h3>Plan Your Next Adventure</h3>
-
-                <p>
-                    From destination discovery to complete itinerary
-                    planning — everything in one place.
-                </p>
-
-                <div class="mini-stats">
-
-                    <div>
-                        <strong>50+</strong>
-                        <span>Destinations</span>
+                    <div class="hero-badge">
+                        ✈️ Your Journey Starts Here
                     </div>
 
-                    <div>
-                        <strong>10K+</strong>
-                        <span>Travelers</span>
-                    </div>
+                    <h1>
 
-                    <div>
-                        <strong>24/7</strong>
-                        <span>Planning</span>
+                        Explore The World.
+                        <span>Your Way.</span>
+
+                    </h1>
+
+                    <p>
+
+                        Plan unforgettable trips, create
+                        personalized itineraries and discover
+                        amazing destinations with GlobeTrotter.
+
+                    </p>
+
+
+                    <div class="hero-buttons">
+
+                        <a href="register.html"
+                           class="btn btn-primary">
+
+                            Start Planning
+
+                        </a>
+
+
+                        <a href="#destinations"
+                           class="btn btn-light">
+
+                            Explore Destinations
+
+                        </a>
+
                     </div>
 
                 </div>
@@ -110,74 +147,223 @@
             </div>
 
         </section>
+
+
+
+        <!-- ================= DESTINATIONS ================= -->
+
+        <section class="section"
+                 id="destinations">
+
+            <div class="container">
+
+                <div class="section-title">
+
+                    <h2>
+                        Popular Destinations
+                    </h2>
+
+                    <p>
+                        Find inspiration for your next adventure.
+                    </p>
+
+                </div>
+
+
+                <div class="destination-grid">
+
+
+                    <div class="destination-card">
+
+                        <div class="destination-image paris">
+                        </div>
+
+                        <div class="destination-content">
+
+                            <h3>
+                                Paris
+                            </h3>
+
+                            <p>
+                                Discover the Eiffel Tower,
+                                beautiful streets and French culture.
+                            </p>
+
+                            <a href="register.html"
+                               class="text-link">
+
+                                Plan Trip →
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="destination-card">
+
+                        <div class="destination-image dubai">
+                        </div>
+
+                        <div class="destination-content">
+
+                            <h3>
+                                Dubai
+                            </h3>
+
+                            <p>
+                                Experience luxury, modern
+                                architecture and unforgettable
+                                adventures.
+                            </p>
+
+                            <a href="register.html"
+                               class="text-link">
+
+                                Plan Trip →
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="destination-card">
+
+                        <div class="destination-image bali">
+                        </div>
+
+                        <div class="destination-content">
+
+                            <h3>
+                                Bali
+                            </h3>
+
+                            <p>
+                                Enjoy tropical beaches, temples
+                                and peaceful island experiences.
+                            </p>
+
+                            <a href="register.html"
+                               class="text-link">
+
+                                Plan Trip →
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
 
 
         <!-- ================= FEATURES ================= -->
 
-        <section class="features">
+        <section class="section features-section"
+                 id="features">
 
-            <div class="section-heading">
+            <div class="container">
 
-                <span>WHY GLOBETROTTER?</span>
+                <div class="section-title">
 
-                <h2>
-                    Everything You Need To Travel Smarter
-                </h2>
-
-                <p>
-                    One platform to organize your complete travel journey.
-                </p>
-
-            </div>
-
-
-            <div class="feature-grid">
-
-                <div class="feature-card">
-                    <div class="feature-icon">🗺️</div>
-
-                    <h3>Smart Trip Planning</h3>
+                    <h2>
+                        Everything You Need
+                    </h2>
 
                     <p>
-                        Create trips and organize every part of your journey
-                        in one place.
+                        Your complete travel planning companion.
                     </p>
+
                 </div>
 
 
-                <div class="feature-card">
-                    <div class="feature-icon">📅</div>
-
-                    <h3>Build Itineraries</h3>
-
-                    <p>
-                        Add destinations, activities and schedules to create
-                        your perfect itinerary.
-                    </p>
-                </div>
+                <div class="features-grid">
 
 
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
+                    <div class="feature-card">
 
-                    <h3>Manage Budget</h3>
+                        <div class="feature-icon">
+                            🗺️
+                        </div>
 
-                    <p>
-                        Track your travel expenses and keep your trip within
-                        your planned budget.
-                    </p>
-                </div>
+                        <h3>
+                            Plan Trips
+                        </h3>
+
+                        <p>
+                            Create detailed trips according
+                            to your travel preferences.
+                        </p>
+
+                    </div>
 
 
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
 
-                    <h3>Travel Community</h3>
+                    <div class="feature-card">
 
-                    <p>
-                        Share experiences and discover recommendations from
-                        other travelers.
-                    </p>
+                        <div class="feature-icon">
+                            📅
+                        </div>
+
+                        <h3>
+                            Smart Itinerary
+                        </h3>
+
+                        <p>
+                            Organize your activities
+                            day by day.
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            💰
+                        </div>
+
+                        <h3>
+                            Budget Tracking
+                        </h3>
+
+                        <p>
+                            Keep track of your travel
+                            expenses and budget.
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            👥
+                        </div>
+
+                        <h3>
+                            Travel Community
+                        </h3>
+
+                        <p>
+                            Share experiences and discover
+                            ideas from other travelers.
+                        </p>
+
+                    </div>
+
                 </div>
 
             </div>
@@ -185,38 +371,171 @@
         </section>
 
 
-        <!-- ================= CTA ================= -->
 
-        <section class="cta">
+        <!-- ================= ABOUT ================= -->
 
-            <h2>Ready to Plan Your Next Adventure?</h2>
+            <nav class="nav-links" id="navLinks">
 
-            <p>
-                Create your free account and start building your dream trip.
-            </p>
+    <a href="index.html">Home</a>
 
-            <a href="register.html" class="btn-primary">
-                Create Free Account →
-            </a>
+    <a href="#destinations">Destinations</a>
+
+    <a href="#features">Features</a>
+
+    <a href="#about">About</a>
+
+    <a href="login.html">Login</a>
+
+    <a href="register.html" class="btn btn-primary nav-button">
+        Get Started
+    </a>
+
+        </nav>
+        <section class="section about-section"
+                 id="about">
+
+            <div class="container">
+
+                <div class="about-content">
+
+                    <span class="about-label">
+                        ABOUT GLOBETROTTER
+                    </span>
+
+                    <h2>
+                        Travel Planning
+                        Made Simple
+                    </h2>
+
+                    <p>
+                        GlobeTrotter helps you turn your travel
+                        ideas into organized adventures. Create
+                        trips, manage itineraries, track budgets
+                        and discover new destinations — all in
+                        one place.
+                    </p>
+
+                    <a href="register.html"
+                       class="btn btn-primary">
+
+                        Start Your Journey
+
+                    </a>
+
+                </div>
+
+            </div>
 
         </section>
 
     </main>
 
 
+
     <!-- ================= FOOTER ================= -->
 
-    <footer>
+    <footer class="footer">
 
-        <div class="footer-logo">
-            🌍 GlobeTrotter
+        <div class="container">
+
+            <div class="footer-grid">
+
+
+                <div class="footer-brand">
+
+                    <a href="index.html"
+                       class="logo">
+
+                        <span class="logo-icon">
+                            ✈
+                        </span>
+
+                        <span>
+                            GlobeTrotter
+                        </span>
+
+                    </a>
+
+                    <p>
+                        Explore the world, plan better trips
+                        and create unforgettable memories.
+                    </p>
+
+                </div>
+
+
+
+                <div>
+
+                    <h4>
+                        Explore
+                    </h4>
+
+                    <a href="#destinations">
+                        Destinations
+                    </a>
+
+                    <a href="#features">
+                        Features
+                    </a>
+
+                </div>
+
+
+
+                <div>
+
+                    <h4>
+                        Account
+                    </h4>
+
+                    <a href="login.html">
+                        Login
+                    </a>
+
+                    <a href="register.html">
+                        Register
+                    </a>
+
+                </div>
+
+
+
+                <div>
+
+                    <h4>
+                        Company
+                    </h4>
+
+                    <a href="#about">
+                        About
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <p>
+                    © 2026 GlobeTrotter.
+                    All rights reserved.
+                </p>
+
+            </div>
+
         </div>
-
-        <p>
-            © 2026 GlobeTrotter. Plan better. Travel smarter.
-        </p>
 
     </footer>
 
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script src="jsfiles/home.js"></script>
+
 </body>
+
 </html>
