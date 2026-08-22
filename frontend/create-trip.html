@@ -5,14 +5,22 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Create Trip | GlobeTrotter</title>
 
-    <link rel="stylesheet" href="cssfiles/global.css">
 
-    <link rel="stylesheet" href="cssfiles/trip.css">
+    <!-- CSS -->
+
+    <link
+        rel="stylesheet"
+        href="cssfiles/global.css">
+
+    <link
+        rel="stylesheet"
+        href="cssfiles/trip.css">
 
 </head>
 
@@ -27,8 +35,11 @@
         <div class="trip-navbar-inner">
 
 
-            <a href="dashboard.html"
-               class="dashboard-logo">
+            <!-- LOGO -->
+
+            <a
+                href="dashboard.html"
+                class="dashboard-logo">
 
                 <span class="logo-icon">
                     ✈
@@ -41,10 +52,20 @@
             </a>
 
 
+            <!-- DESKTOP NAV -->
+
             <nav class="trip-nav">
 
                 <a href="dashboard.html">
                     Dashboard
+                </a>
+
+                <a
+                    href="create-trip.html"
+                    class="active">
+
+                    Create Trip
+
                 </a>
 
                 <a href="my-trips.html">
@@ -58,11 +79,16 @@
             </nav>
 
 
+            <!-- USER -->
+
             <div class="trip-user">
 
-                <div class="trip-avatar"
-                     id="tripAvatar">
+                <div
+                    class="trip-avatar"
+                    id="tripAvatar">
+
                     T
+
                 </div>
 
                 <span id="tripUserName">
@@ -72,25 +98,34 @@
             </div>
 
 
+            <!-- MOBILE MENU BUTTON -->
+
             <button
                 class="trip-menu"
                 id="tripMenu"
-                type="button">
+                type="button"
+                aria-label="Open Menu">
 
                 ☰
 
             </button>
+
 
         </div>
 
 
         <!-- MOBILE NAV -->
 
-        <nav class="trip-mobile-nav"
-             id="tripMobileNav">
+        <nav
+            class="trip-mobile-nav"
+            id="tripMobileNav">
 
             <a href="dashboard.html">
                 🏠 Dashboard
+            </a>
+
+            <a href="create-trip.html">
+                ➕ Create Trip
             </a>
 
             <a href="my-trips.html">
@@ -103,6 +138,7 @@
 
         </nav>
 
+
     </header>
 
 
@@ -111,12 +147,14 @@
 
     <main class="create-trip-main">
 
+
         <div class="create-trip-container">
 
 
             <!-- ================= PAGE HEADER ================= -->
 
             <section class="trip-page-header">
+
 
                 <div>
 
@@ -135,33 +173,40 @@
 
                 </div>
 
-                <a href="dashboard.html"
-                   class="back-link">
+
+                <a
+                    href="dashboard.html"
+                    class="back-link">
 
                     ← Back to Dashboard
 
                 </a>
 
+
             </section>
 
 
 
-            <!-- ================= FORM ================= -->
+            <!-- ================= FORM CARD ================= -->
 
             <section class="trip-form-card">
+
 
                 <form id="createTripForm">
 
 
-                    <!-- ================= BASIC DETAILS ================= -->
+                    <!-- ================= SECTION 01 ================= -->
 
                     <div class="form-section">
 
+
                         <div class="form-section-heading">
+
 
                             <div class="form-number">
                                 01
                             </div>
+
 
                             <div>
 
@@ -176,7 +221,9 @@
 
                             </div>
 
+
                         </div>
+
 
 
                         <div class="form-grid">
@@ -187,8 +234,10 @@
                             <div class="form-group full-width">
 
                                 <label for="tripName">
+
                                     Trip Name
                                     <span>*</span>
+
                                 </label>
 
                                 <input
@@ -201,13 +250,16 @@
                             </div>
 
 
+
                             <!-- DESTINATION -->
 
                             <div class="form-group">
 
                                 <label for="destination">
+
                                     Destination
                                     <span>*</span>
+
                                 </label>
 
                                 <input
@@ -218,6 +270,7 @@
                                     required>
 
                             </div>
+
 
 
                             <!-- TRAVEL STYLE -->
@@ -264,21 +317,26 @@
 
                             </div>
 
+
                         </div>
+
 
                     </div>
 
 
 
-                    <!-- ================= DATES ================= -->
+                    <!-- ================= SECTION 02 ================= -->
 
                     <div class="form-section">
 
+
                         <div class="form-section-heading">
+
 
                             <div class="form-number">
                                 02
                             </div>
+
 
                             <div>
 
@@ -293,17 +351,23 @@
 
                             </div>
 
+
                         </div>
+
 
 
                         <div class="form-grid">
 
 
+                            <!-- START DATE -->
+
                             <div class="form-group">
 
                                 <label for="startDate">
+
                                     Start Date
                                     <span>*</span>
+
                                 </label>
 
                                 <input
@@ -315,11 +379,16 @@
                             </div>
 
 
+
+                            <!-- END DATE -->
+
                             <div class="form-group">
 
                                 <label for="endDate">
+
                                     End Date
                                     <span>*</span>
+
                                 </label>
 
                                 <input
@@ -331,55 +400,83 @@
                             </div>
 
 
-                            <div class="form-group">
+                        </div>
 
-                                <label for="travelers">
-                                    Number of Travelers
-                                    <span>*</span>
-                                </label>
 
-                                <div class="number-input">
 
-                                    <button
-                                        type="button"
-                                        id="minusBtn">
-                                        −
-                                    </button>
+                        <!-- NUMBER OF TRAVELERS -->
 
-                                    <input
-                                        type="number"
-                                        id="travelers"
-                                        name="travelers"
-                                        value="1"
-                                        min="1"
-                                        max="20"
-                                        required>
+                        <div class="form-group">
 
-                                    <button
-                                        type="button"
-                                        id="plusBtn">
-                                        +
-                                    </button>
+                            <label for="travelers">
 
-                                </div>
+                                Number of Travelers
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="traveler-counter">
+
+
+                                <!-- MINUS -->
+
+                                <button
+                                    type="button"
+                                    id="decreaseTravelers"
+                                    >
+
+                                    −
+
+                                </button>
+
+
+
+                                <!-- NUMBER -->
+
+                                <input
+                                    type="number"
+                                    id="travelers"
+                                    name="travelers"
+                                    value="1"
+                                    min="1"
+                                    readonly>
+
+
+
+                                <!-- PLUS -->
+
+                                <button
+                                    type="button"
+                                    id="increaseTravelers">
+
+                                    +
+
+                                </button>
+
 
                             </div>
 
+
                         </div>
+
 
                     </div>
 
 
 
-                    <!-- ================= BUDGET ================= -->
+                    <!-- ================= SECTION 03 ================= -->
 
                     <div class="form-section">
 
+
                         <div class="form-section-heading">
+
 
                             <div class="form-number">
                                 03
                             </div>
+
 
                             <div>
 
@@ -394,11 +491,15 @@
 
                             </div>
 
+
                         </div>
+
 
 
                         <div class="form-grid">
 
+
+                            <!-- CURRENCY -->
 
                             <div class="form-group">
 
@@ -406,7 +507,9 @@
                                     Currency
                                 </label>
 
-                                <select id="currency">
+                                <select
+                                    id="currency"
+                                    name="currency">
 
                                     <option value="INR">
                                         ₹ Indian Rupee
@@ -429,6 +532,9 @@
                             </div>
 
 
+
+                            <!-- BUDGET -->
+
                             <div class="form-group">
 
                                 <label for="budget">
@@ -444,21 +550,26 @@
 
                             </div>
 
+
                         </div>
+
 
                     </div>
 
 
 
-                    <!-- ================= DESCRIPTION ================= -->
+                    <!-- ================= SECTION 04 ================= -->
 
                     <div class="form-section">
 
+
                         <div class="form-section-heading">
+
 
                             <div class="form-number">
                                 04
                             </div>
+
 
                             <div>
 
@@ -473,14 +584,18 @@
 
                             </div>
 
+
                         </div>
+
 
 
                         <div class="form-group">
 
+
                             <label for="description">
                                 Description
                             </label>
+
 
                             <textarea
                                 id="description"
@@ -488,6 +603,7 @@
                                 rows="5"
                                 maxlength="500"
                                 placeholder="Tell us what you want to do, places you want to visit, activities you are interested in..."></textarea>
+
 
                             <div class="character-count">
 
@@ -499,35 +615,42 @@
 
                             </div>
 
+
                         </div>
 
-                    </div>
-
-
-
-                    <!-- ================= ERROR ================= -->
-
-                    <div class="form-message error-message"
-                         id="errorMessage">
-
-                    </div>
-
-
-                    <!-- ================= SUCCESS ================= -->
-
-                    <div class="form-message success-message"
-                         id="successMessage">
 
                     </div>
 
 
 
-                    <!-- ================= ACTIONS ================= -->
+                    <!-- ================= ERROR MESSAGE ================= -->
+
+                    <div
+                        class="form-message error-message"
+                        id="errorMessage">
+
+                    </div>
+
+
+
+                    <!-- ================= SUCCESS MESSAGE ================= -->
+
+                    <div
+                        class="form-message success-message"
+                        id="successMessage">
+
+                    </div>
+
+
+
+                    <!-- ================= BUTTONS ================= -->
 
                     <div class="form-actions">
 
-                        <a href="dashboard.html"
-                           class="btn btn-cancel">
+
+                        <a
+                            href="dashboard.html"
+                            class="btn btn-cancel">
 
                             Cancel
 
@@ -542,14 +665,18 @@
 
                         </button>
 
+
                     </div>
 
 
                 </form>
 
+
             </section>
 
+
         </div>
+
 
     </main>
 
@@ -559,7 +686,9 @@
 
     <footer class="footer trip-footer">
 
+
         <div class="container">
+
 
             <div class="footer-bottom">
 
@@ -570,13 +699,20 @@
 
             </div>
 
+
         </div>
+
 
     </footer>
 
 
 
-    <script src="jsfiles/my-trips.js"></script>
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <!-- IMPORTANT: my-trips.js NAHI, create-trip.js -->
+
+    <script src="jsfiles/create-trip.js"></script>
+
 
 </body>
 
