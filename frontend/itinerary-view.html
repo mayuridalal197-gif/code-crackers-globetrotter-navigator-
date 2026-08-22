@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GlobeTrotter - Itinerary View</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ==============================
+           PAGE
+        ============================== */
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #1f2937;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        /* ==============================
+           BACK BUTTON
+        ============================== */
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* ==============================
+           TRIP HEADER
+        ============================== */
+
+        .trip-header {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            padding: 35px;
+            border-radius: 18px;
+            margin-bottom: 35px;
+        }
+
+        .trip-header h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+        }
+
+        .trip-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .trip-info {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .trip-info span {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 14px;
+            border-radius: 8px;
+        }
+
+        /* ==============================
+           DAY CARD
+        ============================== */
+
+        .day-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        .day-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .day-number {
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+
+            background: #2563eb;
+            color: white;
+
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .day-title h2 {
+            margin: 0 0 5px;
+        }
+
+        .day-title p {
+            margin: 0;
+            color: #64748b;
+        }
+
+        /* ==============================
+           TIMELINE
+        ============================== */
+
+        .timeline {
+            position: relative;
+
+            margin-left: 25px;
+            padding-left: 30px;
+
+            border-left: 3px solid #dbeafe;
+        }
+
+        .activity {
+            position: relative;
+            margin-bottom: 28px;
+        }
+
+        .activity:last-child {
+            margin-bottom: 0;
+        }
+
+        .activity::before {
+            content: "";
+
+            position: absolute;
+
+            left: -41px;
+            top: 5px;
+
+            width: 18px;
+            height: 18px;
+
+            background: #2563eb;
+
+            border-radius: 50%;
+
+            border: 4px solid white;
+
+            box-shadow: 0 0 0 2px #2563eb;
+        }
+
+        .activity-time {
+            color: #2563eb;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .activity h3 {
+            margin: 5px 0;
+            font-size: 18px;
+        }
+
+        .activity p {
+            margin: 6px 0;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .location {
+            display: inline-block;
+
+            margin-top: 8px;
+
+            padding: 6px 10px;
+
+            background: #eff6ff;
+            color: #1d4ed8;
+
+            border-radius: 6px;
+
+            font-size: 13px;
+        }
+
+        /* ==============================
+           BUTTONS
+        ============================== */
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+        }
+
+        .btn {
+            border: none;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .secondary-btn:hover {
+            background: #cbd5e1;
+        }
+
+        /* ==============================
+           MOBILE RESPONSIVE
+        ============================== */
+
+        @media (max-width: 700px) {
+
+            .page-container {
+                margin: 20px auto;
+                padding: 12px;
+            }
+
+            .trip-header {
+                padding: 25px 20px;
+            }
+
+            .trip-header h1 {
+                font-size: 26px;
+            }
+
+            .trip-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .trip-info span {
+                font-size: 13px;
+            }
+
+            .day-card {
+                padding: 20px 15px;
+            }
+
+            .day-title {
+                align-items: flex-start;
+            }
+
+            .day-title h2 {
+                font-size: 19px;
+            }
+
+            .timeline {
+                margin-left: 15px;
+                padding-left: 25px;
+            }
+
+            .activity::before {
+                left: -36px;
+            }
+
+            .activity h3 {
+                font-size: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- ==============================
+         NAVBAR
+    ============================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🌍 GlobeTrotter
+        </div>
+
+        <div class="nav-links">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="my-trips.html">
+                My Trips
+            </a>
+
+            <a href="calendar.html">
+                Calendar
+            </a>
+
+            <a href="profile.html">
+                Profile
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ==============================
+         MAIN CONTENT
+    ============================== -->
+
+    <main class="page-container">
+
+        <!-- Back -->
+        <a href="my-trips.html" class="back-btn">
+            ← Back to My Trips
+        </a>
+
+
+        <!-- ==============================
+             TRIP HEADER
+        ============================== -->
+
+        <section class="trip-header">
+
+            <h1 id="tripName">
+                Loading itinerary...
+            </h1>
+
+            <p>
+                Your complete day-wise travel itinerary
+            </p>
+
+
+            <div class="trip-info">
+
+                <span id="destination">
+                    📍 Loading destination...
+                </span>
+
+                <span id="tripDates">
+                    📅 Loading dates...
+                </span>
+
+                <span id="travelers">
+                    👥 Loading travelers...
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             ITINERARY CONTAINER
+             
+             JavaScript will generate
+             Day 1, Day 2, Day 3...
+        ============================== -->
+
+        <div id="itineraryContainer">
+
+            <p style="text-align:center;">
+                Loading itinerary...
+            </p>
+
+        </div>
+
+
+        <!-- ==============================
+             ACTION BUTTONS
+        ============================== -->
+
+        <div class="action-buttons">
+
+            <a href="itinerary-builder.html"
+               class="btn primary-btn">
+
+                ✏️ Edit Itinerary
+
+            </a>
+
+
+            <a href="my-trips.html"
+               class="btn secondary-btn">
+
+                ← My Trips
+
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <!-- ==============================
+         JAVASCRIPT
+    ============================== -->
+
+    <script src="js/itinerary-view.js"></script>
+
+</body>
+
+</html>
