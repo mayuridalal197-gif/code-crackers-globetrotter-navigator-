@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GlobeTrotter - Search</title>
+
+    <link rel="stylesheet" href="css/global.css">
+
+    <style>
+        .search-page {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .search-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .search-header p {
+            color: #666;
+        }
+
+        .search-box {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 12px;
+        }
+
+        .search-input,
+        .filter-select {
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-input:focus,
+        .filter-select:focus {
+            border-color: #2563eb;
+        }
+
+        .search-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 13px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .search-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-header h2 {
+            margin: 0;
+        }
+
+        #resultCount {
+            color: #666;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .destination-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .destination-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .destination-content {
+            padding: 20px;
+        }
+
+        .destination-content h3 {
+            margin: 0 0 8px;
+        }
+
+        .destination-location {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .destination-description {
+            color: #555;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .destination-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+        }
+
+        .budget {
+            font-weight: 600;
+            color: #16a34a;
+        }
+
+        .view-btn {
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 9px 15px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .no-results {
+            text-align: center;
+            background: white;
+            padding: 50px 20px;
+            border-radius: 16px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 900px) {
+            .search-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .search-page {
+                padding: 20px 12px;
+            }
+
+            .search-row {
+                grid-template-columns: 1fr;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🌍 GlobeTrotter
+        </div>
+
+        <div class="nav-links">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="my-trips.html">
+                My Trips
+            </a>
+
+            <a href="calendar.html">
+                Calendar
+            </a>
+
+            <a href="search.html" class="active">
+                Search
+            </a>
+
+            <a href="community.html">
+                Community
+            </a>
+
+            <a href="profile.html">
+                Profile
+            </a>
+
+        </div>
+
+        <button
+            class="menu-toggle"
+            id="menuToggle"
+        >
+            ☰
+        </button>
+
+    </nav>
+
+
+    <!-- Main -->
+
+    <main class="search-page">
+
+        <div class="search-header">
+
+            <h1>
+                🔎 Explore Destinations
+            </h1>
+
+            <p>
+                Find your next perfect travel destination.
+            </p>
+
+        </div>
+
+
+        <!-- Search Box -->
+
+        <section class="search-box">
+
+            <div class="search-row">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Search destination..."
+                >
+
+
+                <select
+                    id="categoryFilter"
+                    class="filter-select"
+                >
+
+                    <option value="all">
+                        All Categories
+                    </option>
+
+                    <option value="beach">
+                        🏖️ Beach
+                    </option>
+
+                    <option value="mountain">
+                        🏔️ Mountain
+                    </option>
+
+                    <option value="city">
+                        🌆 City
+                    </option>
+
+                    <option value="adventure">
+                        🧗 Adventure
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="budgetFilter"
+                    class="filter-select"
+                >
+
+                    <option value="all">
+                        Any Budget
+                    </option>
+
+                    <option value="low">
+                        ₹ Low
+                    </option>
+
+                    <option value="medium">
+                        ₹₹ Medium
+                    </option>
+
+                    <option value="high">
+                        ₹₹₹ High
+                    </option>
+
+                </select>
+
+
+                <button
+                    class="search-btn"
+                    id="searchBtn"
+                >
+                    Search
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Results -->
+
+        <div class="results-header">
+
+            <h2>
+                Popular Destinations
+            </h2>
+
+            <span id="resultCount">
+                0 destinations
+            </span>
+
+        </div>
+
+
+        <section
+            class="results-grid"
+            id="resultsGrid"
+        >
+
+        </section>
+
+    </main>
+
+
+    <script src="js/search.js"></script>
+
+</body>
+</html>
