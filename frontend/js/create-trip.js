@@ -1,364 +1,330 @@
-// ==========================================
-// GlobeTrotter - Create Trip JavaScript
-// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
 
+    const token = getToken();
 
-// ==========================================
-// DOM Elements
-// ==========================================
-
-const tripForm =
-    document.getElementById("tripForm");
-
-const destinationInput =
-    document.getElementById("destination");
-
-const selectedDestination =
-    document.getElementById("selectedDestination");
-
-const startDate =
-    document.getElementById("startDate");
-
-const endDate =
-    document.getElementById("endDate");
-
-const startDateError =
-    document.getElementById("startDateError");
-
-const endDateError =
-    document.getElementById("endDateError");
-
-const successMessage =
-    document.getElementById("successMessage");
-
-
-// ==========================================
-// Get Destination From URL
-// ==========================================
-
-const urlParams =
-    new URLSearchParams(window.location.search);
-
-const destinationFromURL =
-    urlParams.get("destination");
-
-
-if (destinationFromURL) {
-
-    destinationInput.value =
-        destinationFromURL;
-
-    selectedDestination.textContent =
-        destinationFromURL;
-
-}
-
-
-// ==========================================
-// Set Minimum Date
-// ==========================================
-
-const today =
-    new Date();
-
-const todayString =
-    today.toISOString().split("T")[0];
-
-
-// Prevent past dates
-
-startDate.min = todayString;
-
-endDate.min = todayString;
-
-
-// ==========================================
-// Start Date Change
-// ==========================================
-
-startDate.addEventListener(
-    "change",
-    function () {
-
-        startDateError.style.display =
-            "none";
-
-
-        if (!startDate.value) {
-            return;
-        }
-
-
-        // End date cannot be before start date
-
-        endDate.min =
-            startDate.value;
-
-
-        // If current end date is invalid
-
-        if (
-            endDate.value &&
-            endDate.value < startDate.value
-        ) {
-
-            endDate.value = "";
-
-            endDateError.style.display =
-                "block";
-
-        }
-
+    if (!token) {
+        window.location.href = "login.html";
+        return;
     }
-);
 
 
-// ==========================================
-// End Date Change
-// ==========================================
+    const form =
+        document.getElementById("createTripForm");
 
-endDate.addEventListener(
-    "change",
-    function () {
+    const tripName =
+        document.getElementById("tripName");
 
-        endDateError.style.display =
-            "none";
+    const destination =
+        document.getElementById("destination");
+
+    const startDate =
+        document.getElementById("startDate");
+
+    const endDate =
+        document.getElementById("endDate");
+
+    const travelers =
+        document.getElementById("travelers");
+
+    const budget =
+        document.getElementById("budget");
+
+    const currency =
+        document.getElementById("currency");
+
+    const description =
+        document.getElementById("description");
+
+    const button =
+        document.getElementById("createTripButton");
+
+    const message =
+        document.getElementById("tripMessage");
+
+        // =========================
+        // DATE RESTRICTION
+        // =========================
+
+        const today = new Date();
+        const todayString = today.toISOString().split("T")[0];
+
+        // Start date: today se pehle allowed nahi
+        startDate.min = todayString;
+
+        // End date bhi today se pehle allowed nahi
+        endDate.min = todayString;
+
+        startDate.addEventListener("change", () => {
+
+            // End date start date se pehle nahi ho sakti
+            endDate.min = startDate.value || todayString;
+
+            if (
+                endDate.value &&
+                endDate.value < endDate.min
+            ) {
+                endDate.value = "";
+            }
+
+            updatePreview();
+            });
+
+    // =========================
+    // PREVIEW
+    // =========================
+
+    function updatePreview() {
+
+        document.getElementById(
+            "previewName"
+        ).textContent =
+            tripName.value.trim() ||
+            "Your Trip";
 
 
-        if (
-            startDate.value &&
-            endDate.value < startDate.value
-        ) {
-
-            endDateError.style.display =
-                "block";
-
-            endDate.value = "";
-
-        }
-
-    }
-);
+        document.getElementById(
+            "previewDestination"
+        ).textContent =
+            destination.value.trim() ||
+            "Destination";
 
 
-// ==========================================
-// Form Submit
-// ==========================================
+        if (startDate.value && endDate.value) {
 
-tripForm.addEventListener(
-    "submit",
-    function (event) {
+            const start =
+                new Date(startDate.value)
+                    .toLocaleDateString(
+                        "en-IN",
+                        {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric"
+                        }
+                    );
 
-        event.preventDefault();
+            const end =
+                new Date(endDate.value)
+                    .toLocaleDateString(
+                        "en-IN",
+                        {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric"
+                        }
+                    );
 
-
-        // Get values
-
-        const tripName =
             document.getElementById(
-                "tripName"
-            ).value.trim();
-
-
-        const destination =
-            destinationInput.value.trim();
-
-
-        const travellers =
-            document.getElementById(
-                "travellers"
-            ).value;
-
-
-        const budget =
-            document.getElementById(
-                "budget"
-            ).value;
-
-
-        const description =
-            document.getElementById(
-                "description"
-            ).value.trim();
-
-
-        // ==========================================
-        // Validation
-        // ==========================================
-
-        let isValid = true;
-
-
-        // Start date validation
-
-        if (
-            !startDate.value ||
-            startDate.value < todayString
-        ) {
-
-            startDateError.style.display =
-                "block";
-
-            isValid = false;
+                "previewDates"
+            ).textContent =
+                `${start} - ${end}`;
 
         } else {
 
-            startDateError.style.display =
-                "none";
-
+            document.getElementById(
+                "previewDates"
+            ).textContent =
+                "Select dates";
         }
 
 
-        // End date validation
+        const travelerCount =
+            Number(travelers.value) || 1;
 
-        if (
-            !endDate.value ||
-            endDate.value < startDate.value
-        ) {
-
-            endDateError.style.display =
-                "block";
-
-            isValid = false;
-
-        } else {
-
-            endDateError.style.display =
-                "none";
-
-        }
+        document.getElementById(
+            "previewTravelers"
+        ).textContent =
+            travelerCount === 1
+                ? "1 traveler"
+                : `${travelerCount} travelers`;
 
 
-        if (!isValid) {
+        const budgetValue =
+            Number(budget.value) || 0;
 
-            return;
-
-        }
-
-
-        // ==========================================
-        // Create Trip Object
-        // ==========================================
-
-        const newTrip = {
-
-            id: Date.now(),
-
-            name: tripName,
-
-            destination: destination,
-
-            startDate: startDate.value,
-
-            endDate: endDate.value,
-
-            travellers: Number(travellers),
-
-            budget: budget,
-
-            description: description,
-
-            createdAt:
-                new Date().toISOString()
-
-        };
+        document.getElementById(
+            "previewBudget"
+        ).textContent =
+            `${currency.value} ${budgetValue.toLocaleString("en-IN")}`;
+    }
 
 
-        // ==========================================
-        // Get Existing Trips
-        // ==========================================
+    [
+        tripName,
+        destination,
+        startDate,
+        endDate,
+        travelers,
+        budget,
+        currency
+    ].forEach(element => {
 
-        let savedTrips =
-            JSON.parse(
-                localStorage.getItem("globeTrotterTrips")
-            ) || [];
-
-
-        // Add new trip
-
-        savedTrips.push(newTrip);
-
-
-        // Save
-
-        localStorage.setItem(
-            "globeTrotterTrips",
-            JSON.stringify(savedTrips)
+        element.addEventListener(
+            "input",
+            updatePreview
         );
 
+        element.addEventListener(
+            "change",
+            updatePreview
+        );
 
-        // ==========================================
-        // Success
-        // ==========================================
-
-        successMessage.style.display =
-            "block";
-
-
-        successMessage.scrollIntoView({
-            behavior: "smooth"
-        });
+    });
 
 
-        // ==========================================
-        // Redirect
-        // ==========================================
-
-        setTimeout(function () {
-
-            window.location.href =
-                "my-trips.html";
-
-        }, 1200);
-
-    }
-);
+    updatePreview();
 
 
-// ==========================================
-// Update Destination Preview
-// ==========================================
+    // =========================
+    // DATE VALIDATION
+    // =========================
 
-destinationInput.addEventListener(
-    "input",
-    function () {
+    startDate.addEventListener(
+        "change",
+        () => {
 
-        if (destinationInput.value.trim() === "") {
+            endDate.min =
+                startDate.value;
 
-            selectedDestination.textContent =
-                "Not selected";
+            if (
+                endDate.value &&
+                endDate.value < startDate.value
+            ) {
+                endDate.value = "";
+            }
 
-        } else {
-
-            selectedDestination.textContent =
-                destinationInput.value.trim();
-
+            updatePreview();
         }
-
-    }
-);
+    );
 
 
-// ==========================================
-// Mobile Menu
-// ==========================================
+    // =========================
+    // CREATE TRIP
+    // =========================
 
-const menuToggle =
-    document.getElementById("menuToggle");
+    form.addEventListener(
+        "submit",
+        async (event) => {
 
-const navLinks =
-    document.querySelector(".nav-links");
+            event.preventDefault();
 
 
-if (menuToggle) {
+            if (
+                startDate.value &&
+                endDate.value &&
+                endDate.value < startDate.value
+            ) {
 
-    menuToggle.addEventListener(
-        "click",
-        function () {
+                message.innerHTML = `
+                    <div class="message error">
+                        End date cannot be before start date.
+                    </div>
+                `;
 
-            navLinks.classList.toggle("show");
+                return;
+            }
+
+
+            const tripData = {
+
+                title:
+                    tripName.value.trim(),
+
+                description:
+                    description.value.trim(),
+
+                destination:
+                    destination.value.trim(),
+
+                start_date:
+                    startDate.value,
+
+                end_date:
+                    endDate.value,
+
+                travelers:
+                    Number(travelers.value),
+
+                budget:
+                    Number(budget.value) || 0
+            };
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Creating Trip...";
+
+            message.innerHTML = "";
+
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        "/trips",
+                        {
+                            method: "POST",
+
+                            body:
+                                JSON.stringify(
+                                    tripData
+                                )
+                        }
+                    );
+
+
+                message.innerHTML = `
+                    <div class="message success">
+                        Trip created successfully! 🎉
+                    </div>
+                `;
+
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "my-trips.html";
+
+                }, 1000);
+
+
+            } catch (error) {
+
+                message.innerHTML = `
+                    <div class="message error">
+                        ${error.message}
+                    </div>
+                `;
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Create Trip →";
+            }
 
         }
     );
 
-}
+
+    // =========================
+    // LOGOUT
+    // =========================
+
+    document
+        .getElementById("logoutButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                removeToken();
+
+                localStorage.removeItem(
+                    "globetrotter_user"
+                );
+
+                window.location.href =
+                    "index.html";
+            }
+        );
+
+});
