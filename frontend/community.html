@@ -1,137 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>GlobeTrotter - Community</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="css/global.css">
+    <title>Community - GlobeTrotter</title>
+
+    <link
+        rel="stylesheet"
+        href="cssfiles/global.css"
+    >
 
     <style>
+
         .community-page {
             max-width: 1100px;
-            margin: auto;
-            padding: 30px 20px;
+            margin: 0 auto;
+            padding: 50px 20px;
         }
 
         .community-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .community-header h1 {
-            margin-bottom: 10px;
-        }
-
-        .community-header p {
-            color: #666;
-        }
-
-        /* Create Post */
-
-        .create-post {
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
-        }
-
-        .create-post textarea {
-            width: 100%;
-            min-height: 100px;
-            resize: vertical;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 15px;
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        .create-post textarea:focus {
-            border-color: #2563eb;
-        }
-
-        .post-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .community-header h1 {
+            margin: 0 0 8px;
+        }
+
+        .community-header p {
+            margin: 0;
+            opacity: 0.7;
+        }
+
+        .create-post-btn {
+            border: none;
+            padding: 13px 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .community-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .create-post-card {
+            display: none;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+        }
+
+        .create-post-card.show {
+            display: block;
+        }
+
+        .create-post-card h2 {
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
             gap: 10px;
         }
 
-        .image-label {
-            cursor: pointer;
-            color: #2563eb;
-            font-weight: 500;
-        }
-
-        #imageInput {
-            display: none;
-        }
-
-        .post-btn {
-            border: none;
-            background: #2563eb;
-            color: white;
-            padding: 11px 22px;
+        .form-actions button {
+            padding: 11px 18px;
             border-radius: 8px;
+            border: none;
             cursor: pointer;
             font-weight: 600;
         }
 
-        .post-btn:hover {
-            background: #1d4ed8;
-        }
-
-        /* Posts */
-
-        .posts-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
         .post-card {
-            background: white;
+            padding: 25px;
             border-radius: 16px;
-            padding: 22px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 22px;
         }
 
-        .post-user {
+        .post-top {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            gap: 15px;
         }
 
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #dbeafe;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
+        .post-author {
+            font-weight: 700;
         }
 
-        .user-info h3 {
-            margin: 0;
-            font-size: 16px;
-        }
-
-        .user-info span {
-            color: #888;
+        .post-date {
             font-size: 13px;
+            opacity: 0.6;
+        }
+
+        .delete-post-btn {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .post-card h2 {
+            margin: 18px 0 10px;
         }
 
         .post-content {
             line-height: 1.6;
-            margin-bottom: 15px;
+            white-space: pre-wrap;
         }
 
         .post-image {
@@ -139,177 +152,328 @@
             max-height: 400px;
             object-fit: cover;
             border-radius: 12px;
-            margin-bottom: 15px;
+            margin-top: 15px;
         }
 
-        .post-footer {
+        .post-actions {
             display: flex;
-            gap: 20px;
-            border-top: 1px solid #eee;
+            gap: 12px;
+            margin-top: 20px;
             padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
         }
 
-        .post-footer button {
+        .post-action-btn {
             border: none;
             background: transparent;
             cursor: pointer;
-            font-size: 15px;
-            color: #555;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
         }
 
-        .post-footer button:hover {
-            color: #2563eb;
-        }
-
-        .liked {
-            color: #e11d48 !important;
-        }
-
-        .comments {
-            margin-top: 15px;
+        .comments-section {
+            margin-top: 18px;
             display: none;
         }
 
-        .comments.show {
+        .comments-section.show {
             display: block;
         }
 
+        .comment-list {
+            margin-bottom: 15px;
+        }
+
         .comment {
-            background: #f7f7f7;
-            padding: 10px 12px;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .comment-author {
+            font-weight: 700;
+        }
+
+        .comment-date {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        .comment-text {
+            margin: 7px 0 0;
+            white-space: pre-wrap;
+        }
+
+        .delete-comment-btn {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .comment-form input {
+            flex: 1;
+            padding: 11px;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 14px;
         }
 
-        @media (max-width: 600px) {
+        .comment-form button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
 
-            .community-page {
-                padding: 20px 12px;
-            }
+        .loading-state,
+        .empty-state,
+        .error-state {
+            padding: 40px;
+            text-align: center;
+            border-radius: 16px;
+        }
 
-            .create-post,
-            .post-card {
-                padding: 16px;
-            }
+        .hidden {
+            display: none;
+        }
 
-            .post-actions {
+        @media (max-width: 700px) {
+
+            .community-header {
                 flex-direction: column;
-                align-items: stretch;
+                align-items: flex-start;
             }
 
-            .post-btn {
-                width: 100%;
+            .comment-form {
+                flex-direction: column;
             }
 
-            .post-footer {
-                justify-content: space-between;
-                gap: 5px;
-            }
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <!-- Navbar -->
 
-    <nav class="navbar">
+    <!-- NAVBAR -->
 
-        <div class="logo">
-            🌍 GlobeTrotter
-        </div>
+    <nav class="dashboard-navbar">
 
-        <div class="nav-links">
+        <div class="dashboard-nav">
 
-            <a href="dashboard.html">Dashboard</a>
-
-            <a href="my-trips.html">My Trips</a>
-
-            <a href="calendar.html">Calendar</a>
-
-            <a href="community.html" class="active">
-                Community
+            <a
+                href="dashboard.html"
+                class="dashboard-logo"
+            >
+                🌍 GlobeTrotter
             </a>
 
-            <a href="profile.html">Profile</a>
+
+            <div class="dashboard-links">
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="create-trip.html">
+                    Create Trip
+                </a>
+
+                <a href="my-trips.html">
+                    My Trips
+                </a>
+
+                <a
+                    href="community.html"
+                    class="active"
+                >
+                    Community
+                </a>
+
+            </div>
+
+
+            <div class="dashboard-actions">
+
+                <a
+                    href="profile.html"
+                    class="profile-button"
+                >
+                    👤
+                </a>
+
+                <button
+                    id="logoutButton"
+                    class="logout-button"
+                >
+                    Logout
+                </button>
+
+            </div>
 
         </div>
-
-        <button class="menu-toggle" id="menuToggle">
-            ☰
-        </button>
 
     </nav>
 
 
-    <!-- Community -->
+    <!-- COMMUNITY -->
 
     <main class="community-page">
 
-        <div class="community-header">
 
-            <h1>🌍 Travel Community</h1>
+        <header class="community-header">
 
-            <p>
-                Share your travel experiences, tips and memories
-                with fellow travellers.
-            </p>
+            <div>
 
-        </div>
+                <p>
+                    TRAVEL COMMUNITY
+                </p>
+
+                <h1>
+                    Explore & Share
+                </h1>
+
+                <p>
+                    Share your travel experiences,
+                    tips and recommendations.
+                </p>
+
+            </div>
 
 
-        <!-- Create Post -->
+            <button
+                id="createPostButton"
+                class="create-post-btn"
+                type="button"
+            >
+                + Create Post
+            </button>
 
-        <section class="create-post">
+        </header>
 
-            <textarea
-                id="postText"
-                placeholder="Share your travel experience..."
-            ></textarea>
 
-            <div class="post-actions">
+        <!-- CREATE POST -->
 
-                <label
-                    for="imageInput"
-                    class="image-label"
-                >
-                    📷 Add Photo
-                </label>
+        <section
+            id="createPostCard"
+            class="create-post-card"
+        >
 
-                <input
-                    type="file"
-                    id="imageInput"
-                    accept="image/*"
-                >
+            <h2>
+                Create a Post
+            </h2>
 
-                <button
-                    class="post-btn"
-                    id="postBtn"
-                >
-                    Share Post
-                </button>
 
+            <form id="createPostForm">
+
+                <div class="form-group">
+
+                    <label for="postTitle">
+                        Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="postTitle"
+                        placeholder="e.g. Best places to visit in Rajasthan"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="postImage">
+                        Image URL
+                    </label>
+
+                    <input
+                        type="url"
+                        id="postImage"
+                        placeholder="https://example.com/image.jpg"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="postContent">
+                        Content
+                    </label>
+
+                    <textarea
+                        id="postContent"
+                        placeholder="Share your travel experience..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                    >
+                        Publish Post
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="cancelPostButton"
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- POSTS -->
+
+        <section
+            id="postsContainer"
+            class="community-layout"
+        >
+
+            <div class="loading-state">
+                Loading community posts...
             </div>
 
         </section>
 
 
-        <!-- Posts -->
-
-        <section
-            class="posts-container"
-            id="postsContainer"
-        >
-
-            <!-- Posts generated by JavaScript -->
-
-        </section>
-
     </main>
 
 
-    <script src="js/community.js"></script>
+    <script src="jsfiles/api.js"></script>
+
+    <script src="jsfiles/community.js"></script>
+
 
 </body>
+
 </html>
