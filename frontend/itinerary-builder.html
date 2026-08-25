@@ -4,33 +4,32 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Build Itinerary | GlobeTrotter</title>
+    <title>Itinerary Builder - GlobeTrotter</title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="cssfiles/global.css">
     <link rel="stylesheet" href="cssfiles/itinerary.css">
-
 </head>
 
 <body>
 
+    <!-- NAVBAR -->
 
-    <!-- ================= NAVBAR ================= -->
+    <nav class="dashboard-navbar">
 
-    <header class="trip-navbar">
+        <div class="dashboard-nav">
 
-        <div class="trip-navbar-inner">
-
-            <a href="dashboard.html" class="dashboard-logo">
-                <span class="logo-icon">✈</span>
-                <span>GlobeTrotter</span>
+            <a
+                href="dashboard.html"
+                class="dashboard-logo">
+                🌍 GlobeTrotter
             </a>
 
-
-            <nav class="trip-nav">
+            <div class="dashboard-links">
 
                 <a href="dashboard.html">
                     Dashboard
@@ -44,532 +43,247 @@
                     My Trips
                 </a>
 
+                <a
+                    href="itinerary-builder.html"
+                    class="active"
+                >
+                    Itinerary
+                </a>
+
                 <a href="community.html">
                     Community
                 </a>
 
-            </nav>
-
-
-            <div class="trip-user">
-
-                <div class="trip-avatar">
-                    T
-                </div>
-
-                <span>
-                    Traveler
-                </span>
-
             </div>
 
-
-            <!-- Mobile Menu -->
-
-            <button
-                class="trip-menu"
-                id="tripMenu"
-                type="button">
-
-                ☰
-
-            </button>
-
-        </div>
-
-
-        <nav
-            class="trip-mobile-nav"
-            id="tripMobileNav">
-
-            <a href="dashboard.html">
-                🏠 Dashboard
-            </a>
-
-            <a href="create-trip.html">
-                ➕ Create Trip
-            </a>
-
-            <a href="my-trips.html">
-                🧳 My Trips
-            </a>
-
-            <a href="community.html">
-                👥 Community
-            </a>
-
-        </nav>
-
-    </header>
-
-
-
-    <!-- ================= MAIN ================= -->
-
-    <main class="itinerary-main">
-
-
-        <div class="itinerary-container">
-
-
-            <!-- PAGE HEADER -->
-
-            <section class="itinerary-header">
-
-                <div>
-
-                    <span class="page-label">
-                        TRIP PLANNER
-                    </span>
-
-                    <h1>
-                        Build Your Itinerary
-                    </h1>
-
-                    <p>
-                        Plan your journey day by day and
-                        organize all your activities in one place.
-                    </p>
-
-                </div>
-
+            <div class="dashboard-actions">
 
                 <a
-                    href="my-trips.html"
-                    class="back-link">
-
-                    ← Back to My Trips
-
+                    href="profile.html"
+                    class="profile-button"
+                >
+                    👤
                 </a>
 
-            </section>
-
-
-
-            <!-- TRIP SUMMARY -->
-
-            <section class="trip-summary-card">
-
-                <div class="summary-item">
-
-                    <span class="summary-label">
-                        TRIP
-                    </span>
-
-                    <h2 id="tripTitle">
-                        My Amazing Trip
-                    </h2>
-
-                </div>
-
-
-                <div class="summary-item">
-
-                    <span class="summary-label">
-                        DESTINATION
-                    </span>
-
-                    <p id="tripDestination">
-                        Paris, France
-                    </p>
-
-                </div>
-
-
-                <div class="summary-item">
-
-                    <span class="summary-label">
-                        TRAVELERS
-                    </span>
-
-                    <p id="tripTravelers">
-                        1 Traveler
-                    </p>
-
-                </div>
-
-            </section>
-
-
-
-            <!-- ================= ADD ACTIVITY ================= -->
-
-            <section class="activity-form-card">
-
-                <h2>
-                    Add New Activity
-                </h2>
-
-                <p>
-                    Add activities to your selected travel day.
-                </p>
-
-
-                <form id="activityForm">
-
-
-                    <div class="activity-form-grid">
-
-
-                        <!-- DAY -->
-
-                        <div class="form-group">
-
-                            <label for="activityDay">
-                                Select Day
-                            </label>
-
-                            <select id="activityDay">
-
-                                <option value="Day 1">
-                                    Day 1
-                                </option>
-
-                                <option value="Day 2">
-                                    Day 2
-                                </option>
-
-                                <option value="Day 3">
-                                    Day 3
-                                </option>
-
-                                <option value="Day 4">
-                                    Day 4
-                                </option>
-
-                                <option value="Day 5">
-                                    Day 5
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-
-                        <!-- TIME -->
-
-                        <div class="form-group">
-
-                            <label for="activityTime">
-                                Time
-                            </label>
-
-                            <input
-                                type="time"
-                                id="activityTime"
-                                required>
-
-                        </div>
-
-
-
-                        <!-- ACTIVITY -->
-
-                        <div class="form-group">
-
-                            <label for="activityName">
-                                Activity
-                            </label>
-
-                            <input
-                                type="text"
-                                id="activityName"
-                                placeholder="e.g. Visit Eiffel Tower"
-                                required>
-
-                        </div>
-
-
-
-                        <!-- LOCATION -->
-
-                        <div class="form-group">
-
-                            <label for="activityLocation">
-                                Location
-                            </label>
-
-                            <input
-                                type="text"
-                                id="activityLocation"
-                                placeholder="e.g. Champ de Mars"
-                                required>
-
-                        </div>
-
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        class="add-activity-btn">
-
-                        + Add Activity
-
-                    </button>
-
-
-                </form>
-
-            </section>
-
-
-
-            <!-- ================= ITINERARY ================= -->
-
-            <section class="itinerary-section">
-
-                <div class="itinerary-section-header">
-
-                    <div>
-
-                        <span class="page-label">
-                            YOUR PLAN
-                        </span>
-
-                        <h2>
-                            Day Wise Itinerary
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Day 1 -->
-
-                <div
-                    class="day-card"
-                    id="day1">
-
-                    <div class="day-card-header">
-
-                        <div>
-
-                            <span class="day-number">
-                                DAY 1
-                            </span>
-
-                            <h3>
-                                Start Your Adventure
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="activities-list"
-                        data-day="Day 1">
-
-                        <p class="empty-message">
-                            No activities added yet.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- Day 2 -->
-
-                <div
-                    class="day-card"
-                    id="day2">
-
-                    <div class="day-card-header">
-
-                        <div>
-
-                            <span class="day-number">
-                                DAY 2
-                            </span>
-
-                            <h3>
-                                Explore the City
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="activities-list"
-                        data-day="Day 2">
-
-                        <p class="empty-message">
-                            No activities added yet.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- Day 3 -->
-
-                <div
-                    class="day-card"
-                    id="day3">
-
-                    <div class="day-card-header">
-
-                        <div>
-
-                            <span class="day-number">
-                                DAY 3
-                            </span>
-
-                            <h3>
-                                Discover More
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="activities-list"
-                        data-day="Day 3">
-
-                        <p class="empty-message">
-                            No activities added yet.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- Day 4 -->
-
-                <div
-                    class="day-card"
-                    id="day4">
-
-                    <div class="day-card-header">
-
-                        <div>
-
-                            <span class="day-number">
-                                DAY 4
-                            </span>
-
-                            <h3>
-                                Local Experiences
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="activities-list"
-                        data-day="Day 4">
-
-                        <p class="empty-message">
-                            No activities added yet.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- Day 5 -->
-
-                <div
-                    class="day-card"
-                    id="day5">
-
-                    <div class="day-card-header">
-
-                        <div>
-
-                            <span class="day-number">
-                                DAY 5
-                            </span>
-
-                            <h3>
-                                Final Day
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="activities-list"
-                        data-day="Day 5">
-
-                        <p class="empty-message">
-                            No activities added yet.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-            </section>
-
-
-            <!-- SAVE BUTTON -->
-
-            <div class="save-itinerary-section">
-
                 <button
-                    type="button"
-                    id="saveItineraryBtn"
-                    class="save-itinerary-btn">
-
-                    Save Itinerary
-
+                    id="logoutButton"
+                    class="logout-button"
+                >
+                    Logout
                 </button>
 
             </div>
 
+        </div>
 
+    </nav>
+
+
+    <!-- HERO -->
+
+    <section class="itinerary-hero">
+
+        <div class="itinerary-hero-content">
+
+            <div>
+
+                <p class="page-label">
+                    PLAN YOUR JOURNEY
+                </p>
+
+                <h1 id="tripTitle">
+                    Itinerary Builder
+                </h1>
+
+                <p id="tripDestination">
+                    Build your perfect day-by-day trip.
+                </p>
+
+            </div>
+
+            <a
+                id="viewTripButton"
+                href="#"
+                class="view-trip-btn">
+                View Trip
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN -->
+
+    <main class="itinerary-container">
+
+        <div
+            id="loading"
+            class="itinerary-loading"
+        >
+            Loading trip...
+        </div>
+
+
+        <div
+            id="itineraryDays"
+            class="itinerary-days"
+        >
         </div>
 
     </main>
 
 
+    <!-- ADD ACTIVITY MODAL -->
 
-    <!-- FOOTER -->
+    <div
+        id="activityModal"
+        class="modal-overlay"
+    >
 
-    <footer class="footer trip-footer">
+        <div class="activity-modal">
 
-        <div class="container">
+            <div class="modal-header">
 
-            <div class="footer-bottom">
+                <div>
 
-                <p>
-                    © 2026 GlobeTrotter.
-                    All rights reserved.
-                </p>
+                    <p class="page-label">
+                        ADD TO DAY
+                    </p>
+
+                    <h2 id="modalDayTitle">
+                        Add Activity
+                    </h2>
+
+                </div>
+
+                <button
+                    id="closeModal"
+                    class="close-modal"
+                >
+                    ×
+                </button>
 
             </div>
 
+
+            <form id="activityForm">
+
+                <input
+                    type="hidden"
+                    id="selectedItineraryId"
+                >
+
+
+                <div class="form-group">
+
+                    <label>
+                        Activity Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="activityName"
+                        placeholder="e.g. Visit City Palace"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>
+                            Start Time
+                        </label>
+
+                        <input
+                            type="time"
+                            id="startTime"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            End Time
+                        </label>
+
+                        <input
+                            type="time"
+                            id="endTime"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="activityLocation"
+                        placeholder="e.g. City Palace, Udaipur"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Estimated Cost
+                    </label>
+
+                    <input
+                        type="number"
+                        id="activityCost"
+                        min="0"
+                        placeholder="₹ 0"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        id="activityDescription"
+                        rows="3"
+                        placeholder="Add some notes..."
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="save-activity-btn"
+                >
+                    Add Activity
+                </button>
+
+            </form>
+
         </div>
 
-    </footer>
+    </div>
 
 
-
-    <!-- JAVASCRIPT -->
-
+    <script src="jsfiles/api.js"></script>
     <script src="jsfiles/itinerary-builder.js"></script>
 
 </body>
