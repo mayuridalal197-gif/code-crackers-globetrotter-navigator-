@@ -1,140 +1,248 @@
-const authServices = require("../_services/authServices");
+const { pool } =
+    require("../_config/database");
+
 const {
-    validateRegister,
-    validateLogin
+    registerUser,
+    loginUser
+} = require("../_services/authServices");
+
+const {
+    successResponse,
+    errorResponse
+} = require("../_utils/response");
+
+const {
+    validateRegisterData,
+    validateLoginData
 } = require("../_utils/validation");
 
-// Handle user registration request
-const register = async (req, res) => {
+
+// =========================================
+// REGISTER
+// =========================================
+
+async function register(req, res) {
+
     try {
-        // Get registration data from frontend
-        const { name, email, password } = req.body;
 
-        // Validate registration data
-        const errors = validateRegister(name, email, password);
+        const {
+            name,
+            email,
+            password
+        } = req.body;
 
-        // Stop request if validation fails
-        if (errors.length > 0) {
-            return res.status(400).json({
-                success: false,
-                message: "Validation failed",
+
+        const errors =
+            validateRegisterData(
+                name,
+                email,
+                password
+            );
+
+
+        if (
+            Object.keys(errors).length > 0
+        ) {
+
+            return errorResponse(
+                res,
+                "Validation failed",
+                400,
                 errors
-            });
+            );
+
         }
 
-        // Call service layer to create user
-        const user = await authServices.registerUser(
-            name.trim(),
-            email.trim().toLowerCase(),
-            password
+
+        const user =
+            await registerUser(
+                name,
+                email,
+                password
+            );
+
+
+        return successResponse(
+            res,
+            "Registration successful",
+            user,
+            201
         );
 
-        // Send successful response
-        return res.status(201).json({
-            success: true,
-            message: "Registration successful",
-            data: {
-                user
-            }
-        });
 
     } catch (error) {
 
-        // Email already exists
-        if (error.message === "Email already registered") {
-            return res.status(409).json({
-                success: false,
-                message: error.message
-            });
-        }
-
-        console.error("Register error:", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Internal server error"
-        });
-    }
-};
-
-
-// Handle user login request
-const login = async (req, res) => {
-    try {
-        // Get login data from frontend
-        const { email, password } = req.body;
-
-        // Validate login data
-        const errors = validateLogin(email, password);
-
-        // Stop request if validation fails
-        if (errors.length > 0) {
-            return res.status(400).json({
-                success: false,
-                message: "Validation failed",
-                errors
-            });
-        }
-
-        // Call service layer to verify credentials
-        const result = await authServices.loginUser(
-            email.trim().toLowerCase(),
-            password
+        console.error(
+            "Register error:",
+            error
         );
 
-        // Send token and user information
-        return res.status(200).json({
-            success: true,
-            message: "Login successful",
-            data: result
-        });
 
-    } catch (error) {
+        return errorResponse(
+            res,
+            error.message ||
+                "Registration failed",
+            error.statusCode ||
+                500
+        );
 
-        // Invalid login credentials
-        if (error.message === "Invalid email or password") {
-            return res.status(401).json({
-                success: false,
-                message: error.message
-            });
+    }
+
+}
+
+
+// =========================================
+// LOGIN
+// =========================================
+
+async function login(req, res) {
+
+    try {
+
+        const {
+            email,
+            password
+        } = req.body;
+
+
+        const errors =
+            validateLoginData(
+                email,
+                password
+            );
+
+
+        if (
+            Object.keys(errors).length > 0
+        ) {
+
+            return errorResponse(
+                res,
+                "Validation failed",
+                400,
+                errors
+            );
+
         }
 
-        console.error("Login error:", error);
 
-        return res.status(500).json({
-            success: false,
-            message: "Internal server error"
-        });
-    }
-};
+        const result =
+            await loginUser(
+                email,
+                password
+            );
 
 
-// Get currently logged-in user's information
-const getMe = async (req, res) => {
-    try {
-        // req.user comes from authMiddleware after JWT verification
-        const user = await authServices.getUserById(req.user.id);
+        return successResponse(
+            res,
+            "Login successful",
+            result
+        );
 
-        return res.status(200).json({
-            success: true,
-            data: {
-                user
-            }
-        });
 
     } catch (error) {
-        console.error("Get user error:", error);
 
-        return res.status(404).json({
-            success: false,
-            message: "User not found"
-        });
+        console.error(
+            "Login error:",
+            error
+        );
+
+
+        return errorResponse(
+            res,
+            error.message ||
+                "Login failed",
+            error.statusCode ||
+                500
+        );
+
     }
-};
 
+}
+
+
+// =========================================
+// GET CURRENT USER
+// =========================================
+
+async function getMe(req, res) {
+
+    try {
+
+        const userId =
+            req.user.id;
+
+
+        const [rows] =
+            await pool.execute(
+                `
+                SELECT
+                    id,
+                    name,
+                    email,
+                    role,
+                    profile_image,
+                    bio,
+                    created_at,
+                    updated_at
+                FROM users
+                WHERE id = ?
+                `,
+                [userId]
+            );
+
+
+        if (
+            rows.length === 0
+        ) {
+
+            return errorResponse(
+                res,
+                "User not found",
+                404
+            );
+
+        }
+
+
+        return successResponse(
+            res,
+            "User loaded successfully",
+            rows[0]
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Get current user error:",
+            error
+        );
+
+
+        return errorResponse(
+            res,
+            error.message ||
+                "Unable to load user",
+            error.statusCode ||
+                500
+        );
+
+    }
+
+}
+
+
+// =========================================
+// EXPORT
+// =========================================
 
 module.exports = {
+
     register,
+
     login,
+
     getMe
+
 };
