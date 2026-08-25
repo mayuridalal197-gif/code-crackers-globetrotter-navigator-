@@ -1,263 +1,1022 @@
-// ==========================================
-// GlobeTrotter Community
-// ==========================================
+// =========================================
+// PAGE INITIALIZATION
+// =========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    initializeCommunity
+);
 
 
-// Sample community posts
+function initializeCommunity() {
 
-let posts = [
+    setupCreatePost();
 
-    {
-        id: 1,
-        user: "Rahul Sharma",
-        avatar: "👨🏻",
-        date: "2 hours ago",
-        text: "Just completed my Goa trip! The beaches were amazing and the sunset at Palolem was unforgettable. 🌅🏖️",
-        image: "",
-        likes: 24,
-        liked: false,
-        comments: [
-            "Goa looks amazing!",
-            "Thanks for sharing!"
-        ]
-    },
+    loadPosts();
 
-    {
-        id: 2,
-        user: "Priya Patel",
-        avatar: "👩🏻",
-        date: "Yesterday",
-        text: "Travel tip: Always keep a digital copy of your passport and important documents while travelling. ✈️",
-        image: "",
-        likes: 18,
-        liked: false,
-        comments: [
-            "Very useful tip!",
-            "Absolutely agree."
-        ]
-    },
-
-    {
-        id: 3,
-        user: "Amit Verma",
-        avatar: "🧑🏻",
-        date: "3 days ago",
-        text: "Planning a trip to Manali next month. Anyone have recommendations for places to visit? 🏔️",
-        image: "",
-        likes: 12,
-        liked: false,
-        comments: []
-    }
-
-];
+}
 
 
-// DOM elements
+// =========================================
+// CREATE POST UI
+// =========================================
 
-const postsContainer =
-    document.getElementById("postsContainer");
+function setupCreatePost() {
 
-const postText =
-    document.getElementById("postText");
-
-const postBtn =
-    document.getElementById("postBtn");
-
-const imageInput =
-    document.getElementById("imageInput");
+    const createButton =
+        document.getElementById(
+            "createPostButton"
+        );
 
 
-// ==========================================
-// Render Posts
-// ==========================================
-
-function renderPosts() {
-
-    postsContainer.innerHTML = "";
-
-    posts.forEach(post => {
-
-        const postCard =
-            document.createElement("article");
-
-        postCard.className = "post-card";
-
-        postCard.innerHTML = `
-
-            <div class="post-user">
-
-                <div class="user-avatar">
-                    ${post.avatar}
-                </div>
-
-                <div class="user-info">
-
-                    <h3>
-                        ${post.user}
-                    </h3>
-
-                    <span>
-                        ${post.date}
-                    </span>
-
-                </div>
-
-            </div>
+    const createCard =
+        document.getElementById(
+            "createPostCard"
+        );
 
 
-            <div class="post-content">
-                ${post.text}
-            </div>
+    const cancelButton =
+        document.getElementById(
+            "cancelPostButton"
+        );
 
 
-            ${
-                post.image
-                ?
-                `<img
-                    src="${post.image}"
-                    class="post-image"
-                    alt="Travel photo"
-                >`
-                :
-                ""
-            }
+    const form =
+        document.getElementById(
+            "createPostForm"
+        );
 
 
-            <div class="post-footer">
+    createButton.addEventListener(
+        "click",
+        () => {
 
-                <button
-                    class="${post.liked ? "liked" : ""}"
-                    onclick="likePost(${post.id})"
-                >
-                    ❤️ ${post.likes}
-                </button>
+            createCard.classList.toggle(
+                "show"
+            );
 
-
-                <button
-                    onclick="toggleComments(${post.id})"
-                >
-                    💬 ${post.comments.length}
-                </button>
+        }
+    );
 
 
-                <button
-                    onclick="sharePost(${post.id})"
-                >
-                    🔗 Share
-                </button>
+    cancelButton.addEventListener(
+        "click",
+        () => {
 
-            </div>
+            form.reset();
+
+            createCard.classList.remove(
+                "show"
+            );
+
+        }
+    );
 
 
-            <div
-                class="comments"
-                id="comments-${post.id}"
-            >
+    form.addEventListener(
+        "submit",
+        createPost
+    );
 
-                ${
-                    post.comments.length > 0
-                    ?
-                    post.comments.map(comment => `
-                        <div class="comment">
-                            ${comment}
-                        </div>
-                    `).join("")
-                    :
-                    `<div class="comment">
-                        No comments yet.
-                    </div>`
+}
+
+
+// =========================================
+// LOAD POSTS
+// =========================================
+
+async function loadPosts() {
+
+    const container =
+        document.getElementById(
+            "postsContainer"
+        );
+
+
+    container.innerHTML = `
+        <div class="loading-state">
+            Loading community posts...
+        </div>
+    `;
+
+
+    try {
+
+        const response =
+            await apiRequest(
+                "/community/posts",
+                {
+                    method: "GET"
                 }
+            );
+
+
+        const posts =
+            response.data || [];
+
+
+        if (
+            posts.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty-state">
+
+                    <h2>
+                        No posts yet
+                    </h2>
+
+                    <p>
+                        Be the first person
+                        to share a travel story.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            posts
+                .map(
+                    post =>
+                        createPostHTML(
+                            post
+                        )
+                )
+                .join("");
+
+
+        setupPostEvents();
+
+
+    } catch (error) {
+
+        container.innerHTML = `
+
+            <div class="error-state">
+
+                <h2>
+                    Unable to load posts
+                </h2>
+
+                <p>
+                    ${escapeHTML(
+                        error.message
+                    )}
+                </p>
+
+                <button
+                    type="button"
+                    onclick="loadPosts()"
+                >
+                    Try Again
+                </button>
 
             </div>
 
         `;
 
-        postsContainer.appendChild(postCard);
-
-    });
+    }
 
 }
 
 
-// ==========================================
-// Like Post
-// ==========================================
+// =========================================
+// CREATE POST
+// =========================================
 
-function likePost(postId) {
+async function createPost(event) {
 
-    const post =
-        posts.find(item => item.id === postId);
-
-    if (!post) return;
+    event.preventDefault();
 
 
-    if (post.liked) {
+    const form =
+        event.target;
 
-        post.likes--;
-        post.liked = false;
 
-    } else {
+    const title =
+        document
+            .getElementById(
+                "postTitle"
+            )
+            .value
+            .trim();
 
-        post.likes++;
-        post.liked = true;
+
+    const content =
+        document
+            .getElementById(
+                "postContent"
+            )
+            .value
+            .trim();
+
+
+    const imageUrl =
+        document
+            .getElementById(
+                "postImage"
+            )
+            .value
+            .trim();
+
+
+    if (!title) {
+
+        alert(
+            "Please enter a post title."
+        );
+
+        return;
 
     }
 
 
-    renderPosts();
+    if (!content) {
+
+        alert(
+            "Please enter post content."
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        form.querySelector(
+            "button[type='submit']"
+        );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Publishing...";
+
+
+    try {
+
+        await apiRequest(
+            "/community/posts",
+            {
+                method: "POST",
+
+                body: JSON.stringify({
+
+                    title,
+
+                    content,
+
+                    image_url:
+                        imageUrl || null
+
+                })
+
+            }
+        );
+
+
+        form.reset();
+
+
+        document
+            .getElementById(
+                "createPostCard"
+            )
+            .classList.remove(
+                "show"
+            );
+
+
+        await loadPosts();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Publish Post";
+
+    }
+
 }
 
 
-// ==========================================
-// Show / Hide Comments
-// ==========================================
+// =========================================
+// POST HTML
+// =========================================
 
-function toggleComments(postId) {
+function createPostHTML(post) {
 
-    const comments =
+    const author =
+        post.name ||
+        "GlobeTrotter User";
+
+
+    const image =
+        post.image_url
+            ? `
+                <img
+                    class="post-image"
+                    src="${escapeAttribute(
+                        post.image_url
+                    )}"
+                    alt="${escapeAttribute(
+                        post.title
+                    )}"
+                    onerror="this.style.display='none'"
+                >
+            `
+            : "";
+
+
+    return `
+
+        <article
+            class="post-card"
+            data-post-id="${post.id}"
+        >
+
+
+            <div class="post-top">
+
+                <div>
+
+                    <div class="post-author">
+
+                        👤
+                        ${escapeHTML(
+                            author
+                        )}
+
+                    </div>
+
+                    <div class="post-date">
+
+                        ${formatDate(
+                            post.created_at
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="delete-post-btn"
+                    data-post-id="${post.id}"
+                    title="Delete post"
+                >
+                    🗑️
+                </button>
+
+            </div>
+
+
+            <h2>
+                ${escapeHTML(
+                    post.title
+                )}
+            </h2>
+
+
+            <div class="post-content">
+
+                ${escapeHTML(
+                    post.content
+                )}
+
+            </div>
+
+
+            ${image}
+
+
+            <div class="post-actions">
+
+                <button
+                    type="button"
+                    class="post-action-btn like-btn"
+                    data-post-id="${post.id}"
+                >
+
+                    ❤️
+                    <span>
+                        ${Number(
+                            post.likes_count || 0
+                        )}
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="post-action-btn comment-btn"
+                    data-post-id="${post.id}"
+                >
+
+                    💬
+                    <span>
+                        ${Number(
+                            post.comments_count || 0
+                        )}
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <section
+                class="comments-section"
+                id="comments-${post.id}"
+            >
+
+                <div
+                    class="comment-list"
+                    id="comment-list-${post.id}"
+                >
+                </div>
+
+
+                <form
+                    class="comment-form"
+                    data-post-id="${post.id}"
+                >
+
+                    <input
+                        type="text"
+                        placeholder="Write a comment..."
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                    >
+                        Comment
+                    </button>
+
+                </form>
+
+            </section>
+
+
+        </article>
+
+    `;
+
+}
+
+
+// =========================================
+// POST EVENTS
+// =========================================
+
+function setupPostEvents() {
+
+    document
+        .querySelectorAll(
+            ".like-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () =>
+                        likePost(
+                            button.dataset.postId,
+                            button
+                        )
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".comment-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () =>
+                        toggleComments(
+                            button.dataset.postId
+                        )
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".delete-post-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () =>
+                        deletePost(
+                            button.dataset.postId
+                        )
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".comment-form"
+        )
+        .forEach(
+            form => {
+
+                form.addEventListener(
+                    "submit",
+                    submitComment
+                );
+
+            }
+        );
+
+}
+
+
+// =========================================
+// LIKE / UNLIKE
+// =========================================
+
+async function likePost(
+    postId,
+    button
+) {
+
+    button.disabled = true;
+
+
+    try {
+
+        const response =
+            await apiRequest(
+                `/community/posts/${postId}/like`,
+                {
+                    method: "POST"
+                }
+            );
+
+
+        const count =
+            button.querySelector(
+                "span"
+            );
+
+
+        if (
+            response.data
+        ) {
+
+            // Reload posts so
+            // database count is always accurate.
+            await loadPosts();
+
+        }
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    } finally {
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+// =========================================
+// COMMENTS TOGGLE
+// =========================================
+
+async function toggleComments(
+    postId
+) {
+
+    const section =
         document.getElementById(
             `comments-${postId}`
         );
 
-    if (comments) {
 
-        comments.classList.toggle("show");
+    if (
+        section.classList.contains(
+            "show"
+        )
+    ) {
+
+        section.classList.remove(
+            "show"
+        );
+
+        return;
 
     }
+
+
+    section.classList.add(
+        "show"
+    );
+
+
+    await loadComments(
+        postId
+    );
+
 }
 
 
-// ==========================================
-// Share Post
-// ==========================================
+// =========================================
+// LOAD COMMENTS
+// =========================================
 
-function sharePost(postId) {
+async function loadComments(
+    postId
+) {
 
-    const post =
-        posts.find(item => item.id === postId);
-
-    if (!post) return;
-
-
-    const shareText =
-        `${post.user}: ${post.text}`;
-
-
-    if (navigator.share) {
-
-        navigator.share({
-            title: "GlobeTrotter Travel Post",
-            text: shareText
-        });
-
-    } else {
-
-        navigator.clipboard.writeText(
-            shareText
+    const list =
+        document.getElementById(
+            `comment-list-${postId}`
         );
+
+
+    list.innerHTML = `
+        <p>
+            Loading comments...
+        </p>
+    `;
+
+
+    try {
+
+        const response =
+            await apiRequest(
+                `/community/posts/${postId}/comments`,
+                {
+                    method: "GET"
+                }
+            );
+
+
+        const comments =
+            response.data || [];
+
+
+        if (
+            comments.length === 0
+        ) {
+
+            list.innerHTML = `
+                <p>
+                    No comments yet.
+                    Be the first to comment.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            comments
+                .map(
+                    comment =>
+                        createCommentHTML(
+                            comment
+                        )
+                )
+                .join("");
+
+
+        setupCommentDeleteEvents();
+
+
+    } catch (error) {
+
+        list.innerHTML = `
+            <p>
+                Unable to load comments.
+            </p>
+        `;
+
+    }
+
+}
+
+
+// =========================================
+// COMMENT HTML
+// =========================================
+
+function createCommentHTML(
+    comment
+) {
+
+    return `
+
+        <div
+            class="comment"
+            data-comment-id="${comment.id}"
+        >
+
+            <div class="comment-header">
+
+                <div>
+
+                    <span class="comment-author">
+
+                        👤
+                        ${escapeHTML(
+                            comment.name ||
+                            "User"
+                        )}
+
+                    </span>
+
+                    <span class="comment-date">
+
+                        ${formatDate(
+                            comment.created_at
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="delete-comment-btn"
+                    data-comment-id="${comment.id}"
+                >
+                    Delete
+                </button>
+
+            </div>
+
+
+            <p class="comment-text">
+
+                ${escapeHTML(
+                    comment.comment
+                )}
+
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+// =========================================
+// SUBMIT COMMENT
+// =========================================
+
+async function submitComment(
+    event
+) {
+
+    event.preventDefault();
+
+
+    const form =
+        event.target;
+
+
+    const postId =
+        form.dataset.postId;
+
+
+    const input =
+        form.querySelector(
+            "input"
+        );
+
+
+    const button =
+        form.querySelector(
+            "button"
+        );
+
+
+    const comment =
+        input.value.trim();
+
+
+    if (!comment) {
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Posting...";
+
+
+    try {
+
+        await apiRequest(
+            `/community/posts/${postId}/comments`,
+            {
+                method: "POST",
+
+                body: JSON.stringify({
+
+                    comment
+
+                })
+
+            }
+        );
+
+
+        input.value = "";
+
+
+        await loadComments(
+            postId
+        );
+
+
+        await loadPosts();
+
+
+        const section =
+            document.getElementById(
+                `comments-${postId}`
+            );
+
+
+        if (section) {
+
+            section.classList.add(
+                "show"
+            );
+
+        }
+
+
+    } catch (error) {
 
         alert(
-            "Post link/text copied to clipboard!"
+            error.message
+        );
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Comment";
+
+    }
+
+}
+
+
+// =========================================
+// DELETE COMMENT EVENTS
+// =========================================
+
+function setupCommentDeleteEvents() {
+
+    document
+        .querySelectorAll(
+            ".delete-comment-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () =>
+                        deleteComment(
+                            button.dataset.commentId
+                        )
+                );
+
+            }
+        );
+
+}
+
+
+// =========================================
+// DELETE COMMENT
+// =========================================
+
+async function deleteComment(
+    commentId
+) {
+
+    const confirmed =
+        confirm(
+            "Delete this comment?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/community/comments/${commentId}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+
+        const comment =
+            document.querySelector(
+                `[data-comment-id="${commentId}"]`
+            );
+
+
+        if (comment) {
+
+            const section =
+                comment.closest(
+                    ".comments-section"
+                );
+
+
+            comment.remove();
+
+
+            if (section) {
+
+                const postId =
+                    section.id.replace(
+                        "comments-",
+                        ""
+                    );
+
+
+                await loadComments(
+                    postId
+                );
+
+            }
+
+        }
+
+
+        await loadPosts();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
         );
 
     }
@@ -265,138 +1024,134 @@ function sharePost(postId) {
 }
 
 
-// ==========================================
-// Create New Post
-// ==========================================
+// =========================================
+// DELETE POST
+// =========================================
 
-postBtn.addEventListener(
-    "click",
-    function () {
+async function deletePost(
+    postId
+) {
 
-        const text =
-            postText.value.trim();
-
-
-        if (text === "") {
-
-            alert(
-                "Please write something before sharing."
-            );
-
-            return;
-
-        }
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this post?"
+        );
 
 
-        const file =
-            imageInput.files[0];
+    if (!confirmed) {
 
-
-        // Create post without image
-
-        if (!file) {
-
-            addPost(text, "");
-
-            return;
-
-        }
-
-
-        // Read image
-
-        const reader =
-            new FileReader();
-
-
-        reader.onload = function (event) {
-
-            addPost(
-                text,
-                event.target.result
-            );
-
-        };
-
-
-        reader.readAsDataURL(file);
+        return;
 
     }
-);
 
 
-// ==========================================
-// Add New Post
-// ==========================================
+    try {
 
-function addPost(text, image) {
-
-    const newPost = {
-
-        id: Date.now(),
-
-        user: "You",
-
-        avatar: "👤",
-
-        date: "Just now",
-
-        text: text,
-
-        image: image,
-
-        likes: 0,
-
-        liked: false,
-
-        comments: []
-
-    };
+        await apiRequest(
+            `/community/posts/${postId}`,
+            {
+                method: "DELETE"
+            }
+        );
 
 
-    posts.unshift(newPost);
+        await loadPosts();
 
 
-    postText.value = "";
+    } catch (error) {
 
-    imageInput.value = "";
+        alert(
+            error.message
+        );
 
-
-    renderPosts();
-
-
-    alert("Your post has been shared! 🎉");
+    }
 
 }
 
 
-// ==========================================
-// Mobile Menu
-// ==========================================
+// =========================================
+// DATE FORMAT
+// =========================================
 
-const menuToggle =
-    document.getElementById("menuToggle");
+function formatDate(
+    value
+) {
 
-const navLinks =
-    document.querySelector(".nav-links");
+    if (!value) {
+
+        return "";
+
+    }
 
 
-if (menuToggle) {
+    const date =
+        new Date(value);
 
-    menuToggle.addEventListener(
-        "click",
-        function () {
 
-            navLinks.classList.toggle("show");
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
 
+        return "";
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
         }
     );
 
 }
 
 
-// ==========================================
-// Initial Load
-// ==========================================
+// =========================================
+// HTML SAFETY
+// =========================================
 
-renderPosts();
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function escapeAttribute(
+    value
+) {
+
+    return escapeHTML(
+        value
+    );
+
+}
