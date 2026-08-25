@@ -1,317 +1,106 @@
-const tripService = require("../_services/tripServices");
+const { pool } = require("../_config/database");
+const { successResponse, errorResponse } = require("../_utils/response");
 
-
-// =========================
-// CREATE TRIP
-// =========================
-
-const createTrip = async (req, res, next) => {
-
+// Get logged-in user's profile
+async function getProfile(req, res) {
     try {
+        const [users] = await pool.execute(
+            `SELECT 
+                id,
+                name,
+                email,
+                role,
+                profile_image,
+                bio,
+                created_at
+             FROM users
+             WHERE id = ?`,
+            [req.user.id]
+        );
 
+        if (users.length === 0) {
+            return errorResponse(
+                res,
+                "User not found",
+                404
+            );
+        }
+
+        return successResponse(
+            res,
+            "Profile fetched successfully",
+            users[0]
+        );
+
+    } catch (error) {
+        console.error("Get profile error:", error);
+
+        return errorResponse(
+            res,
+            "Failed to fetch profile",
+            500
+        );
+    }
+}
+
+
+// Update logged-in user's profile
+async function updateProfile(req, res) {
+    try {
         const {
-            title,
-            description,
-            destination,
-            start_date,
-            end_date,
-            travelers,
-            budget
+            name,
+            bio,
+            profile_image
         } = req.body;
 
-
-        if (
-            !title ||
-            !destination ||
-            !start_date ||
-            !end_date
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message:
-                    "Title, destination, start date and end date are required."
-            });
-
+        if (!name || name.trim().length < 2) {
+            return errorResponse(
+                res,
+                "Name must contain at least 2 characters",
+                400
+            );
         }
 
-
-        // End date validation
-
-        if (
-            new Date(end_date) <
-            new Date(start_date)
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message:
-                    "End date cannot be before start date."
-            });
-
-        }
-
-
-        // Start date cannot be in the past
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const selectedStartDate =
-            new Date(start_date);
-
-        if (selectedStartDate < today) {
-
-            return res.status(400).json({
-                success: false,
-                message:
-                    "Start date cannot be in the past."
-            });
-
-        }
-
-
-        const trip =
-            await tripService.createTrip({
-
-                user_id: req.user.id,
-
-                title,
-
-                description,
-
-                destination,
-
-                start_date,
-
-                end_date,
-
-                travelers:
-                    travelers || 1,
-
-                budget:
-                    budget || 0
-
-            });
-
-
-        return res.status(201).json({
-
-            success: true,
-
-            message:
-                "Trip created successfully.",
-
-            data: trip
-
-        });
-
-
-    } catch (error) {
-
-        next(error);
-
-    }
-
-};
-
-
-// =========================
-// GET ALL TRIPS
-// =========================
-
-const getTrips = async (
-    req,
-    res,
-    next
-) => {
-
-    try {
-
-        const trips =
-            await tripService.getTrips(
+        const [result] = await pool.execute(
+            `UPDATE users
+             SET name = ?,
+                 bio = ?,
+                 profile_image = ?
+             WHERE id = ?`,
+            [
+                name.trim(),
+                bio || null,
+                profile_image || null,
                 req.user.id
+            ]
+        );
+
+        if (result.affectedRows === 0) {
+            return errorResponse(
+                res,
+                "User not found",
+                404
             );
-
-
-        return res.json({
-
-            success: true,
-
-            data: trips
-
-        });
-
-
-    } catch (error) {
-
-        next(error);
-
-    }
-
-};
-
-
-// =========================
-// GET SINGLE TRIP
-// =========================
-
-const getTripById = async (
-    req,
-    res,
-    next
-) => {
-
-    try {
-
-        const trip =
-            await tripService.getTripById(
-                req.params.id,
-                req.user.id
-            );
-
-
-        if (!trip) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                message:
-                    "Trip not found."
-
-            });
-
         }
 
-
-        return res.json({
-
-            success: true,
-
-            data: trip
-
-        });
-
+        return successResponse(
+            res,
+            "Profile updated successfully"
+        );
 
     } catch (error) {
+        console.error("Update profile error:", error);
 
-        next(error);
-
+        return errorResponse(
+            res,
+            "Failed to update profile",
+            500
+        );
     }
-
-};
-
-
-// =========================
-// UPDATE TRIP
-// =========================
-
-const updateTrip = async (
-    req,
-    res,
-    next
-) => {
-
-    try {
-
-        const trip =
-            await tripService.updateTrip(
-                req.params.id,
-                req.user.id,
-                req.body
-            );
-
-
-        if (!trip) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                message:
-                    "Trip not found."
-
-            });
-
-        }
-
-
-        return res.json({
-
-            success: true,
-
-            message:
-                "Trip updated successfully.",
-
-            data: trip
-
-        });
-
-    } catch (error) {
-
-        next(error);
-
-    }
-
-};
-
-
-// =========================
-// DELETE TRIP
-// =========================
-
-const deleteTrip = async (
-    req,
-    res,
-    next
-) => {
-
-    try {
-
-        const deleted =
-            await tripService.deleteTrip(
-                req.params.id,
-                req.user.id
-            );
-
-
-        if (!deleted) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                message:
-                    "Trip not found."
-
-            });
-
-        }
-
-
-        return res.json({
-
-            success: true,
-
-            message:
-                "Trip deleted successfully."
-
-        });
-
-    } catch (error) {
-
-        next(error);
-
-    }
-
-};
+}
 
 
 module.exports = {
-    createTrip,
-    getTrips,
-    getTripById,
-    updateTrip,
-    deleteTrip
+    getProfile,
+    updateProfile
 };
