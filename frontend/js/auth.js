@@ -1,299 +1,300 @@
-/* =========================================
-   GlobeTrotter Authentication
-   Backend Integrated Authentication
-   ========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+
+    const registerForm =
+        document.getElementById("registerForm");
+
+    const loginForm =
+        document.getElementById("loginForm");
 
 
-/* ================= PASSWORD TOGGLE ================= */
+    // ==========================
+    // REGISTER
+    // ==========================
 
-function togglePassword(inputId, button) {
+    if (registerForm) {
 
-    const input = document.getElementById(inputId);
+        registerForm.addEventListener(
+            "submit",
+            async (event) => {
 
-    if (!input) {
-        return;
-    }
-
-    if (input.type === "password") {
-
-        input.type = "text";
-        button.textContent = "🙈";
-
-    } else {
-
-        input.type = "password";
-        button.textContent = "👁";
-
-    }
-}
+                event.preventDefault();
 
 
-/* ================= MESSAGE ================= */
-
-function showMessage(elementId, message, type) {
-
-    const element = document.getElementById(elementId);
-
-    if (!element) {
-        return;
-    }
-
-    element.textContent = message;
-    element.className = "auth-message " + type;
-}
+                const name =
+                    document
+                        .getElementById("name")
+                        .value
+                        .trim();
 
 
-/* ================= REGISTER ================= */
-
-const registerForm = document.getElementById("registerForm");
-
-if (registerForm) {
-
-    registerForm.addEventListener("submit", async function (event) {
-
-        event.preventDefault();
-
-        const fullName =
-            document.getElementById("fullName").value.trim();
-
-        const email =
-            document.getElementById("registerEmail").value.trim();
-
-        const password =
-            document.getElementById("registerPassword").value;
-
-        const confirmPassword =
-            document.getElementById("confirmPassword").value;
-
-        const terms =
-            document.getElementById("terms").checked;
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
 
 
-        /* ---------- Frontend Validation ---------- */
-
-        if (fullName.length < 2) {
-
-            showMessage(
-                "registerMessage",
-                "Please enter your full name.",
-                "error"
-            );
-
-            return;
-        }
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
 
 
-        if (password.length < 6) {
-
-            showMessage(
-                "registerMessage",
-                "Password must contain at least 6 characters.",
-                "error"
-            );
-
-            return;
-        }
+                const button =
+                    document.getElementById(
+                        "registerButton"
+                    );
 
 
-        if (password !== confirmPassword) {
-
-            showMessage(
-                "registerMessage",
-                "Passwords do not match.",
-                "error"
-            );
-
-            return;
-        }
+                const message =
+                    document.getElementById(
+                        "message"
+                    );
 
 
-        if (!terms) {
+                button.disabled = true;
 
-            showMessage(
-                "registerMessage",
-                "Please accept the Terms & Conditions.",
-                "error"
-            );
-
-            return;
-        }
+                button.textContent =
+                    "Creating account...";
 
 
-        /* ---------- Send Data To Backend ---------- */
-
-        try {
-
-            showMessage(
-                "registerMessage",
-                "Creating your account...",
-                "success"
-            );
+                message.innerHTML = "";
 
 
-            const response = await apiRequest(
-                "/auth/register",
-                {
-                    method: "POST",
+                try {
 
-                    body: JSON.stringify({
-                        name: fullName,
-                        email: email,
-                        password: password
-                    })
+                    const response =
+                        await apiRequest(
+                            "/auth/register",
+                            {
+                                method: "POST",
+
+                                body: JSON.stringify({
+                                    name,
+                                    email,
+                                    password
+                                })
+                            }
+                        );
+
+
+                    message.innerHTML = `
+                        <div class="message success">
+                            ${response.message}
+                        </div>
+                    `;
+
+
+                    registerForm.reset();
+
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            "login.html";
+
+                    }, 1000);
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Register error:",
+                        error
+                    );
+
+
+                    message.innerHTML = `
+                        <div class="message error">
+                            ${error.message}
+                        </div>
+                    `;
+
+
+                } finally {
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "Create Account";
+
                 }
-            );
-
-
-            /* ---------- Registration Success ---------- */
-
-            showMessage(
-                "registerMessage",
-                response.message || "Account created successfully!",
-                "success"
-            );
-
-
-            /* Redirect to login */
-
-            setTimeout(function () {
-
-                window.location.href = "login.html";
-
-            }, 1000);
-
-
-        } catch (error) {
-
-            showMessage(
-                "registerMessage",
-                error.message || "Registration failed.",
-                "error"
-            );
-
-        }
-
-    });
-
-}
-
-
-/* ================= LOGIN ================= */
-
-const loginForm = document.getElementById("loginForm");
-
-if (loginForm) {
-
-    loginForm.addEventListener("submit", async function (event) {
-
-        event.preventDefault();
-
-
-        const email =
-            document.getElementById("loginEmail").value.trim();
-
-        const password =
-            document.getElementById("loginPassword").value;
-
-
-        /* ---------- Basic Validation ---------- */
-
-        if (!email || !password) {
-
-            showMessage(
-                "loginMessage",
-                "Please enter email and password.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        /* ---------- Send Login Request ---------- */
-
-        try {
-
-            showMessage(
-                "loginMessage",
-                "Logging in...",
-                "success"
-            );
-
-
-            const response = await apiRequest(
-                "/auth/login",
-                {
-                    method: "POST",
-
-                    body: JSON.stringify({
-                        email: email,
-                        password: password
-                    })
-                }
-            );
-
-
-            /* ---------- Get Backend Response ---------- */
-
-            const token = response.data?.token;
-            const user = response.data?.user;
-
-
-            if (!token) {
-
-                throw new Error(
-                    "Login successful but authentication token was not received."
-                );
 
             }
+        );
+
+    }
 
 
-            /* ---------- Store JWT ---------- */
+    // ==========================
+    // LOGIN
+    // ==========================
 
-            localStorage.setItem(
-                "token",
-                token
-            );
+    if (loginForm) {
+
+        loginForm.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
 
 
-            /* ---------- Store User ---------- */
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
 
-            if (user) {
 
-                localStorage.setItem(
-                    "globeTrotterLoggedIn",
-                    JSON.stringify(user)
-                );
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
 
+
+                const button =
+                    document.getElementById(
+                        "loginButton"
+                    );
+
+
+                const message =
+                    document.getElementById(
+                        "message"
+                    );
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Logging in...";
+
+
+                message.innerHTML = "";
+
+
+                try {
+
+                    // ==========================
+                    // LOGIN API
+                    // ==========================
+
+                    const response =
+                        await apiRequest(
+                            "/auth/login",
+                            {
+                                method: "POST",
+
+                                body: JSON.stringify({
+                                    email,
+                                    password
+                                })
+                            }
+                        );
+
+
+                    // ==========================
+                    // CHECK RESPONSE
+                    // ==========================
+
+                    if (
+                        !response ||
+                        !response.data ||
+                        !response.data.token ||
+                        !response.data.user
+                    ) {
+
+                        throw new Error(
+                            "Invalid login response from server."
+                        );
+
+                    }
+
+
+                    const token =
+                        response.data.token;
+
+
+                    const user =
+                        response.data.user;
+
+
+                    // ==========================
+                    // SAVE TOKEN
+                    // ==========================
+
+                    saveToken(token);
+
+
+                    // ==========================
+                    // SAVE USER
+                    // ==========================
+
+                    localStorage.setItem(
+                        "globetrotter_user",
+                        JSON.stringify(user)
+                    );
+
+
+                    // ==========================
+                    // SUCCESS MESSAGE
+                    // ==========================
+
+                    message.innerHTML = `
+                        <div class="message success">
+                            ${response.message || "Login successful"}
+                        </div>
+                    `;
+
+
+                    // ==========================
+                    // ROLE CHECK
+                    // ==========================
+
+                    setTimeout(() => {
+
+                        if (
+                            user.role &&
+                            user.role.toLowerCase() ===
+                            "admin"
+                        ) {
+
+                            // ADMIN
+                            window.location.href =
+                                "admin.html";
+
+                        } else {
+
+                            // NORMAL USER
+                            window.location.href =
+                                "dashboard.html";
+
+                        }
+
+                    }, 800);
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Login error:",
+                        error
+                    );
+
+
+                    message.innerHTML = `
+                        <div class="message error">
+                            ${error.message || "Login failed"}
+                        </div>
+                    `;
+
+
+                } finally {
+                    button.disabled = false;
+                    button.textContent =
+                        "Login";
+                }
             }
-
-
-            showMessage(
-                "loginMessage",
-                response.message || "Login successful!",
-                "success"
-            );
-
-
-            /* ---------- Redirect ---------- */
-
-            setTimeout(function () {
-
-                window.location.href = "dashboard.html";
-
-            }, 800);
-
-
-        } catch (error) {
-
-            showMessage(
-                "loginMessage",
-                error.message || "Login failed.",
-                "error"
-            );
-
-        }
-
-    });
-
-}
+        );
+    }
+});
