@@ -1,433 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>GlobeTrotter - Profile</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="css/global.css">
+    <title>Profile - GlobeTrotter</title>
 
-    <style>
-        .profile-page {
-            max-width: 1000px;
-            margin: auto;
-            padding: 30px 20px;
-        }
+    <link rel="stylesheet" href="cssfiles/global.css">
+    <link rel="stylesheet" href="cssfiles/profile.css">
 
-        .profile-card {
-            background: white;
-            border-radius: 18px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
-        }
-
-        .profile-top {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
-
-        .profile-photo-wrapper {
-            position: relative;
-        }
-
-        .profile-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: #dbeafe;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 55px;
-            overflow: hidden;
-        }
-
-        .profile-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .change-photo {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: #2563eb;
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        #profileImageInput {
-            display: none;
-        }
-
-        .profile-info h1 {
-            margin: 0 0 8px;
-        }
-
-        .profile-info p {
-            color: #666;
-            margin: 5px 0;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .stat-card {
-            text-align: center;
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        .stat-card h2 {
-            margin: 0;
-            color: #2563eb;
-        }
-
-        .stat-card p {
-            margin: 5px 0 0;
-            color: #666;
-        }
-
-        .section-title {
-            margin-bottom: 20px;
-        }
-
-        .profile-form {
-            display: grid;
-            gap: 15px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-        }
-
-        .form-group input {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 15px;
-            outline: none;
-        }
-
-        .form-group input:focus {
-            border-color: #2563eb;
-        }
-
-        .save-btn {
-            width: fit-content;
-            border: none;
-            background: #2563eb;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .save-btn:hover {
-            background: #1d4ed8;
-        }
-
-        .saved-trips {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .trip-card {
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding: 18px;
-            background: #fafafa;
-        }
-
-        .trip-card h3 {
-            margin-top: 0;
-        }
-
-        .trip-card p {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .view-trip {
-            display: inline-block;
-            margin-top: 8px;
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .logout-section {
-            text-align: center;
-        }
-
-        .logout-btn {
-            border: none;
-            background: #dc2626;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .logout-btn:hover {
-            background: #b91c1c;
-        }
-
-        @media (max-width: 768px) {
-
-            .profile-page {
-                padding: 20px 12px;
-            }
-
-            .profile-top {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .saved-trips {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
+
 
 <body>
 
-    <!-- Navbar -->
+    <!-- NAVBAR -->
 
-    <nav class="navbar">
+    <nav class="dashboard-navbar">
 
-        <div class="logo">
-            🌍 GlobeTrotter
-        </div>
+        <div class="dashboard-nav">
 
-        <div class="nav-links">
-
-            <a href="dashboard.html">Dashboard</a>
-
-            <a href="my-trips.html">My Trips</a>
-
-            <a href="calendar.html">Calendar</a>
-
-            <a href="community.html">Community</a>
-
-            <a href="profile.html" class="active">
-                Profile
+            <a
+                href="dashboard.html"
+                class="dashboard-logo"
+            >
+                🌍 GlobeTrotter
             </a>
 
-        </div>
 
-        <button
-            class="menu-toggle"
-            id="menuToggle"
-        >
-            ☰
-        </button>
+            <div class="dashboard-links">
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="create-trip.html">
+                    Create Trip
+                </a>
+
+                <a href="my-trips.html">
+                    My Trips
+                </a>
+
+                <a href="community.html">
+                    Community
+                </a>
+
+            </div>
+
+
+            <div class="dashboard-actions">
+
+                <a
+                    href="profile.html"
+                    class="profile-button active"
+                >
+                    👤
+                </a>
+
+                <button
+                    id="logoutButton"
+                    class="logout-button"
+                    type="button"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
 
     </nav>
 
 
+    <!-- PROFILE -->
+
     <main class="profile-page">
 
+        <section class="profile-header">
 
-        <!-- Profile Header -->
+            <p class="page-label">
+                ACCOUNT
+            </p>
 
-        <section class="profile-card">
+            <h1>
+                My Profile
+            </h1>
 
-            <div class="profile-top">
-
-                <div class="profile-photo-wrapper">
-
-                    <div
-                        class="profile-photo"
-                        id="profilePhoto"
-                    >
-                        👤
-                    </div>
-
-                    <label
-                        for="profileImageInput"
-                        class="change-photo"
-                    >
-                        📷
-                    </label>
-
-                    <input
-                        type="file"
-                        id="profileImageInput"
-                        accept="image/*"
-                    >
-
-                </div>
-
-
-                <div class="profile-info">
-
-                    <h1 id="profileName">
-                        Twinkle Gohil
-                    </h1>
-
-                    <p id="profileEmail">
-                        twinkle@example.com
-                    </p>
-
-                    <p>
-                        🌍 Travel Enthusiast
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- Statistics -->
-
-            <div class="stats">
-
-                <div class="stat-card">
-
-                    <h2 id="tripCount">
-                        8
-                    </h2>
-
-                    <p>Trips</p>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <h2>
-                        12
-                    </h2>
-
-                    <p>Places Visited</p>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <h2>
-                        24
-                    </h2>
-
-                    <p>Community Likes</p>
-
-                </div>
-
-            </div>
+            <p>
+                Manage your personal information.
+            </p>
 
         </section>
 
 
-        <!-- Personal Information -->
-
         <section class="profile-card">
 
-            <h2 class="section-title">
-                👤 Personal Information
-            </h2>
+            <!-- PROFILE AVATAR -->
+
+            <div class="profile-avatar-section">
+
+                <div
+                    id="profileAvatar"
+                    class="profile-avatar"
+                >
+                    👤
+                </div>
+
+                <div>
+
+                    <h2 id="profileName">
+                        Traveler
+                    </h2>
+
+                    <p id="profileEmail">
+                        -
+                    </p>
+
+                </div>
+
+            </div>
 
 
-            <form
-                class="profile-form"
-                id="profileForm"
-            >
+            <!-- PROFILE FORM -->
 
-                <div class="form-group">
+            <form id="profileForm">
 
-                    <label for="name">
-                        Full Name
-                    </label>
+                <div class="profile-form-grid">
 
-                    <input
-                        type="text"
-                        id="name"
-                        value="Twinkle Gohil"
-                        required
-                    >
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            disabled
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="Enter phone number"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Username"
+                            disabled
+                        >
+
+                    </div>
 
                 </div>
 
 
-                <div class="form-group">
-
-                    <label for="email">
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        value="twinkle@example.com"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="phone">
-                        Phone Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="phone"
-                        placeholder="Enter phone number"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="location">
-                        Location
-                    </label>
-
-                    <input
-                        type="text"
-                        id="location"
-                        placeholder="Enter your city"
-                    >
-
+                <div
+                    id="profileMessage"
+                    class="profile-message"
+                >
                 </div>
 
 
                 <button
                     type="submit"
-                    class="save-btn"
+                    class="save-profile-btn"
                 >
                     Save Changes
                 </button>
@@ -437,119 +219,49 @@
         </section>
 
 
-        <!-- Saved Trips -->
+        <!-- ACCOUNT ACTIONS -->
 
-        <section class="profile-card">
+        <section class="profile-actions">
 
-            <h2 class="section-title">
-                ✈️ Saved Trips
+            <h2>
+                Account
             </h2>
 
 
-            <div class="saved-trips">
+            <div class="profile-action-row">
 
-                <div class="trip-card">
+                <div>
 
                     <h3>
-                        🏖️ Goa Trip
+                        Logout
                     </h3>
 
                     <p>
-                        Goa, India
+                        Sign out from your GlobeTrotter account.
                     </p>
-
-                    <p>
-                        5 Sep - 8 Sep 2026
-                    </p>
-
-                    <a
-                        href="itinerary-view.html"
-                        class="view-trip"
-                    >
-                        View Itinerary →
-                    </a>
 
                 </div>
 
 
-                <div class="trip-card">
-
-                    <h3>
-                        🏔️ Manali Adventure
-                    </h3>
-
-                    <p>
-                        Manali, India
-                    </p>
-
-                    <p>
-                        12 Oct - 17 Oct 2026
-                    </p>
-
-                    <a
-                        href="itinerary-view.html"
-                        class="view-trip"
-                    >
-                        View Itinerary →
-                    </a>
-
-                </div>
-
-
-                <div class="trip-card">
-
-                    <h3>
-                        🌆 Dubai Trip
-                    </h3>
-
-                    <p>
-                        Dubai, UAE
-                    </p>
-
-                    <p>
-                        20 Nov - 25 Nov 2026
-                    </p>
-
-                    <a
-                        href="itinerary-view.html"
-                        class="view-trip"
-                    >
-                        View Itinerary →
-                    </a>
-
-                </div>
+                <button
+                    id="profileLogoutButton"
+                    class="profile-logout-btn"
+                    type="button"
+                >
+                    Logout
+                </button>
 
             </div>
 
         </section>
 
-
-        <!-- Logout -->
-
-        <section class="profile-card logout-section">
-
-            <h2>
-                🔐 Account
-            </h2>
-
-            <p>
-                Ready to leave GlobeTrotter?
-            </p>
-
-            <button
-                class="logout-btn"
-                id="logoutBtn"
-            >
-                Logout
-            </button>
-
-        </section>
-
-
     </main>
 
 
-    <script src="js/profile.js"></script>
+    <script src="jsfiles/api.js"></script>
+
+    <script src="jsfiles/profile.js"></script>
 
 </body>
+
 </html>
