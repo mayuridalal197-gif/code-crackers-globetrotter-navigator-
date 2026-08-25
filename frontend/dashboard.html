@@ -5,288 +5,343 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <meta name="description"
-          content="GlobeTrotter User Dashboard">
-
-    <title>Dashboard | GlobeTrotter</title>
+    <title>Dashboard - GlobeTrotter</title>
 
     <link rel="stylesheet" href="cssfiles/global.css">
-
     <link rel="stylesheet" href="cssfiles/dashboard.css">
 
 </head>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+    const menuButton =
+        document.getElementById("mobileMenuButton");
+
+    const mobileMenu =
+        document.getElementById("mobileMenu");
+
+    if (!menuButton || !mobileMenu) {
+        return;
+    }
+
+    menuButton.addEventListener(
+        "click",
+        function () {
+
+            mobileMenu.classList.toggle("open");
+
+            const isOpen =
+                mobileMenu.classList.contains("open");
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                isOpen ? "true" : "false"
+            );
+
+            menuButton.textContent =
+                isOpen ? "✕" : "☰";
+
+        }
+    );
+
+});
+</script>
 
 <body>
 
+    <!-- =========================
+         NAVBAR
+    ========================== -->
 
-    <!-- ================= DASHBOARD NAVBAR ================= -->
+    <!-- =========================
+     RESPONSIVE NAVBAR
+========================== -->
 
-    <header class="dashboard-navbar">
+<nav class="dashboard-navbar">
 
-        <div class="dashboard-navbar-inner">
+    <div class="dashboard-nav">
+
+        <!-- LOGO -->
+
+        <a
+            href="dashboard.html"
+            class="dashboard-logo"
+        >
+            🌍 GlobeTrotter
+        </a>
 
 
-            <!-- LOGO -->
+        <!-- DESKTOP LINKS -->
 
-            <a href="dashboard.html"
-               class="dashboard-logo">
+        <div class="dashboard-links" id="dashboardLinks">
 
-                <span class="logo-icon">
-                    ✈
-                </span>
-
-                <span>
-                    GlobeTrotter
-                </span>
-
+            <a
+                href="dashboard.html"
+                class="active"
+            >
+                Dashboard
             </a>
 
+            <a href="create-trip.html">
+                Create Trip
+            </a>
 
-            <!-- DESKTOP NAV -->
+            <a href="my-trips.html">
+                My Trips
+            </a>
 
-            <nav class="dashboard-nav">
+            <a href="search.html">
+                Search
+            </a>
 
-                <a href="dashboard.html"
-                   class="active">
-                    Dashboard
-                </a>
+            <a href="community.html">
+                Community
+            </a>
 
-                <a href="my-trips.html">
-                    Create Trip
-                </a>
+            <a href="calendar.html">
+                Calendar
+            </a>
 
-                <a href="my-trips.html">
-                    My Trips
-                </a>
-
-                <a href="community.html">
-                    Community
-                </a>
-
-            </nav>
+        </div>
 
 
-            <!-- PROFILE -->
+        <!-- DESKTOP ACTIONS -->
 
-            <div class="dashboard-profile">
+        <div class="dashboard-actions">
 
-                <div class="profile-avatar"
-                     id="profileAvatar">
-                    T
-                </div>
-
-                <div class="profile-info">
-
-                    <strong id="profileName">
-                        Traveler
-                    </strong>
-
-                    <span>
-                        Traveler
-                    </span>
-
-                </div>
-
-                <button
-                    class="profile-menu-btn"
-                    id="profileMenuBtn"
-                    type="button">
-
-                    ▾
-
-                </button>
-
-            </div>
-
-
-            <!-- MOBILE MENU -->
+            <a
+                href="profile.html"
+                class="profile-button"
+                aria-label="Profile"
+            >
+                👤
+            </a>
 
             <button
-                class="dashboard-menu-btn"
-                id="dashboardMenuBtn"
-                type="button">
-
-                ☰
-
+                id="logoutButton"
+                class="logout-button"
+                type="button"
+            >
+                Logout
             </button>
 
         </div>
 
 
-        <!-- MOBILE NAV -->
+        <!-- MOBILE MENU BUTTON -->
 
-        <nav class="mobile-dashboard-nav"
-             id="mobileDashboardNav">
+        <button
+            type="button"
+            class="mobile-menu-button"
+            id="mobileMenuButton"
+            aria-label="Open menu"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
 
-            <a href="dashboard.html"
-               class="active">
-                🏠 Dashboard
-            </a>
-
-            <a href="create-trip.html">
-                ➕ Create Trip
-            </a>
-
-            <a href="my-trips.html">
-                🧳 My Trips
-            </a>
-
-            <a href="community.html">
-                👥 Community
-            </a>
-
-            <a href="profile.html">
-                👤 Profile
-            </a>
-
-            <button id="mobileLogoutBtn"
-                    type="button">
-                🚪 Logout
-            </button>
-
-        </nav>
-
-    </header>
+    </div>
 
 
+    <!-- MOBILE MENU -->
 
-    <!-- ================= PROFILE DROPDOWN ================= -->
+    <div
+        class="mobile-menu"
+        id="mobileMenu"
+    >
 
-    <div class="profile-dropdown"
-         id="profileDropdown">
+        <a href="dashboard.html">
+            🏠 Dashboard
+        </a>
 
-        <a href="profile.html">
-            👤 My Profile
+        <a href="create-trip.html">
+            ✈️ Create Trip
+        </a>
+
+        <a href="my-trips.html">
+            🧳 My Trips
+        </a>
+
+        <a href="search.html">
+            🔍 Search
+        </a>
+
+        <a href="community.html">
+            👥 Community
         </a>
 
         <a href="calendar.html">
             📅 Calendar
         </a>
 
-        <button id="logoutBtn"
-                type="button">
+        <a href="profile.html">
+            👤 Profile
+        </a>
+
+        <button
+            type="button"
+            id="mobileLogoutButton"
+        >
             🚪 Logout
         </button>
 
     </div>
 
+</nav>
 
 
-    <!-- ================= MAIN ================= -->
+    <!-- =========================
+         DASHBOARD
+    ========================== -->
 
-    <main class="dashboard-main">
-
-        <div class="dashboard-container">
+    <main class="dashboard-container">
 
 
-            <!-- ================= WELCOME ================= -->
+        <!-- =========================
+             WELCOME
+        ========================== -->
 
-            <section class="welcome-section">
+        <section class="dashboard-welcome">
 
-                <div>
+            <div>
 
-                    <span class="welcome-label">
-                        WELCOME BACK 👋
+                <p class="page-label">
+                    TRAVEL DASHBOARD
+                </p>
+
+                <h1>
+                    Welcome back,
+                    <span id="userName">
+                        Traveler
                     </span>
+                    👋
+                </h1>
 
-                    <h1>
-                        Hello,
-                        <span id="welcomeName">
-                            Traveler
+                <p>
+                    Plan your next adventure
+                    and keep all your journeys
+                    in one place.
+                </p>
+
+            </div>
+
+
+            <a
+                href="create-trip.html"
+                class="dashboard-create-btn"
+            >
+                + Create New Trip
+            </a>
+
+        </section>
+
+
+        <!-- =========================
+             LOADING
+        ========================== -->
+
+        <div
+            id="dashboardLoading"
+            class="dashboard-loading"
+        >
+            Loading dashboard...
+        </div>
+
+
+        <!-- =========================
+             STATS
+        ========================== -->
+
+        <section
+            id="dashboardContent"
+            style="display: none;"
+        >
+
+            <div class="dashboard-stats">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🌍
+                    </div>
+
+                    <div>
+
+                        <span>
+                            TOTAL TRIPS
                         </span>
-                    </h1>
 
-                    <p>
-                        Ready to plan your next adventure?
-                    </p>
+                        <strong id="totalTrips">
+                            0
+                        </strong>
+
+                    </div>
 
                 </div>
 
 
-                <a href="create-trip.html"
-                   class="btn btn-primary">
+                <div class="stat-card">
 
-                    + Create New Trip
+                    <div class="stat-icon">
+                        ✈️
+                    </div>
 
-                </a>
+                    <div>
 
-            </section>
+                        <span>
+                            UPCOMING
+                        </span>
 
+                        <strong id="upcomingTrips">
+                            0
+                        </strong>
 
+                    </div>
 
-            <!-- ================= STATISTICS ================= -->
+                </div>
 
-            <section class="stats-grid">
-
-
-                <!-- TOTAL TRIPS -->
 
                 <div class="stat-card">
 
-                    <div class="stat-icon blue">
+                    <div class="stat-icon">
+                        💰
+                    </div>
+
+                    <div>
+
+                        <span>
+                            TOTAL BUDGET
+                        </span>
+
+                        <strong id="totalBudget">
+                            ₹0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
                         🧳
                     </div>
 
                     <div>
 
                         <span>
-                            Total Trips
-                        </span>
-
-                        <strong id="totalTrips">
-                            3
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- UPCOMING -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon orange">
-                        📅
-                    </div>
-
-                    <div>
-
-                        <span>
-                            Upcoming Trips
-                        </span>
-
-                        <strong id="upcomingTrips">
-                            2
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- COMPLETED -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon green">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <span>
-                            Completed
+                            COMPLETED
                         </span>
 
                         <strong id="completedTrips">
-                            1
+                            0
                         </strong>
 
                     </div>
@@ -294,48 +349,26 @@
                 </div>
 
 
-
-                <!-- SAVED -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon purple">
-                        ❤️
-                    </div>
-
-                    <div>
-
-                        <span>
-                            Saved Places
-                        </span>
-
-                        <strong>
-                            12
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </section>
+            </div>
 
 
+            <!-- =========================
+                 QUICK ACTIONS
+            ========================== -->
 
-            <!-- ================= QUICK ACTIONS ================= -->
+            <section class="quick-actions-section">
 
-            <section class="dashboard-section">
-
-                <div class="section-heading">
+                <div class="dashboard-section-heading">
 
                     <div>
+
+                        <p class="page-label">
+                            QUICK ACTIONS
+                        </p>
 
                         <h2>
-                            Quick Actions
+                            What do you want to do?
                         </h2>
-
-                        <p>
-                            Manage your travel plans quickly.
-                        </p>
 
                     </div>
 
@@ -345,8 +378,10 @@
                 <div class="quick-actions-grid">
 
 
-                    <a href="create-trip.html"
-                       class="quick-action-card">
+                    <a
+                        href="create-trip.html"
+                        class="quick-action-card"
+                    >
 
                         <div class="quick-action-icon">
                             ➕
@@ -359,7 +394,8 @@
                             </h3>
 
                             <p>
-                                Start planning a new adventure.
+                                Start planning a
+                                new adventure.
                             </p>
 
                         </div>
@@ -371,12 +407,13 @@
                     </a>
 
 
-
-                    <a href="my-trips.html"
-                       class="quick-action-card">
+                    <a
+                        href="my-trips.html"
+                        class="quick-action-card"
+                    >
 
                         <div class="quick-action-icon">
-                            🧳
+                            🗺️
                         </div>
 
                         <div>
@@ -386,7 +423,8 @@
                             </h3>
 
                             <p>
-                                View and manage your trips.
+                                View and manage
+                                your journeys.
                             </p>
 
                         </div>
@@ -398,22 +436,24 @@
                     </a>
 
 
-
-                    <a href="search.html"
-                       class="quick-action-card">
+                    <a
+                        href="community.html"
+                        class="quick-action-card"
+                    >
 
                         <div class="quick-action-icon">
-                            🔍
+                            👥
                         </div>
 
                         <div>
 
                             <h3>
-                                Explore
+                                Community
                             </h3>
 
                             <p>
-                                Discover new destinations.
+                                Discover trips and
+                                travel ideas.
                             </p>
 
                         </div>
@@ -424,304 +464,122 @@
 
                     </a>
 
-
-
-                    <a href="calendar.html"
-                       class="quick-action-card">
-
-                        <div class="quick-action-icon">
-                            📅
-                        </div>
-
-                        <div>
-
-                            <h3>
-                                Calendar
-                            </h3>
-
-                            <p>
-                                Check your travel schedule.
-                            </p>
-
-                        </div>
-
-                        <span>
-                            →
-                        </span>
-
-                    </a>
 
                 </div>
 
             </section>
 
 
+            <!-- =========================
+                 UPCOMING TRIPS
+            ========================== -->
 
-            <!-- ================= TWO COLUMN ================= -->
+            <section class="dashboard-trips-section">
 
-            <section class="dashboard-columns">
+                <div class="dashboard-section-heading">
 
+                    <div>
 
-                <!-- UPCOMING TRIPS -->
+                        <p class="page-label">
+                            YOUR JOURNEYS
+                        </p>
 
-                <div class="dashboard-panel">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <h2>
-                                Upcoming Trips
-                            </h2>
-
-                            <p>
-                                Your next adventures.
-                            </p>
-
-                        </div>
-
-                        <a href="my-trips.html">
-                            View All
-                        </a>
+                        <h2>
+                            Upcoming Trips
+                        </h2>
 
                     </div>
 
 
-
-                    <!-- TRIP 1 -->
-
-                    <div class="trip-item">
-
-                        <div class="trip-image trip-paris">
-                        </div>
-
-                        <div class="trip-details">
-
-                            <h3>
-                                Paris Adventure
-                            </h3>
-
-                            <p>
-                                📍 Paris, France
-                            </p>
-
-                            <span>
-                                📅 15 Sep - 20 Sep 2026
-                            </span>
-
-                        </div>
-
-                        <span class="trip-status upcoming">
-                            Upcoming
-                        </span>
-
-                    </div>
-
-
-
-                    <!-- TRIP 2 -->
-
-                    <div class="trip-item">
-
-                        <div class="trip-image trip-bali">
-                        </div>
-
-                        <div class="trip-details">
-
-                            <h3>
-                                Bali Escape
-                            </h3>
-
-                            <p>
-                                📍 Bali, Indonesia
-                            </p>
-
-                            <span>
-                                📅 10 Oct - 15 Oct 2026
-                            </span>
-
-                        </div>
-
-                        <span class="trip-status planned">
-                            Planned
-                        </span>
-
-                    </div>
+                    <a
+                        href="my-trips.html"
+                        class="view-all-link"
+                    >
+                        View All →
+                    </a>
 
                 </div>
 
 
-
-                <!-- POPULAR DESTINATIONS -->
-
-                <div class="dashboard-panel">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <h2>
-                                Popular Destinations
-                            </h2>
-
-                            <p>
-                                Get inspired.
-                            </p>
-
-                        </div>
-
-                        <a href="search.html">
-                            Explore
-                        </a>
-
-                    </div>
-
-
-                    <div class="popular-list">
-
-
-                        <a href="search.html"
-                           class="popular-item">
-
-                            <div class="popular-image paris-small">
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Paris
-                                </h3>
-
-                                <span>
-                                    France
-                                </span>
-
-                            </div>
-
-                            <strong>
-                                →
-                            </strong>
-
-                        </a>
-
-
-
-                        <a href="search.html"
-                           class="popular-item">
-
-                            <div class="popular-image dubai-small">
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Dubai
-                                </h3>
-
-                                <span>
-                                    UAE
-                                </span>
-
-                            </div>
-
-                            <strong>
-                                →
-                            </strong>
-
-                        </a>
-
-
-
-                        <a href="search.html"
-                           class="popular-item">
-
-                            <div class="popular-image bali-small">
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Bali
-                                </h3>
-
-                                <span>
-                                    Indonesia
-                                </span>
-
-                            </div>
-
-                            <strong>
-                                →
-                            </strong>
-
-                        </a>
-
-                    </div>
-
+                <div
+                    id="upcomingTripsGrid"
+                    class="dashboard-trips-grid"
+                >
                 </div>
 
-            </section>
 
+                <div
+                    id="noUpcomingTrips"
+                    class="dashboard-empty"
+                    style="display: none;"
+                >
 
+                    <div>
+                        ✈️
+                    </div>
 
-            <!-- ================= CTA ================= -->
-
-            <section class="dashboard-cta">
-
-                <div>
-
-                    <span>
-                        READY FOR YOUR NEXT ADVENTURE?
-                    </span>
-
-                    <h2>
-                        Start planning your dream trip today.
-                    </h2>
+                    <h3>
+                        No upcoming trips
+                    </h3>
 
                     <p>
-                        Create a personalized itinerary
-                        and make every moment count.
+                        Ready to plan your next adventure?
                     </p>
 
+                    <a
+                        href="create-trip.html"
+                        class="dashboard-create-btn"
+                    >
+                        Create Trip
+                    </a>
+
                 </div>
-
-
-                <a href="create-trip.html"
-                   class="btn btn-light">
-
-                    Create My Trip →
-
-                </a>
 
             </section>
 
 
-        </div>
+            <!-- =========================
+                 RECENT TRIPS
+            ========================== -->
+
+            <section class="dashboard-trips-section">
+
+                <div class="dashboard-section-heading">
+
+                    <div>
+
+                        <p class="page-label">
+                            RECENT
+                        </p>
+
+                        <h2>
+                            Recent Trips
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="recentTripsGrid"
+                    class="dashboard-trips-grid"
+                >
+                </div>
+
+            </section>
+
+
+        </section>
 
     </main>
 
 
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
 
-    <!-- ================= FOOTER ================= -->
-
-    <footer class="footer dashboard-footer">
-
-        <div class="container">
-
-            <div class="footer-bottom">
-
-                <p>
-                    © 2026 GlobeTrotter.
-                    All rights reserved.
-                </p>
-
-            </div>
-
-        </div>
-
-    </footer>
-
-
+    <script src="jsfiles/api.js"></script>
 
     <script src="jsfiles/dashboard.js"></script>
 
