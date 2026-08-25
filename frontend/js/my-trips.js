@@ -1,394 +1,231 @@
-const tripsGrid =
-    document.getElementById("tripsGrid");
+document.addEventListener(
+    "DOMContentLoaded",
+    loadTrips
+);
 
-const tripSearch =
-    document.getElementById("tripSearch");
 
-const tripFilter =
-    document.getElementById("tripFilter");
+async function loadTrips() {
 
-const tripCount =
-    document.getElementById("tripCount");
+    const loading =
+        document.getElementById("loading");
 
+    const emptyState =
+        document.getElementById("emptyState");
 
-// ==========================================
-// Get Saved Trips
-// ==========================================
+    const tripsGrid =
+        document.getElementById("tripsGrid");
 
-function getTrips() {
 
-    return JSON.parse(
-        localStorage.getItem("globeTrotterTrips")
-    ) || [];
+    try {
 
-}
+        const response =
+            await apiRequest(
+                "/trips",
+                {
+                    method: "GET"
+                }
+            );
 
 
-// ==========================================
-// Format Date
-// ==========================================
+        const trips =
+            response.data || [];
 
-function formatDate(dateString) {
 
-    if (!dateString) {
-        return "";
-    }
+        loading.style.display = "none";
 
-    return new Date(
-        dateString + "T00:00:00"
-    ).toLocaleDateString("en-IN", {
 
-        day: "numeric",
-        month: "short",
-        year: "numeric"
+        if (trips.length === 0) {
 
-    });
+            emptyState.style.display =
+                "block";
 
-}
+            return;
+        }
 
 
-// ==========================================
-// Get Trip Icon
-// ==========================================
+        tripsGrid.innerHTML =
+            trips
+                .map(
+                    trip =>
+                        createTripCard(trip)
+                )
+                .join("");
 
-function getTripIcon(destination) {
 
-    const place =
-        destination.toLowerCase();
+    } catch (error) {
 
-    if (
-        place.includes("goa") ||
-        place.includes("beach")
-    ) {
-        return "🏖️";
-    }
-
-    if (
-        place.includes("manali") ||
-        place.includes("ladakh") ||
-        place.includes("mountain")
-    ) {
-        return "🏔️";
-    }
-
-    if (
-        place.includes("dubai") ||
-        place.includes("paris") ||
-        place.includes("city")
-    ) {
-        return "🌆";
-    }
-
-    return "✈️";
-
-}
-
-
-// ==========================================
-// Display Trips
-// ==========================================
-
-function displayTrips() {
-
-    const trips =
-        getTrips();
-
-    const searchValue =
-        tripSearch.value
-            .trim()
-            .toLowerCase();
-
-    const filterValue =
-        tripFilter.value;
-
-    const today =
-        new Date();
-
-    today.setHours(0, 0, 0, 0);
-
-
-    const filteredTrips =
-        trips.filter(trip => {
-
-            // Search
-
-            const matchesSearch =
-                trip.name
-                    .toLowerCase()
-                    .includes(searchValue)
-                ||
-                trip.destination
-                    .toLowerCase()
-                    .includes(searchValue);
-
-
-            if (!matchesSearch) {
-                return false;
-            }
-
-
-            // Filter
-
-            if (filterValue === "upcoming") {
-
-                return new Date(
-                    trip.endDate + "T00:00:00"
-                ) >= today;
-
-            }
-
-
-            if (filterValue === "past") {
-
-                return new Date(
-                    trip.endDate + "T00:00:00"
-                ) < today;
-
-            }
-
-
-            return true;
-
-        });
-
-
-    tripCount.textContent =
-        `${filteredTrips.length} trip${filteredTrips.length !== 1 ? "s" : ""}`;
-
-
-    tripsGrid.innerHTML = "";
-
-
-    // ==========================================
-    // Empty State
-    // ==========================================
-
-    if (filteredTrips.length === 0) {
-
-        tripsGrid.innerHTML = `
-
-            <div class="empty-state">
-
-                <div class="empty-state-icon">
-                    🧳
-                </div>
-
-                <h2>
-                    No trips found
-                </h2>
-
-                <p>
-                    Start planning your next adventure!
-                </p>
-
-                <a
-                    href="create-trip.html"
-                    class="empty-create-btn"
-                >
-                    + Create Your First Trip
-                </a>
-
+        loading.innerHTML = `
+            <div class="trip-error">
+                <h3>Unable to load trips</h3>
+                <p>${error.message}</p>
             </div>
-
         `;
 
-        return;
     }
 
-
-    // ==========================================
-    // Create Trip Cards
-    // ==========================================
-
-    filteredTrips.forEach(trip => {
-
-        const card =
-            document.createElement("article");
-
-        card.className =
-            "trip-card";
+}
 
 
-        const icon =
-            getTripIcon(trip.destination);
+// =========================
+// TRIP CARD
+// =========================
+
+function createTripCard(trip) {
+
+    const startDate =
+        formatDate(trip.start_date);
+
+    const endDate =
+        formatDate(trip.end_date);
 
 
-        card.innerHTML = `
+    const status =
+        trip.status || "planning";
 
-            <div class="trip-cover">
-                ${icon}
+
+    return `
+
+        <article class="trip-card">
+
+            <div class="trip-card-image">
+
+                <img
+                    src="${getDestinationImage(
+                        trip.destination
+                    )}"
+                    alt="${trip.destination}"
+                >
+
+                <span class="trip-status">
+                    ${status}
+                </span>
+
             </div>
 
 
-            <div class="trip-content">
+            <div class="trip-card-content">
 
                 <h2>
-                    ${trip.name}
+                    ${escapeHTML(trip.title)}
                 </h2>
 
 
-                <div class="trip-location">
-                    📍 ${trip.destination}
-                </div>
+                <p class="trip-destination">
+                    📍 ${escapeHTML(
+                        trip.destination
+                    )}
+                </p>
 
 
                 <div class="trip-info">
 
                     <div>
-                        📅
-                        ${formatDate(trip.startDate)}
-                        -
-                        ${formatDate(trip.endDate)}
+                        <span>DATES</span>
+                        <strong>
+                            ${startDate} -
+                            ${endDate}
+                        </strong>
                     </div>
 
-                    <div>
-                        👥
-                        ${trip.travellers}
-                        traveller${trip.travellers > 1 ? "s" : ""}
-                    </div>
 
                     <div>
-                        💰
-                        ${trip.budget}
-                        budget
+                        <span>TRAVELERS</span>
+                        <strong>
+                            👥 ${trip.travelers}
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>BUDGET</span>
+                        <strong>
+                            ₹${Number(
+                                trip.budget || 0
+                            ).toLocaleString("en-IN")}
+                        </strong>
                     </div>
 
                 </div>
 
 
-                <div class="trip-actions">
+                <div class="trip-card-actions">
 
-                    <button
-                        class="view-btn"
-                        onclick="viewTrip(${trip.id})"
+                    <a
+                        href="itinerary-builder.html?tripId=${trip.id}"
+                        class="primary-trip-btn"
+                    >
+                        Build Itinerary
+                    </a>
+
+
+                    <a
+                        href="itinerary-view.html?tripId=${trip.id}"
+                        class="secondary-trip-btn"
                     >
                         View Trip
-                    </button>
-
-
-                    <button
-                        class="delete-btn"
-                        onclick="deleteTrip(${trip.id})"
-                    >
-                        🗑️
-                    </button>
+                    </a>
 
                 </div>
 
             </div>
 
-        `;
+        </article>
+
+    `;
+}
 
 
-        tripsGrid.appendChild(card);
+// =========================
+// DATE FORMAT
+// =========================
 
-    });
+function formatDate(date) {
+
+    if (!date) return "-";
+
+
+    return new Date(date)
+        .toLocaleDateString(
+            "en-IN",
+            {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            }
+        );
 
 }
 
 
-// ==========================================
-// View Trip
-// ==========================================
+// =========================
+// DESTINATION IMAGE
+// =========================
 
-function viewTrip(tripId) {
+function getDestinationImage(
+    destination
+) {
 
-    window.location.href =
-        `itinerary-view.html?tripId=${tripId}`;
-
-}
-
-
-// ==========================================
-// Delete Trip
-// ==========================================
-
-function deleteTrip(tripId) {
-
-    const confirmDelete =
-        confirm(
-            "Are you sure you want to delete this trip?"
+    const destinationName =
+        encodeURIComponent(
+            destination || "travel"
         );
 
 
-    if (!confirmDelete) {
-        return;
-    }
-
-
-    let trips =
-        getTrips();
-
-
-    trips =
-        trips.filter(
-            trip => trip.id !== tripId
-        );
-
-
-    localStorage.setItem(
-        "globeTrotterTrips",
-        JSON.stringify(trips)
-    );
-
-
-    displayTrips();
-
-
-    alert(
-        "Trip deleted successfully."
-    );
-
+    return `https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80`;
 }
 
 
-// ==========================================
-// Search
-// ==========================================
+// =========================
+// HTML SAFETY
+// =========================
 
-tripSearch.addEventListener(
-    "input",
-    displayTrips
-);
+function escapeHTML(value) {
 
-
-// ==========================================
-// Filter
-// ==========================================
-
-tripFilter.addEventListener(
-    "change",
-    displayTrips
-);
-
-
-// ==========================================
-// Mobile Menu
-// ==========================================
-
-const menuToggle =
-    document.getElementById("menuToggle");
-
-const navLinks =
-    document.querySelector(".nav-links");
-
-
-if (menuToggle) {
-
-    menuToggle.addEventListener(
-        "click",
-        function () {
-
-            navLinks.classList.toggle("show");
-
-        }
-    );
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
-
-
-// ==========================================
-// Initial Load
-// ==========================================
-
-displayTrips();
