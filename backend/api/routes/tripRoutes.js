@@ -1,49 +1,56 @@
 const express = require("express");
 
-const tripController = require("../apicontrollers/tripController");
-const authMiddleware = require("../_middleware/authMiddleware");
-
 const router = express.Router();
 
+const {
+    createTrip,
+    getTrips,
+    getTripById,
+    updateTrip,
+    deleteTrip
+} = require("../apicontrollers/tripController");
 
-// Create a new trip
-// POST /api/trips
+const authMiddleware =
+    require("../_middleware/authMiddleware");
+
+
+// CREATE
 router.post(
     "/",
     authMiddleware,
-    tripController.createTrip
+    createTrip
 );
 
 
-// Get all trips of logged-in user
-// GET /api/trips
+// GET ALL
 router.get(
     "/",
     authMiddleware,
-    tripController.getMyTrips
+    getTrips
 );
 
-// Get one specific trip
-// GET /api/trips/:id
+
+// GET ONE
 router.get(
     "/:id",
     authMiddleware,
-    tripController.getTripById
+    getTripById
 );
-// Update a trip
-// PUT /api/trips/:id
+
+
+// UPDATE
 router.put(
     "/:id",
     authMiddleware,
-    tripController.updateTrip
+    updateTrip
 );
 
-// Delete a trip
-// DELETE /api/trips/:id
+
+// DELETE
 router.delete(
     "/:id",
     authMiddleware,
-    tripController.deleteTrip
+    deleteTrip
 );
 
 
