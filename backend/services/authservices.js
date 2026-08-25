@@ -3,60 +3,67 @@ const jwt = require("jsonwebtoken");
 
 const { pool } = require("../_config/database");
 
-const registerUser = async (name, email, password) => {
-    // Check if email already exists
-    const [existingUsers] = await pool.execute(
-        "SELECT id FROM users WHERE email = ?",
-        [email]
-    );
+async function registerUser(name, email, password) {
+    const connection = await pool.getConnection();
 
-    if (existingUsers.length > 0) {
-        throw new Error("Email already registered");
+    try {
+        const [existingUsers] = await connection.execute(
+            "SELECT id FROM users WHERE email = ?",
+            [email]
+        );
+
+        if (existingUsers.length > 0) {
+            const error = new Error("Email is already registered");
+            error.statusCode = 409;
+            throw error;
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const [result] = await connection.execute(
+            `INSERT INTO users (name, email, password, role)
+             VALUES (?, ?, ?, 'user')`,
+            [name.trim(), email.toLowerCase(), hashedPassword]
+        );
+
+        return {
+            id: result.insertId,
+            name: name.trim(),
+            email: email.toLowerCase(),
+            role: "user"
+        };
+    } finally {
+        connection.release();
     }
+}
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Insert user
-    const [result] = await pool.execute(
-        `INSERT INTO users (name, email, password)
-         VALUES (?, ?, ?)`,
-        [name, email, hashedPassword]
-    );
-
-    return {
-        id: result.insertId,
-        name,
-        email,
-        role: "user"
-    };
-};
-
-
-const loginUser = async (email, password) => {
-    // Find user
+async function loginUser(email, password) {
     const [users] = await pool.execute(
-        "SELECT * FROM users WHERE email = ?",
-        [email]
+        `SELECT id, name, email, password, role, profile_image, bio
+         FROM users
+         WHERE email = ?`,
+        [email.toLowerCase()]
     );
 
     if (users.length === 0) {
-        throw new Error("Invalid email or password");
+        const error = new Error("Invalid email or password");
+        error.statusCode = 401;
+        throw error;
     }
 
     const user = users[0];
 
-    // Compare password
-    const isPasswordCorrect = await bcrypt.compare(
+    const passwordMatch = await bcrypt.compare(
         password,
         user.password
     );
 
-    if (!isPasswordCorrect) {
-        throw new Error("Invalid email or password");
+    if (!passwordMatch) {
+        const error = new Error("Invalid email or password");
+        error.statusCode = 401;
+        throw error;
     }
 
-    // Generate JWT
     const token = jwt.sign(
         {
             id: user.id,
@@ -69,36 +76,15 @@ const loginUser = async (email, password) => {
         }
     );
 
+    delete user.password;
+
     return {
-        token,
-        user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role
-        }
+        user,
+        token
     };
-};
-
-
-const getUserById = async (id) => {
-    const [users] = await pool.execute(
-        `SELECT id, name, email, role, created_at
-         FROM users
-         WHERE id = ?`,
-        [id]
-    );
-
-    if (users.length === 0) {
-        throw new Error("User not found");
-    }
-
-    return users[0];
-};
-
+}
 
 module.exports = {
     registerUser,
-    loginUser,
-    getUserById
+    loginUser
 };
