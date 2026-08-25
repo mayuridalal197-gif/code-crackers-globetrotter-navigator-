@@ -1,434 +1,665 @@
-// ==========================================
-// GlobeTrotter - Calendar JavaScript
-// ==========================================
+// =========================================
+// CALENDAR INITIALIZATION
+// =========================================
 
-// Current calendar date
-let currentDate = new Date();
+document.addEventListener("DOMContentLoaded", () => {
 
+    const calendarGrid =
+        document.getElementById("calendarGrid");
 
-// ==========================================
-// Sample Trips
-// ==========================================
+    const currentMonthElement =
+        document.getElementById("currentMonth");
 
-const trips = [
-    {
-        id: 1,
-        title: "Goa Trip",
-        startDate: "2026-09-05",
-        endDate: "2026-09-08",
-        location: "Goa, India",
-        description: "Beach vacation and sightseeing."
-    },
+    const previousMonthButton =
+        document.getElementById("previousMonth");
 
-    {
-        id: 2,
-        title: "Manali Adventure",
-        startDate: "2026-10-12",
-        endDate: "2026-10-17",
-        location: "Manali, Himachal Pradesh",
-        description: "Mountain adventure and nature exploration."
-    },
+    const nextMonthButton =
+        document.getElementById("nextMonth");
 
-    {
-        id: 3,
-        title: "Dubai Trip",
-        startDate: "2026-11-20",
-        endDate: "2026-11-25",
-        location: "Dubai, UAE",
-        description: "City tour, shopping and sightseeing."
-    }
-];
+    const upcomingTrips =
+        document.getElementById("upcomingTrips");
 
 
-// ==========================================
-// DOM Elements
-// ==========================================
+    let currentDate = new Date();
 
-const calendarDays = document.getElementById("calendarDays");
-const monthYear = document.getElementById("monthYear");
-
-const prevMonth = document.getElementById("prevMonth");
-const nextMonth = document.getElementById("nextMonth");
-const todayBtn = document.getElementById("todayBtn");
-
-const tripDetails = document.getElementById("tripDetails");
+    let trips = [];
 
 
-// ==========================================
-// Render Calendar
-// ==========================================
+    // =========================================
+    // INITIALIZE
+    // =========================================
 
-function renderCalendar() {
-
-    calendarDays.innerHTML = "";
-
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-
-    // First day of current month
-    const firstDay = new Date(year, month, 1);
-
-    // Last day of current month
-    const lastDay = new Date(year, month + 1, 0);
-
-    // Days from previous month
-    const previousLastDay = new Date(year, month, 0);
-
-    const firstDayIndex = firstDay.getDay();
-
-    const lastDate = lastDay.getDate();
-
-    const previousLastDate = previousLastDay.getDate();
+    initialize();
 
 
-    // ==========================================
-    // Month Heading
-    // ==========================================
+    async function initialize() {
 
-    const monthName = currentDate.toLocaleString("default", {
-        month: "long"
-    });
+        await loadTrips();
 
-    monthYear.textContent = `${monthName} ${year}`;
+        renderCalendar();
 
+        renderUpcomingTrips();
 
-    // ==========================================
-    // Previous Month Dates
-    // ==========================================
-
-    for (let i = firstDayIndex - 1; i >= 0; i--) {
-
-        const dayNumber = previousLastDate - i;
-
-        const date = new Date(year, month - 1, dayNumber);
-
-        createDayElement(
-            date,
-            dayNumber,
-            true
-        );
     }
 
 
-    // ==========================================
-    // Current Month Dates
-    // ==========================================
+    // =========================================
+    // LOAD TRIPS
+    // =========================================
 
-    for (let day = 1; day <= lastDate; day++) {
+    async function loadTrips() {
 
-        const date = new Date(year, month, day);
+        try {
 
-        createDayElement(
-            date,
-            day,
-            false
-        );
+            const response =
+                await apiRequest(
+                    "/trips",
+                    {
+                        method: "GET"
+                    }
+                );
+
+
+            // Handle different API response formats
+
+            if (Array.isArray(response)) {
+
+                trips = response;
+
+            }
+
+            else if (
+                response &&
+                Array.isArray(response.data)
+            ) {
+
+                trips = response.data;
+
+            }
+
+            else if (
+                response &&
+                response.data &&
+                Array.isArray(response.data.trips)
+            ) {
+
+                trips = response.data.trips;
+
+            }
+
+            else if (
+                response &&
+                Array.isArray(response.trips)
+            ) {
+
+                trips = response.trips;
+
+            }
+
+            else {
+
+                trips = [];
+
+            }
+
+
+            console.log(
+                "Calendar trips:",
+                trips
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Unable to load calendar trips:",
+                error
+            );
+
+            trips = [];
+
+        }
+
     }
 
 
-    // ==========================================
-    // Next Month Dates
-    // ==========================================
+    // =========================================
+    // RENDER CALENDAR
+    // =========================================
 
-    const totalCells = calendarDays.children.length;
+    function renderCalendar() {
 
-    const remainingCells = 42 - totalCells;
+        const year =
+            currentDate.getFullYear();
 
-    for (let day = 1; day <= remainingCells; day++) {
+        const month =
+            currentDate.getMonth();
 
-        const date = new Date(year, month + 1, day);
 
-        createDayElement(
-            date,
-            day,
-            true
-        );
+        const monthName =
+            currentDate.toLocaleString(
+                "en-US",
+                {
+                    month: "long"
+                }
+            );
+
+
+        currentMonthElement.textContent =
+            `${monthName} ${year}`;
+
+
+        calendarGrid.innerHTML = "";
+
+
+        const firstDay =
+            new Date(
+                year,
+                month,
+                1
+            ).getDay();
+
+
+        const daysInMonth =
+            new Date(
+                year,
+                month + 1,
+                0
+            ).getDate();
+
+
+        // Empty cells before first day
+
+        for (
+            let i = 0;
+            i < firstDay;
+            i++
+        ) {
+
+            const emptyDay =
+                document.createElement(
+                    "div"
+                );
+
+            emptyDay.className =
+                "calendar-day empty";
+
+            calendarGrid.appendChild(
+                emptyDay
+            );
+
+        }
+
+
+        // Create days
+
+        for (
+            let day = 1;
+            day <= daysInMonth;
+            day++
+        ) {
+
+            const dayElement =
+                document.createElement(
+                    "div"
+                );
+
+
+            dayElement.className =
+                "calendar-day";
+
+
+            // Day number
+
+            const numberElement =
+                document.createElement(
+                    "div"
+                );
+
+
+            numberElement.className =
+                "calendar-day-number";
+
+
+            numberElement.textContent =
+                day;
+
+
+            dayElement.appendChild(
+                numberElement
+            );
+
+
+            // =====================================
+            // TODAY
+            // =====================================
+
+            const today =
+                new Date();
+
+
+            if (
+                day === today.getDate() &&
+                month === today.getMonth() &&
+                year === today.getFullYear()
+            ) {
+
+                dayElement.classList.add(
+                    "today"
+                );
+
+            }
+
+
+            // =====================================
+            // TRIPS ON THIS DATE
+            // =====================================
+
+            const dayTrips =
+                getTripsForDate(
+                    year,
+                    month,
+                    day
+                );
+
+
+            dayTrips.forEach(
+                trip => {
+
+                    const event =
+                        document.createElement(
+                            "a"
+                        );
+
+
+                    event.className =
+                        "calendar-event";
+
+
+                    // IMPORTANT:
+                    // itinerary-view.js expects ?tripId=
+
+                    event.href =
+                        `itinerary-view.html?tripId=${trip.id}`;
+
+
+                    event.textContent =
+                        trip.title ||
+                        trip.name ||
+                        trip.destination ||
+                        "Trip";
+
+
+                    event.title =
+                        event.textContent;
+
+
+                    dayElement.appendChild(
+                        event
+                    );
+
+                }
+            );
+
+
+            calendarGrid.appendChild(
+                dayElement
+            );
+
+        }
+
     }
-}
 
 
-// ==========================================
-// Create Calendar Day
-// ==========================================
+    // =========================================
+    // FIND TRIPS FOR DATE
+    // =========================================
 
-function createDayElement(date, dayNumber, otherMonth) {
-
-    const dayElement = document.createElement("div");
-
-    dayElement.classList.add("day");
-
-    if (otherMonth) {
-        dayElement.classList.add("other-month");
-    }
-
-
-    // ==========================================
-    // Date String
-    // ==========================================
-
-    const dateString = formatDate(date);
-
-
-    // ==========================================
-    // Today
-    // ==========================================
-
-    const today = new Date();
-
-    if (
-        date.getDate() === today.getDate() &&
-        date.getMonth() === today.getMonth() &&
-        date.getFullYear() === today.getFullYear()
+    function getTripsForDate(
+        year,
+        month,
+        day
     ) {
 
-        dayElement.classList.add("today");
-    }
+        return trips.filter(
+            trip => {
+
+                const startDate =
+                    getTripStartDate(
+                        trip
+                    );
 
 
-    // ==========================================
-    // Selected Date
-    // ==========================================
+                if (!startDate) {
 
-    const dayNumberElement = document.createElement("span");
+                    return false;
 
-    dayNumberElement.classList.add("day-number");
-
-    dayNumberElement.textContent = dayNumber;
-
-    dayElement.appendChild(dayNumberElement);
+                }
 
 
-    // ==========================================
-    // Find Trip
-    // ==========================================
+                return (
+                    startDate.getFullYear() === year &&
+                    startDate.getMonth() === month &&
+                    startDate.getDate() === day
+                );
 
-    const trip = getTripForDate(dateString);
-
-
-    if (trip) {
-
-        const eventElement = document.createElement("div");
-
-        eventElement.classList.add("trip-event");
-
-        eventElement.textContent = trip.title;
-
-        dayElement.appendChild(eventElement);
-    }
-
-
-    // ==========================================
-    // Click Event
-    // ==========================================
-
-    dayElement.addEventListener("click", function () {
-
-        document.querySelectorAll(".day").forEach(day => {
-            day.classList.remove("selected-day");
-        });
-
-        dayElement.classList.add("selected-day");
-
-        showTripDetails(dateString);
-    });
-
-
-    calendarDays.appendChild(dayElement);
-}
-
-
-// ==========================================
-// Format Date
-// ==========================================
-
-function formatDate(date) {
-
-    const year = date.getFullYear();
-
-    const month = String(
-        date.getMonth() + 1
-    ).padStart(2, "0");
-
-    const day = String(
-        date.getDate()
-    ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
-
-
-// ==========================================
-// Find Trip For Date
-// ==========================================
-
-function getTripForDate(dateString) {
-
-    return trips.find(trip => {
-
-        return (
-            dateString >= trip.startDate &&
-            dateString <= trip.endDate
+            }
         );
 
-    });
-}
-
-
-// ==========================================
-// Show Trip Details
-// ==========================================
-
-function showTripDetails(dateString) {
-
-    const trip = getTripForDate(dateString);
-
-
-    if (!trip) {
-
-        const formattedDate = new Date(
-            dateString + "T00:00:00"
-        ).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        });
-
-        tripDetails.innerHTML = `
-            <h2>📅 ${formattedDate}</h2>
-
-            <p class="no-trip">
-                No trip is scheduled for this date.
-            </p>
-        `;
-
-        return;
     }
 
 
-    // ==========================================
-    // Trip Found
-    // ==========================================
+    // =========================================
+    // GET TRIP START DATE
+    // =========================================
 
-    const start = new Date(
-        trip.startDate + "T00:00:00"
-    ).toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
+    function getTripStartDate(
+        trip
+    ) {
 
-    const end = new Date(
-        trip.endDate + "T00:00:00"
-    ).toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
+        const value =
+            trip.start_date ||
+            trip.startDate ||
+            trip.from_date ||
+            trip.date;
 
 
-    tripDetails.innerHTML = `
+        if (!value) {
 
-        <h2>✈️ ${trip.title}</h2>
+            return null;
 
-        <p>
-            <strong>📍 Location:</strong>
-            ${trip.location}
-        </p>
-
-        <p>
-            <strong>📅 Dates:</strong>
-            ${start} - ${end}
-        </p>
-
-        <p>
-            <strong>📝 Description:</strong>
-            ${trip.description}
-        </p>
-
-        <button
-            onclick="viewTrip(${trip.id})"
-            class="primary-btn"
-        >
-            View Itinerary
-        </button>
-
-    `;
-}
+        }
 
 
-// ==========================================
-// View Trip
-// ==========================================
-
-function viewTrip(tripId) {
-
-    // Later this can open the actual itinerary
-    window.location.href =
-        `itinerary-view.html?tripId=${tripId}`;
-}
+        const date =
+            new Date(value);
 
 
-// ==========================================
-// Previous Month
-// ==========================================
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
 
-prevMonth.addEventListener("click", function () {
+            return null;
 
-    currentDate.setMonth(
-        currentDate.getMonth() - 1
+        }
+
+
+        return date;
+
+    }
+
+
+    // =========================================
+    // UPCOMING TRIPS
+    // =========================================
+
+    function renderUpcomingTrips() {
+
+        upcomingTrips.innerHTML = "";
+
+
+        if (
+            !trips.length
+        ) {
+
+            upcomingTrips.innerHTML = `
+
+                <div class="calendar-empty">
+
+                    <h3>
+                        No trips found
+                    </h3>
+
+                    <p>
+                        Create a trip to see it
+                        on your calendar.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        const today =
+            new Date();
+
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        const upcoming =
+            trips
+                .filter(
+                    trip => {
+
+                        const date =
+                            getTripStartDate(
+                                trip
+                            );
+
+
+                        return (
+                            date &&
+                            date >= today
+                        );
+
+                    }
+                )
+                .sort(
+                    (a, b) => {
+
+                        return (
+                            getTripStartDate(a) -
+                            getTripStartDate(b)
+                        );
+
+                    }
+                );
+
+
+        if (
+            !upcoming.length
+        ) {
+
+            upcomingTrips.innerHTML = `
+
+                <div class="calendar-empty">
+
+                    <h3>
+                        No upcoming trips
+                    </h3>
+
+                    <p>
+                        Your upcoming journeys
+                        will appear here.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        // =====================================
+        // CREATE TRIP CARDS
+        // =====================================
+
+        upcoming.forEach(
+            trip => {
+
+                const card =
+                    document.createElement(
+                        "article"
+                    );
+
+
+                card.className =
+                    "upcoming-trip-card";
+
+
+                const title =
+                    trip.title ||
+                    trip.name ||
+                    "Untitled Trip";
+
+
+                const destination =
+                    trip.destination ||
+                    trip.city ||
+                    trip.to ||
+                    "Destination";
+
+
+                const startDate =
+                    getTripStartDate(
+                        trip
+                    );
+
+
+                const formattedDate =
+                    startDate
+                        ? startDate.toLocaleDateString(
+                            "en-IN",
+                            {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric"
+                            }
+                        )
+                        : "Date not available";
+
+
+                card.innerHTML = `
+
+                    <h3>
+                        ${escapeHTML(
+                            title
+                        )}
+                    </h3>
+
+
+                    <p class="trip-destination">
+
+                        📍
+                        ${escapeHTML(
+                            destination
+                        )}
+
+                    </p>
+
+
+                    <p class="trip-date">
+
+                        📅
+                        ${formattedDate}
+
+                    </p>
+
+
+                    <a
+                        href="itinerary-view.html?tripId=${trip.id}"
+                        class="view-trip-button"
+                    >
+                        View Trip
+                    </a>
+
+                `;
+
+
+                upcomingTrips.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+    // =========================================
+    // PREVIOUS MONTH
+    // =========================================
+
+    previousMonthButton.addEventListener(
+        "click",
+        () => {
+
+            currentDate.setMonth(
+                currentDate.getMonth() - 1
+            );
+
+
+            renderCalendar();
+
+        }
     );
 
-    renderCalendar();
-});
+
+    // =========================================
+    // NEXT MONTH
+    // =========================================
+
+    nextMonthButton.addEventListener(
+        "click",
+        () => {
+
+            currentDate.setMonth(
+                currentDate.getMonth() + 1
+            );
 
 
-// ==========================================
-// Next Month
-// ==========================================
+            renderCalendar();
 
-nextMonth.addEventListener("click", function () {
-
-    currentDate.setMonth(
-        currentDate.getMonth() + 1
+        }
     );
 
-    renderCalendar();
+
+    // =========================================
+    // HTML ESCAPE
+    // =========================================
+
+    function escapeHTML(
+        value
+    ) {
+
+        return String(
+            value || ""
+        )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+    }
+
 });
-
-
-// ==========================================
-// Today Button
-// ==========================================
-
-todayBtn.addEventListener("click", function () {
-
-    currentDate = new Date();
-
-    renderCalendar();
-
-});
-
-
-// ==========================================
-// Mobile Menu
-// ==========================================
-
-const menuToggle = document.getElementById("menuToggle");
-const navLinks = document.querySelector(".nav-links");
-
-if (menuToggle) {
-
-    menuToggle.addEventListener("click", function () {
-
-        navLinks.classList.toggle("show");
-
-    });
-
-}
-
-
-// ==========================================
-// Initial Calendar Load
-// ==========================================
-
-renderCalendar();
