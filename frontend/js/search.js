@@ -1,338 +1,489 @@
-// ==========================================
-// GlobeTrotter - Search JavaScript
-// ==========================================
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
+        const form =
+            document.getElementById("searchForm");
 
-// ==========================================
-// Destination Data
-// ==========================================
+        const input =
+            document.getElementById("searchInput");
 
-const destinations = [
+        const results =
+            document.getElementById("searchResults");
 
-    {
-        id: 1,
-        name: "Goa",
-        location: "India",
-        category: "beach",
-        budget: "low",
-        price: "₹15,000",
-        image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
-        description: "Beautiful beaches, sunsets, nightlife and relaxing coastal experiences."
-    },
 
-    {
-        id: 2,
-        name: "Manali",
-        location: "Himachal Pradesh, India",
-        category: "mountain",
-        budget: "medium",
-        price: "₹20,000",
-        image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
-        description: "Snow-covered mountains, valleys, adventure activities and scenic views."
-    },
-
-    {
-        id: 3,
-        name: "Dubai",
-        location: "UAE",
-        category: "city",
-        budget: "high",
-        price: "₹60,000",
-        image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80",
-        description: "Modern architecture, luxury shopping, desert adventures and city experiences."
-    },
-
-    {
-        id: 4,
-        name: "Rishikesh",
-        location: "Uttarakhand, India",
-        category: "adventure",
-        budget: "low",
-        price: "₹12,000",
-        image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
-        description: "River rafting, trekking, camping and exciting outdoor adventures."
-    },
-
-    {
-        id: 5,
-        name: "Paris",
-        location: "France",
-        category: "city",
-        budget: "high",
-        price: "₹90,000",
-        image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
-        description: "Explore iconic landmarks, museums, cafes and romantic streets."
-    },
-
-    {
-        id: 6,
-        name: "Ladakh",
-        location: "India",
-        category: "mountain",
-        budget: "medium",
-        price: "₹25,000",
-        image: "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80",
-        description: "High-altitude landscapes, monasteries, mountain passes and road trips."
-    }
-
-];
-
-
-// ==========================================
-// DOM Elements
-// ==========================================
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const categoryFilter =
-    document.getElementById("categoryFilter");
-
-const budgetFilter =
-    document.getElementById("budgetFilter");
-
-const searchBtn =
-    document.getElementById("searchBtn");
-
-const resultsGrid =
-    document.getElementById("resultsGrid");
-
-const resultCount =
-    document.getElementById("resultCount");
-
-
-// ==========================================
-// Display Destinations
-// ==========================================
-
-function displayDestinations(list) {
-
-    resultsGrid.innerHTML = "";
-
-    resultCount.textContent =
-        `${list.length} destination${list.length !== 1 ? "s" : ""}`;
-
-
-    // No results
-
-    if (list.length === 0) {
-
-        resultsGrid.innerHTML = `
-
-            <div class="no-results">
-
-                <h2>
-                    😕 No destinations found
-                </h2>
-
-                <p>
-                    Try another destination or change your filters.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-    }
-
-
-    // Create cards
-
-    list.forEach(destination => {
-
-        const card =
-            document.createElement("article");
-
-        card.className =
-            "destination-card";
-
-
-        card.innerHTML = `
-
-            <img
-                src="${destination.image}"
-                alt="${destination.name}"
-                class="destination-image"
-            >
-
-
-            <div class="destination-content">
-
-                <h3>
-                    ${destination.name}
-                </h3>
-
-
-                <div class="destination-location">
-                    📍 ${destination.location}
-                </div>
-
-
-                <p class="destination-description">
-                    ${destination.description}
-                </p>
-
-
-                <div class="destination-bottom">
-
-                    <span class="budget">
-                        ${destination.price}
-                    </span>
-
-
-                    <a
-                        href="create-trip.html?destination=${encodeURIComponent(destination.name)}"
-                        class="view-btn"
-                    >
-                        Plan Trip
-                    </a>
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        resultsGrid.appendChild(card);
-
-    });
-
-}
-
-
-// ==========================================
-// Search Function
-// ==========================================
-
-function performSearch() {
-
-    const searchValue =
-        searchInput.value
-            .trim()
-            .toLowerCase();
-
-
-    const category =
-        categoryFilter.value;
-
-
-    const budget =
-        budgetFilter.value;
-
-
-    const filtered =
-        destinations.filter(destination => {
-
-            const matchesSearch =
-                destination.name
-                    .toLowerCase()
-                    .includes(searchValue)
-                ||
-                destination.location
-                    .toLowerCase()
-                    .includes(searchValue);
-
-
-            const matchesCategory =
-                category === "all"
-                ||
-                destination.category === category;
-
-
-            const matchesBudget =
-                budget === "all"
-                ||
-                destination.budget === budget;
-
-
-            return (
-                matchesSearch &&
-                matchesCategory &&
-                matchesBudget
-            );
-
-        });
-
-
-    displayDestinations(filtered);
-
-}
-
-
-// ==========================================
-// Search Button
-// ==========================================
-
-searchBtn.addEventListener(
-    "click",
-    performSearch
-);
-
-
-// ==========================================
-// Search While Typing
-// ==========================================
-
-searchInput.addEventListener(
-    "input",
-    performSearch
-);
-
-
-// ==========================================
-// Filter Changes
-// ==========================================
-
-categoryFilter.addEventListener(
-    "change",
-    performSearch
-);
-
-
-budgetFilter.addEventListener(
-    "change",
-    performSearch
-);
-
-
-// ==========================================
-// Enter Key
-// ==========================================
-
-searchInput.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (event.key === "Enter") {
-
-            performSearch();
-
+        if (!form || !input || !results) {
+            return;
         }
 
+
+        // =========================================
+        // SEARCH
+        // =========================================
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const query =
+                    input.value.trim();
+
+
+                if (!query) {
+
+                    results.innerHTML = `
+
+                        <div class="search-message">
+
+                            <h3>
+                                Enter a destination
+                            </h3>
+
+                            <p>
+                                Try Paris, Dubai,
+                                Tokyo, London or Bali.
+                            </p>
+
+                        </div>
+
+                    `;
+
+                    return;
+                }
+
+
+                results.innerHTML = `
+
+                    <div class="search-message">
+
+                        <h3>
+                            Searching...
+                        </h3>
+
+                    </div>
+
+                `;
+
+
+                try {
+
+                    const response =
+                        await apiRequest(
+                            `/search?q=${encodeURIComponent(query)}`,
+                            {
+                                method: "GET"
+                            }
+                        );
+
+
+                    const cities =
+                        Array.isArray(
+                            response.data
+                        )
+                            ? response.data
+                            : [];
+
+
+                    if (
+                        cities.length === 0
+                    ) {
+
+                        results.innerHTML = `
+
+                            <div class="search-empty">
+
+                                <h3>
+                                    No destinations found
+                                </h3>
+
+                                <p>
+                                    Try another destination.
+                                </p>
+
+                            </div>
+
+                        `;
+
+                        return;
+                    }
+
+
+                    results.innerHTML = "";
+
+
+                    cities.forEach(
+                        city => {
+
+                            const card =
+                                document.createElement(
+                                    "article"
+                                );
+
+
+                            card.className =
+                                "search-card";
+
+
+                            card.innerHTML = `
+
+                                <img
+                                    src="${escapeHTML(
+                                        city.image_url
+                                    )}"
+                                    alt="${escapeHTML(
+                                        city.name
+                                    )}"
+                                    class="city-image"
+                                >
+
+
+                                <div class="city-content">
+
+                                    <h2>
+                                        ${escapeHTML(
+                                            city.name
+                                        )}
+                                    </h2>
+
+
+                                    <p class="city-country">
+
+                                        📍
+                                        ${escapeHTML(
+                                            city.country
+                                        )}
+
+                                    </p>
+
+
+                                    <p class="city-description">
+
+                                        ${escapeHTML(
+                                            city.description
+                                        )}
+
+                                    </p>
+
+
+                                    <div class="city-cost">
+
+                                        <span>
+                                            Average Budget
+                                        </span>
+
+                                        <strong>
+
+                                            ₹${Number(
+                                                city.average_budget || 0
+                                            ).toLocaleString(
+                                                "en-IN"
+                                            )}
+
+                                        </strong>
+
+                                    </div>
+
+
+                                    <button
+                                        type="button"
+                                        class="add-to-trip-btn"
+                                        data-city-id="${city.id}"
+                                    >
+                                        ➕ Add to Trip
+                                    </button>
+
+                                </div>
+
+                            `;
+
+
+                            const button =
+                                card.querySelector(
+                                    ".add-to-trip-btn"
+                                );
+
+                                button.addEventListener(
+                                    "click",
+                                    () => {
+
+                                        console.log(
+                                            "ADD TO TRIP CLICKED",
+                                            city
+                                        );
+
+                                        openTripSelector(
+                                            city
+                                        );
+
+                                    }
+                                );
+
+
+                            results.appendChild(
+                                card
+                            );
+
+                        }
+                    );
+
+
+                } catch (error) {
+
+                    results.innerHTML = `
+
+                        <div class="search-error">
+
+                            <h3>
+                                Search failed
+                            </h3>
+
+                            <p>
+                                ${escapeHTML(
+                                    error.message
+                                )}
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+
+            }
+        );
+
     }
 );
 
 
-// ==========================================
-// Mobile Menu
-// ==========================================
+// =========================================
+// OPEN TRIP SELECTOR
+// =========================================
 
-const menuToggle =
-    document.getElementById("menuToggle");
+async function openTripSelector(city) {
 
-const navLinks =
-    document.querySelector(".nav-links");
+    try {
+
+        const response =
+            await apiRequest(
+                "/trips",
+                {
+                    method: "GET"
+                }
+            );
 
 
-if (menuToggle) {
+        const trips =
+            Array.isArray(response.data)
+                ? response.data
+                : [];
 
-    menuToggle.addEventListener(
+
+        if (trips.length === 0) {
+
+            alert(
+                "You don't have any trips yet. Create a trip first."
+            );
+
+            return;
+        }
+
+
+        showTripModal(
+            city,
+            trips
+        );
+
+
+    } catch (error) {
+
+        alert(
+            error.message ||
+            "Unable to load your trips."
+        );
+
+    }
+
+}
+
+
+// =========================================
+// TRIP MODAL
+// =========================================
+
+function showTripModal(
+    city,
+    trips
+) {
+
+    const existingModal =
+        document.getElementById(
+            "tripSelectorModal"
+        );
+
+
+    if (existingModal) {
+
+        existingModal.remove();
+
+    }
+
+
+    const modal =
+        document.createElement(
+            "div"
+        );
+
+
+    modal.id =
+        "tripSelectorModal";
+
+
+    modal.className =
+        "trip-selector-overlay";
+
+
+    modal.innerHTML = `
+
+        <div class="trip-selector-modal">
+
+            <button
+                type="button"
+                class="trip-modal-close"
+                id="closeTripModal"
+            >
+                ✕
+            </button>
+
+
+            <h2>
+                Add ${escapeHTML(
+                    city.name
+                )} to a Trip
+            </h2>
+
+
+            <p>
+                Select one of your trips:
+            </p>
+
+
+            <div
+                class="trip-selector-list"
+                id="tripSelectorList"
+            >
+
+                ${trips.map(
+                    trip => `
+
+                        <button
+                            type="button"
+                            class="trip-option"
+                            data-trip-id="${trip.id}"
+                        >
+
+                            <div>
+
+                                <strong>
+                                    ${escapeHTML(
+                                        trip.title
+                                    )}
+                                </strong>
+
+                                <span>
+                                    📍
+                                    ${escapeHTML(
+                                        trip.destination || "No destination"
+                                    )}
+                                </span>
+
+                            </div>
+
+                            <span>
+                                →
+                            </span>
+
+                        </button>
+
+                    `
+                ).join("")}
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    // Close button
+
+    document
+        .getElementById(
+            "closeTripModal"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                modal.remove();
+
+            }
+        );
+
+
+    // Click outside modal
+
+    modal.addEventListener(
         "click",
-        function() {
+        event => {
 
-            navLinks.classList.toggle("show");
+            if (
+                event.target === modal
+            ) {
+
+                modal.remove();
+
+            }
+
+        }
+    );
+
+
+    // Trip selection
+
+    const options =
+        modal.querySelectorAll(
+            ".trip-option"
+        );
+
+
+    options.forEach(
+        option => {
+
+            option.addEventListener(
+                "click",
+                async () => {
+
+                    const tripId =
+                        option.dataset.tripId;
+
+
+                    await addCityToTrip(
+                        city,
+                        tripId,
+                        modal
+                    );
+
+                }
+            );
 
         }
     );
@@ -340,8 +491,146 @@ if (menuToggle) {
 }
 
 
-// ==========================================
-// Initial Load
-// ==========================================
+// =========================================
+// ADD CITY TO TRIP
+// =========================================
 
-displayDestinations(destinations);
+async function addCityToTrip(
+    city,
+    tripId,
+    modal
+) {
+
+    const options =
+        modal.querySelectorAll(
+            ".trip-option"
+        );
+
+
+    options.forEach(
+        option => {
+
+            option.disabled =
+                true;
+
+        }
+    );
+
+
+    try {
+
+        const response =
+            await apiRequest(
+                `/search/cities/${city.id}/add-to-trip`,
+                {
+                    method: "POST",
+
+                    body: JSON.stringify({
+                        tripId:
+                            Number(tripId)
+                    })
+                }
+            );
+
+
+        modal.innerHTML = `
+
+            <div class="trip-success">
+
+                <div class="trip-success-icon">
+                    ✓
+                </div>
+
+                <h2>
+                    City Added!
+                </h2>
+
+                <p>
+                    ${escapeHTML(
+                        city.name
+                    )}
+                    has been added to your trip.
+                </p>
+
+                <button
+                    type="button"
+                    class="trip-success-btn"
+                    id="closeSuccessModal"
+                >
+                    Done
+                </button>
+
+            </div>
+
+        `;
+
+
+        document
+            .getElementById(
+                "closeSuccessModal"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    modal.remove();
+
+                }
+            );
+
+
+    } catch (error) {
+
+        options.forEach(
+            option => {
+
+                option.disabled =
+                    false;
+
+            }
+        );
+
+
+        alert(
+            error.message ||
+            "Unable to add city to trip."
+        );
+
+    }
+
+}
+
+
+// =========================================
+// ESCAPE HTML
+// =========================================
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value || ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
