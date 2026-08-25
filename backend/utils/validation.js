@@ -1,86 +1,46 @@
-// Check whether a value is a valid email address
-const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-};
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
-// Validate registration data
-const validateRegister = (name, email, password) => {
-    const errors = [];
+function isValidPassword(password) {
+    return typeof password === "string" && password.length >= 6;
+}
 
-    // Name validation
-    if (!name || name.trim().length === 0) {
-        errors.push("Name is required");
+function validateRegisterData(name, email, password) {
+    const errors = {};
+
+    if (!name || name.trim().length < 2) {
+        errors.name = "Name must contain at least 2 characters";
     }
 
-    // Email validation
     if (!email || !isValidEmail(email)) {
-        errors.push("A valid email is required");
+        errors.email = "Please enter a valid email address";
     }
 
-    // Password validation
-    if (!password || password.length < 8) {
-        errors.push("Password must be at least 8 characters");
+    if (!password || !isValidPassword(password)) {
+        errors.password = "Password must contain at least 6 characters";
     }
 
     return errors;
-};
+}
 
-// Validate login data
-const validateLogin = (email, password) => {
-    const errors = [];
+function validateLoginData(email, password) {
+    const errors = {};
 
     if (!email || !isValidEmail(email)) {
-        errors.push("A valid email is required");
+        errors.email = "Please enter a valid email address";
     }
 
     if (!password) {
-        errors.push("Password is required");
+        errors.password = "Password is required";
     }
 
     return errors;
-};
-
-// Validate trip creation data
-const validateTrip = (
-    title,
-    destination,
-    startDate,
-    endDate
-) => {
-    const errors = [];
-
-    // Title validation
-    if (!title || title.trim().length === 0) {
-        errors.push("Trip title is required");
-    }
-
-    // Destination validation
-    if (!destination || destination.trim().length === 0) {
-        errors.push("Destination is required");
-    }
-
-    // Start date validation
-    if (!startDate) {
-        errors.push("Start date is required");
-    }
-
-    // End date validation
-    if (!endDate) {
-        errors.push("End date is required");
-    }
-
-    // Check date order
-    if (startDate && endDate && startDate > endDate) {
-        errors.push("End date must be after start date");
-    }
-
-    return errors;
-};
+}
 
 module.exports = {
     isValidEmail,
-    validateRegister,
-    validateLogin,
-    validateTrip
+    isValidPassword,
+    validateRegisterData,
+    validateLoginData
 };
