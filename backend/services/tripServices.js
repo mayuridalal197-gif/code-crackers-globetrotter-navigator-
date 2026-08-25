@@ -1,161 +1,209 @@
-const { pool } = require("../_config/database");
+const {pool} = require("../_config/database");
 
 
-// Create a new trip for the logged-in user
-const createTrip = async (
-    userId,
-    title,
-    destination,
-    startDate,
-    endDate,
-    description
-) => {
+// =========================
+// CREATE TRIP
+// =========================
 
-    // Insert trip into database
+const createTrip = async (tripData) => {
+
+    const {
+        user_id,
+        title,
+        destination,
+        start_date,
+        end_date,
+        travelers,
+        budget,
+        description
+    } = tripData;
+
+
     const [result] = await pool.execute(
-        `INSERT INTO trips
-        (user_id, title, destination, start_date, end_date, description)
-        VALUES (?, ?, ?, ?, ?, ?)`,
-        [
-            userId,
+        `
+        INSERT INTO trips
+        (
+            user_id,
             title,
             destination,
-            startDate,
-            endDate,
-            description || null
+            start_date,
+            end_date,
+            travelers,
+            budget,
+            description,
+            status
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+        [
+            user_id,
+            title,
+            destination,
+            start_date,
+            end_date,
+            travelers,
+            budget,
+            description || null,
+            "planning"
         ]
     );
 
-    // Return the newly created trip ID
-    return {
-        id: result.insertId,
-        user_id: userId,
-        title,
-        destination,
-        start_date: startDate,
-        end_date: endDate,
-        description: description || null,
-        status: "planned"
-    };
+
+    const [rows] = await pool.execute(
+        `
+        SELECT *
+        FROM trips
+        WHERE id = ?
+        `,
+        [result.insertId]
+    );
+
+
+    return rows[0];
 };
 
 
-// Get all trips belonging to the logged-in user
-const getMyTrips = async (userId) => {
+// =========================
+// GET ALL USER TRIPS
+// =========================
 
-    const [trips] = await pool.execute(
-        `SELECT
-            id,
-            title,
-            destination,
-            start_date,
-            end_date,
-            description,
-            status,
-            created_at,
-            updated_at
-         FROM trips
-         WHERE user_id = ?
-         ORDER BY created_at DESC`,
+const getTrips = async (userId) => {
+
+    const [rows] = await pool.execute(
+        `
+        SELECT *
+        FROM trips
+        WHERE user_id = ?
+        ORDER BY start_date ASC
+        `,
         [userId]
     );
 
-    return trips;
+
+    return rows;
 };
 
 
-// Get one specific trip belonging to the logged-in user
-const getTripById = async (tripId, userId) => {
+// =========================
+// GET SINGLE TRIP
+// =========================
 
-    const [trips] = await pool.execute(
-        `SELECT
-            id,
-            title,
-            destination,
-            start_date,
-            end_date,
-            description,
-            status,
-            created_at,
-            updated_at
-         FROM trips
-         WHERE id = ? AND user_id = ?`,
-        [tripId, userId]
-    );
-
-    if (trips.length === 0) {
-        throw new Error("Trip not found");
-    }
-
-    return trips[0];
-};
-
-// Update an existing trip
-const updateTrip = async (
+const getTripById = async (
     tripId,
-    userId,
-    title,
-    destination,
-    startDate,
-    endDate,
-    description,
-    status
+    userId
 ) => {
 
-    // Update only the trip that belongs to the logged-in user
-    const [result] = await pool.execute(
-        `UPDATE trips
-         SET title = ?,
-             destination = ?,
-             start_date = ?,
-             end_date = ?,
-             description = ?,
-             status = ?
-         WHERE id = ? AND user_id = ?`,
+    const [rows] = await pool.execute(
+        `
+        SELECT *
+        FROM trips
+        WHERE id = ?
+        AND user_id = ?
+        `,
         [
-            title,
-            destination,
-            startDate,
-            endDate,
-            description || null,
-            status || "planned",
             tripId,
             userId
         ]
     );
 
-    // Check whether the trip existed and belonged to this user
-    if (result.affectedRows === 0) {
-        throw new Error("Trip not found");
-    }
 
-    // Return updated trip
-    return getTripById(tripId, userId);
+    return rows[0];
 };
 
 
-// Delete an existing trip
-const deleteTrip = async (tripId, userId) => {
+// =========================
+// UPDATE TRIP
+// =========================
 
-    // Delete only the user's own trip
+const updateTrip = async (
+    tripId,
+    userId,
+    data
+) => {
+
+    const {
+        title,
+        destination,
+        start_date,
+        end_date,
+        travelers,
+        budget,
+        description,
+        status
+    } = data;
+
+
     const [result] = await pool.execute(
-        `DELETE FROM trips
-         WHERE id = ? AND user_id = ?`,
-        [tripId, userId]
+        `
+        UPDATE trips
+        SET
+            title = ?,
+            destination = ?,
+            start_date = ?,
+            end_date = ?,
+            travelers = ?,
+            budget = ?,
+            description = ?,
+            status = ?
+        WHERE id = ?
+        AND user_id = ?
+        `,
+        [
+            title,
+            destination,
+            start_date,
+            end_date,
+            travelers,
+            budget,
+            description || null,
+            status || "planning",
+            tripId,
+            userId
+        ]
     );
 
-    // Check whether a trip was actually deleted
+
     if (result.affectedRows === 0) {
-        throw new Error("Trip not found");
+        return null;
     }
 
-    return true;
+
+    return getTripById(
+        tripId,
+        userId
+    );
+};
+
+
+// =========================
+// DELETE TRIP
+// =========================
+
+const deleteTrip = async (
+    tripId,
+    userId
+) => {
+
+    const [result] = await pool.execute(
+        `
+        DELETE FROM trips
+        WHERE id = ?
+        AND user_id = ?
+        `,
+        [
+            tripId,
+            userId
+        ]
+    );
+
+
+    return result.affectedRows > 0;
 };
 
 
 module.exports = {
     createTrip,
-    getMyTrips,
+    getTrips,
     getTripById,
     updateTrip,
     deleteTrip
