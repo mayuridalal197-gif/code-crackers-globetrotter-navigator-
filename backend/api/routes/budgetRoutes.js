@@ -1,6 +1,6 @@
 const express = require("express");
 
-const budgetController = require("./apiControllers/budgetController");
+const budgetController = require("../apiControllers/budgetController");
 const authMiddleware = require("../_middleware/authMiddleware");
 
 const router = express.Router();
