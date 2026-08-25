@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Dashboard | GlobeTrotter</title>
+
+    <link
+        rel="stylesheet"
+        href="cssfiles/global.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="cssfiles/admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================
+         NAVBAR
+    ====================================== -->
+
+    <nav class="admin-navbar">
+
+        <div class="admin-nav-inner">
+
+            <a
+                href="dashboard.html"
+                class="admin-logo"
+            >
+                🌍 GlobeTrotter
+            </a>
+
+
+            <div class="admin-nav-title">
+                Admin Panel
+            </div>
+
+
+            <button
+                id="adminLogout"
+                class="admin-logout"
+                type="button"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =====================================
+         PAGE
+    ====================================== -->
+
+    <main class="admin-container">
+
+
+        <!-- HEADER -->
+
+        <section class="admin-header">
+
+            <div>
+
+                <p class="admin-eyebrow">
+                    MANAGEMENT
+                </p>
+
+                <h1>
+                    Admin Dashboard
+                </h1>
+
+                <p>
+                    Manage your GlobeTrotter platform.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             LOADING
+        ====================================== -->
+
+        <div
+            id="adminLoading"
+            class="admin-loading"
+        >
+
+            <div class="admin-spinner"></div>
+
+            <p>
+                Loading admin dashboard...
+            </p>
+
+        </div>
+
+
+
+        <!-- =====================================
+             ERROR
+        ====================================== -->
+
+        <div
+            id="adminError"
+            class="admin-error"
+            style="display:none;"
+        >
+
+            <h3>
+                ⚠️ Unable to load admin dashboard
+            </h3>
+
+            <p id="adminErrorMessage">
+                Something went wrong.
+            </p>
+
+            <button
+                id="retryAdmin"
+                type="button"
+            >
+                Try Again
+            </button>
+
+        </div>
+
+
+
+        <!-- =====================================
+             DASHBOARD CONTENT
+        ====================================== -->
+
+        <section
+            id="adminContent"
+            style="display:none;"
+        >
+
+
+            <!-- =================================
+                 STATISTICS
+            ================================== -->
+
+            <section class="admin-stats">
+
+
+                <article class="admin-stat-card">
+
+                    <div class="stat-icon">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Users
+                        </span>
+
+                        <strong id="totalUsers">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+
+                <article class="admin-stat-card">
+
+                    <div class="stat-icon">
+                        🧳
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Trips
+                        </span>
+
+                        <strong id="totalTrips">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+
+                <article class="admin-stat-card">
+
+                    <div class="stat-icon">
+                        🌍
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Destinations
+                        </span>
+
+                        <strong id="totalCities">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+
+                <article class="admin-stat-card">
+
+                    <div class="stat-icon">
+                        💬
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Community Posts
+                        </span>
+
+                        <strong id="totalPosts">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+
+            <!-- =================================
+                 MANAGEMENT CARDS
+            ================================== -->
+
+            <section class="admin-sections">
+
+
+                <!-- USERS -->
+
+                <article class="admin-panel-card">
+
+                    <div class="panel-card-header">
+
+                        <div>
+
+                            <h2>
+                                👥 Users
+                            </h2>
+
+                            <p>
+                                Manage registered users.
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="panel-button"
+                            data-section="users"
+                        >
+                            View
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- CITIES -->
+
+                <article class="admin-panel-card">
+
+                    <div class="panel-card-header">
+
+                        <div>
+
+                            <h2>
+                                🌍 Destinations
+                            </h2>
+
+                            <p>
+                                Manage travel destinations.
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="panel-button"
+                            data-section="cities"
+                        >
+                            View
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- TRIPS -->
+
+                <article class="admin-panel-card">
+
+                    <div class="panel-card-header">
+
+                        <div>
+
+                            <h2>
+                                🧳 Trips
+                            </h2>
+
+                            <p>
+                                View trips created by users.
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="panel-button"
+                            data-section="trips"
+                        >
+                            View
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- COMMUNITY -->
+
+                <article class="admin-panel-card">
+
+                    <div class="panel-card-header">
+
+                        <div>
+
+                            <h2>
+                                💬 Community
+                            </h2>
+
+                            <p>
+                                Moderate community posts.
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="panel-button"
+                            data-section="community"
+                        >
+                            View
+                        </button>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+
+            <!-- =================================
+                 DATA AREA
+            ================================== -->
+
+            <section
+                id="adminDataSection"
+                class="admin-data-section"
+                style="display:none;"
+            >
+
+                <div class="data-section-header">
+
+                    <div>
+
+                        <h2 id="dataSectionTitle">
+                            Data
+                        </h2>
+
+                        <p id="dataSectionDescription">
+                            Platform data
+                        </p>
+
+                    </div>
+
+                    <button
+                        id="closeDataSection"
+                        type="button"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="adminDataLoading"
+                    class="admin-data-loading"
+                >
+                    Loading...
+                </div>
+
+
+                <div
+                    id="adminTableWrapper"
+                    class="admin-table-wrapper"
+                    style="display:none;"
+                >
+
+                    <table>
+
+                        <thead id="adminTableHead">
+                        </thead>
+
+                        <tbody id="adminTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
+
+    <script src="jsfiles/api.js"></script>
+
+    <script src="jsfiles/admin.js"></script>
+
+
+</body>
+
+</html>
